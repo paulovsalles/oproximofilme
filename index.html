@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#f8f5ef">
-<meta name="description" content="Seu próximo filme começa aqui. Sorteie sem filtros ou escolha gênero, época e clima. Salve favoritos e explore quase mil indicações.">
-<title>O próximo filme — catálogo ampliado</title>
+<meta name="description" content="Na casa da Júlia, a noite já é boa. Falta só escolher um filme à altura. Sorteie, filtre e descubra o próximo filme.">
+<title>O próximo filme — noites na casa da Júlia</title>
 <style>
 :root{
  --bg:#f8f5ef; --paper:#fffdf9; --ink:#302b30; --muted:#756c70; --wine:#874f5b; --wine-dark:#673b49; --rose:#f0dddd; --sage:#dae5d9; --lav:#e8e2ec; --blue:#dfebec; --butter:#f6e9cd; --line:#e7e0d7;
@@ -37,10 +37,12 @@ button:disabled{cursor:not-allowed;opacity:.45}
 .hero-copy{padding-bottom:10px}
 h1{font-family:var(--serif);font-weight:500;font-size:clamp(56px,5.45vw,79px);letter-spacing:-.073em;line-height:1.04;margin:23px 0 22px;max-width:630px}
 h1 em{font-weight:400;font-style:italic;color:var(--wine)}
-.hero-copy>p{color:var(--muted);font-size:16px;max-width:460px;line-height:1.75;margin:0}
-.micro{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:32px;color:#85777a;font-size:12px}
+.hero-copy>p{color:var(--muted);font-size:15px;max-width:465px;line-height:1.75;margin:0}
+.hero-copy>.hero-punch{margin-top:14px;color:#5d5158;font-size:15px}
+.hero-punch strong{color:var(--wine-dark);font-weight:750}
+.micro{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:27px;color:#85777a;font-size:12px}
 .micro span+span::before{content:"•";margin-right:12px;color:#bcb0b0}
-.sketch{margin-top:48px;max-width:430px;position:relative;background:linear-gradient(115deg,var(--butter),#f7f0df);border:1px solid #efe3c8;border-radius:20px;overflow:hidden;min-height:152px;display:flex;align-items:center;padding:25px 28px}
+.sketch{margin-top:34px;max-width:430px;position:relative;background:linear-gradient(115deg,var(--butter),#f7f0df);border:1px solid #efe3c8;border-radius:20px;overflow:hidden;min-height:152px;display:flex;align-items:center;padding:25px 28px}
 .sketch .reel{position:absolute;width:156px;height:156px;right:-22px;top:-4px;border:20px solid #dec6a7;border-radius:50%;opacity:.65}
 .sketch .reel:before,.sketch .reel:after{content:"";position:absolute;width:32px;height:32px;border:10px solid #f8ebd2;border-radius:50%;top:23px;left:22px}
 .sketch .reel:after{top:70px;left:61px}
@@ -235,11 +237,12 @@ h1 em{font-weight:400;font-style:italic;color:var(--wine)}
 <main id="inicio">
  <section class="wrap hero" id="sortear">
   <div class="hero-copy">
-   <div class="kicker">Seu cinema particular</div>
-   <h1>Uma boa noite pede um <em>bom filme.</em></h1>
-   <p>A escolha pode ser simples. Deixe o acaso decidir ou escolha o clima da noite. O próximo filmaço está a um clique.</p>
+   <div class="kicker">Noites na casa da Júlia</div>
+   <h1>Tudo perfeito.<br>Até o <em>filme.</em></h1>
+   <p>Tem coisa melhor que ir à casa da Júlia? Dar um oi no Caju, comer a comida da tia Ângela, provar as bebidas do seu Rubens, bater papo com a Nath e o Stênio, jogar e terminar a noite vendo um filme.</p>
+   <p class="hero-punch"><strong>O único risco?</strong> O filme ser horrível. Foi pra evitar isso que criamos este espaço.</p>
    <div class="micro"><span><strong id="heroCount">957</strong> filmes</span><span>19 gêneros</span><span>Sem cadastro</span></div>
-   <div class="sketch" aria-hidden="true"><div class="reel"></div><p>Um filme. Um sofá.<br>Uma ótima história.</p><span class="tiny">Bilheteria aberta · sessão livre</span></div>
+   <div class="sketch" aria-hidden="true"><div class="reel"></div><p>A turma reunida.<br>O filme certo.</p><span class="tiny">Sessão na casa da Júlia</span></div>
   </div>
   <div class="draw-card" aria-labelledby="drawHeading">
    <div class="card-heading"><h2 id="drawHeading">Escolha sua sessão</h2><span class="ticket-tag">✦ Sorteio</span></div>
@@ -261,10 +264,10 @@ h1 em{font-weight:400;font-style:italic;color:var(--wine)}
  </section>
  <section class="result-wrap" id="resultado" aria-live="polite">
   <div class="wrap">
-   <div class="section-head"><div><div class="kicker">A escolha do destino</div><h2>O filme da noite</h2></div><div class="section-sub" id="resultLabel">Seu próximo favorito pode estar a um sorteio de distância.</div></div>
+   <div class="section-head"><div><div class="kicker">A escolha do destino</div><h2>O filme da noite</h2></div><div class="section-sub" id="resultLabel">A companhia já é boa. Agora é a vez do filme.</div></div>
    <div class="result-card empty-result" id="resultCard">
     <div class="poster" id="resultPoster"><img id="resultPosterArt" class="poster-art" alt="" loading="eager" decoding="async" hidden><span class="poster-top">O próximo filme</span><div class="poster-main" id="posterTitle">Ainda é uma surpresa.</div><span class="poster-end"><svg class="icon"><use href="#i-ticket"></use></svg> UMA BOA SESSÃO</span></div>
-    <div class="result-content"><div class="result-number" id="resultNumber">Bilhete ainda não revelado</div><h3 class="result-title" id="resultTitle">Pronto para descobrir?</h3><div class="result-meta" id="resultMeta">O melhor filme é aquele que começa agora.</div><div class="plot-label" id="plotLabel" hidden>Sobre o filme</div><p class="result-desc" id="resultDesc">Faça seu primeiro sorteio no painel acima. Você pode deixar tudo por conta da sorte ou escolher um gênero, uma época e o estilo da história.</p><p class="info-status" id="movieInfoStatus" role="status" aria-live="polite"></p><div class="tags" id="resultTags"></div>
+    <div class="result-content"><div class="result-number" id="resultNumber">Bilhete ainda não revelado</div><h3 class="result-title" id="resultTitle">Pronto para descobrir?</h3><div class="result-meta" id="resultMeta">Só falta descobrir o que vamos assistir.</div><div class="plot-label" id="plotLabel" hidden>Sobre o filme</div><p class="result-desc" id="resultDesc">Faça um sorteio no painel acima: deixe a sorte decidir ou escolha gênero, época e o clima da noite.</p><p class="info-status" id="movieInfoStatus" role="status" aria-live="polite"></p><div class="tags" id="resultTags"></div>
     <div class="result-actions" id="resultActions" hidden><button class="btn dark" id="againBtn" type="button"><svg class="icon"><use href="#i-shuffle"></use></svg>Sortear outro</button><button class="btn" id="favBtn" type="button"><svg class="icon"><use href="#i-heart"></use></svg><span>Favoritar</span></button><button class="btn" id="seenBtn" type="button"><svg class="icon"><use href="#i-check"></use></svg><span>Marcar como visto</span></button><button class="btn" id="shareBtn" type="button">Compartilhar ↗</button></div>
     </div>
    </div>
@@ -317,7 +320,7 @@ h1 em{font-weight:400;font-style:italic;color:var(--wine)}
   <button type="button" class="load-more" id="loadMore">Ver mais filmes</button>
  </section>
 </main>
-<footer class="footer"><div class="wrap foot"><span><strong>o próximo filme.</strong> Uma pequena ajuda para grandes sessões.</span><span>Feito com carinho para cinéfilos indecisos · Listas salvas neste navegador</span></div></footer>
+<footer class="footer"><div class="wrap foot"><span><strong>o próximo filme.</strong> Pra noite boa não terminar em filme ruim.</span><span>Feito para as noites na casa da Júlia · Listas salvas neste navegador</span></div></footer>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 /* O sorteio e o catálogo são locais. Pôsteres e sinopses são opcionais e exigem rede. */
