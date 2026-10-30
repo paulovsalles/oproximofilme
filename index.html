@@ -216,7 +216,7 @@ h1 em{font-weight:400;font-style:italic;color:var(--wine)}
    <p class="help-text" id="modeHelp">Qualquer filme do catálogo pode ser escolhido. Sem pensar demais.</p>
    <div class="filters" id="filters" hidden>
     <div class="field"><label for="genre">Gênero</label><select id="genre"><option value="">Todos os gêneros</option></select></div>
-    <div class="field"><label for="decade">Época</label><select id="decade"><option value="">Qualquer época</option><option value="pre1980">Antes de 1980</option><option value="1980">Anos 80</option><option value="1990">Anos 90</option><option value="2000">Anos 2000</option><option value="2010">Anos 2010</option><option value="2020">Anos 2020</option></select></div>
+    <div class="field"><label for="decade">Época</label><select id="decade"><option value="">Qualquer época</option><option value="current">Ano atual</option><option value="last5">Últimos 5 anos</option><option value="pre1980">Antes de 1980</option><option value="1980">Anos 80</option><option value="1990">Anos 90</option><option value="2000">Anos 2000</option><option value="2010">Anos 2010</option><option value="2020">Anos 2020</option></select></div>
     <div class="field"><label for="special">Categoria especial</label><select id="special"><option value="">Qualquer categoria</option><option value="Finais extraordinários">Final extraordinário</option><option value="Finais WTF">Final WTF</option><option value="Filmes imprevisíveis">Imprevisível</option><option value="Crítica dividida, fãs apaixonados">Amado pelo público</option><option value="Cult, trash e deliciosamente exagerados">Cult / trash</option><option value="Oscar de Melhor Filme">Oscar: Melhor Filme</option><option value="Lançamentos recentes">Lançamentos recentes</option></select></div>
     <div class="field"><label for="vibe">Clima da noite</label><select id="vibe"><option value="">Qualquer clima</option><option value="leve">Leve e divertido</option><option value="emocionante">Emocionante</option><option value="tenso">Tenso e intrigante</option><option value="fantastico">Fora da realidade</option></select></div>
    </div>
@@ -447,7 +447,16 @@ function matches(m){
  const genre=$('#genre').value,decade=$('#decade').value, special=$('#special').value, vibe=$('#vibe').value;
  if(genre&&!m.genres.includes(genre))return false;
  if(special&&!m.collections.includes(special))return false;
- if(decade){if(decade==='pre1980' && m.year>=1980)return false;if(decade!=='pre1980'){let y=Number(decade);if(!(m.year>=y&&m.year<y+10))return false;}}
+ if(decade){
+  const currentYear=new Date().getFullYear();
+  if(decade==='current' && m.year!==currentYear)return false;
+  else if(decade==='last5' && (m.year<currentYear-4 || m.year>currentYear))return false;
+  else if(decade==='pre1980' && m.year>=1980)return false;
+  else if(!['current','last5','pre1980'].includes(decade)){
+    const y=Number(decade);
+    if(!(m.year>=y && m.year<y+10))return false;
+  }
+ }
  const vibes={leve:['Comédia','Animação','Família e infantojuvenil','Musicais e música'],emocionante:['Drama','Romance','Esportes'],tenso:['Mistério e investigação','Suspense e thriller','Terror','Crime e máfia'],fantastico:['Ficção científica','Fantasia','Aventura']};
  if(vibe&&!m.genres.some(g=>vibes[vibe].includes(g)))return false;
  return true;
@@ -507,7 +516,11 @@ function bind(){
    infoInFlight.clear();infoCache={};persistInfo();updateProviderNotice();toast('TMDB desativado. Usando Wikipédia.');
    if(lastMovie)hydrateMovie(lastMovie);
  });
- $('#heroCount').textContent=MOVIES.length;$('#favCount').textContent=favorites.size;
+  // Períodos relativos: acompanham automaticamente o ano do visitante.
+  const currentYear=new Date().getFullYear();
+  $('#decade').querySelector('option[value="current"]').textContent=`Ano atual (${currentYear})`;
+  $('#decade').querySelector('option[value="last5"]').textContent=`Últimos 5 anos (${currentYear-4}–${currentYear})`;
+  $('#heroCount').textContent=MOVIES.length;$('#favCount').textContent=favorites.size;
  $('#genre').innerHTML+=[...GENRES].map(g=>`<option value="${escapeHTML(g)}">${escapeHTML(g)}</option>`).join('');
  $('#modeAll').addEventListener('click',()=>setMode('all'));$('#modeCustom').addEventListener('click',()=>setMode('custom'));
  $('#drawBtn').addEventListener('click',draw);$('#againBtn').addEventListener('click',draw);
