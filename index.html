@@ -84,12 +84,40 @@ body{background:var(--bg);color:var(--ink)}
 /* Mensagens do contador legíveis em celular */
 #localCount,#worldCount{overflow-wrap:anywhere}
 #clearLocalFilters{color:#262626;background:#fff;border:1px solid #b8c7b9}
+
+/* Descrição livre: busca por IA, mantendo a paleta editorial */
+.ai-explore{max-width:804px;margin:0 auto 69px;padding:0 22px}
+.ai-box{border:1px solid #e2e2de;border-radius:21px;background:#fff;padding:clamp(22px,4vw,36px);box-shadow:0 12px 42px #16161607}
+.ai-head{display:flex;gap:14px;align-items:center;justify-content:space-between}
+.ai-mark{border-radius:50%;background:var(--rose);border:1px solid #ecd9dd;width:40px;height:40px;display:grid;place-items:center;font-size:23px;color:#805967}
+.ai-box h2{font:normal clamp(32px,5vw,43px)/1.13 Georgia,serif;letter-spacing:-1.5px;margin:12px 0}
+.ai-box p{color:var(--muted);font-size:13px;line-height:1.7}
+.ai-jump{display:inline-block;margin-top:19px;color:#865d69;font-size:12px;font-weight:650;text-decoration:underline;text-underline-offset:4px}
+.ai-input{font:inherit;width:100%;min-height:109px;resize:vertical;padding:17px;border:1px solid #d9d9d5;border-radius:12px;background:#fbfbfa;color:var(--ink);font-size:14px;line-height:1.6}
+.ai-input:focus-visible{outline:2px solid #a88a92;outline-offset:2px}
+.ai-examples{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0 18px}
+.ai-example{background:#fff;border:1px solid #e5e3df;border-radius:999px;padding:8px 12px;color:#625e5d;font-size:11px}
+.ai-example:hover{background:var(--sage);color:#2a3e2f}
+.ai-runline{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.ai-status{font-size:12px!important;color:#71676a!important;margin:15px 0 0}
+.ai-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:21px}
+.ai-film{overflow:hidden;border:1px solid #e5e2df;border-radius:13px;background:#fff;display:flex;flex-direction:column}
+.ai-film .ai-film-art{height:210px;width:100%;object-fit:cover;background:var(--sage)}
+.ai-film .ai-film-fallback{height:210px;background:var(--sage);display:grid;place-items:center;padding:18px;font:20px Georgia,serif}
+.ai-film-body{padding:14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.ai-film h3{font:normal 21px/1.17 Georgia,serif;letter-spacing:-.35px;margin:0}
+.ai-film .ai-meta{font-size:11px;color:#8a8583}
+.ai-film .ai-why{font-size:12px;color:#634d55;background:var(--rose);padding:9px 10px;border-radius:9px;line-height:1.5;margin:0}
+.ai-film .ai-synopsis{color:#767171;font-size:11px;line-height:1.6;margin:0;flex:1}
+.ai-film .btn{margin-top:3px;font-size:11px;padding:10px 8px}
+@media(max-width:620px){.ai-grid{grid-template-columns:1fr}.ai-film{display:grid;grid-template-columns:100px 1fr}.ai-film .ai-film-art,.ai-film .ai-film-fallback{height:100%;min-height:170px}.ai-film h3{font-size:20px}.ai-film-body{padding:12px}.ai-box{border-radius:16px}}
+
 </style>
 </head>
 <body>
 <header class="top"><div class="wrap top-in"><a class="logo" href="#inicio">o próximo <em>filme.</em></a><button id="favoritesBtn" type="button">♡ Minha lista <span id="favCount">0</span></button></div></header>
 <main id="inicio">
-<div class="wrap hero"><div class="eyebrow">Uma noite entre amigos</div><h1>O filme certo.<br><em>Sem complicar.</em></h1><p>Na casa da Julia tem Caju, comida da tia Ângela, bebidas do seu Rubens e conversa com a Nath e o Stênio. Falta só escolher o filme.</p></div>
+<div class="wrap hero"><div class="eyebrow">Uma noite entre amigos</div><h1>O filme certo.<br><em>Sem complicar.</em></h1><p>Na casa da Julia tem Caju, comida da tia Ângela, bebidas do seu Rubens e conversa com a Nath e o Stênio. Falta só escolher o filme.</p><a class="ai-jump" href="#recomendar-ia">✧ Prefere descrever o filme que quer assistir?</a></div>
 <div class="wizard">
  <div class="progress" id="progress"><div class="active"><b>1</b> Acervo</div><div><b>2</b> Filtros</div><div><b>3</b> Confirmar</div><div><b>4</b> Filme</div></div>
  <div class="inner">
@@ -170,7 +198,26 @@ body{background:var(--bg);color:var(--ink)}
   <div class="nav"><button class="btn secondary" id="back" type="button" hidden>← Voltar</button><span></span><button class="btn" id="next" type="button">Continuar →</button></div>
  </div>
 </div>
-<section class="explore"><details id="browse"><summary>Prefere procurar pelo nome? ↗</summary><p class="small">Busque filmes diretamente no acervo mundial do TMDB.</p><div class="searchline"><input type="search" id="searchTerm" placeholder="Ex.: Interestelar"><button type="button" class="btn" id="searchBtn">Buscar</button></div><p class="small" id="searchStatus"></p><div id="searchResults" class="list"></div></details></section>
+
+<section class="ai-explore" id="recomendar-ia" aria-labelledby="aiTitle">
+  <div class="ai-box">
+    <div class="ai-head"><div class="eyebrow">Uma escolha a partir das suas palavras</div><div class="ai-mark" aria-hidden="true">✧</div></div>
+    <h2 id="aiTitle">Descreva o filme que você quer ver.</h2>
+    <p>Conte o clima, o tipo de história e até onde você quer assistir. Vamos encontrar <strong>3 opções</strong> para a sua noite, sem entregar spoilers.</p>
+    <label class="field" for="aiRequest"><span class="small" style="display:block;margin:10px 0 7px;font-weight:700">O que você está procurando?</span></label>
+    <textarea id="aiRequest" class="ai-input" maxlength="400" placeholder="Quero um suspense intrigante, com reviravoltas, que me prenda do começo ao fim. De preferência na Netflix..."></textarea>
+    <div class="ai-examples" aria-label="Ideias de pedidos">
+      <button class="ai-example" type="button" data-ai-example="Quero um suspense intrigante, cheio de reviravoltas e mistério.">Suspense intrigante</button>
+      <button class="ai-example" type="button" data-ai-example="Quero uma comédia leve e divertida, com até duas horas de duração.">Leve e divertido</button>
+      <button class="ai-example" type="button" data-ai-example="Quero um filme de ficção científica inteligente e emocionante, de preferência no Prime Video.">Ficção científica</button>
+    </div>
+    <div class="ai-runline"><span class="small">Sugestões com pôsteres e sinopses do TMDB.</span><button type="button" id="aiFindBtn" class="btn">✧ Encontrar 3 filmes</button></div>
+    <p class="ai-status" id="aiStatus" role="status" aria-live="polite"></p>
+    <div id="aiResults" class="ai-grid" aria-live="polite"></div>
+  </div>
+</section>
+
+ <section class="explore"><details id="browse"><summary>Prefere procurar pelo nome? ↗</summary><p class="small">Busque filmes diretamente no acervo mundial do TMDB.</p><div class="searchline"><input type="search" id="searchTerm" placeholder="Ex.: Interestelar"><button type="button" class="btn" id="searchBtn">Buscar</button></div><p class="small" id="searchStatus"></p><div id="searchResults" class="list"></div></details></section>
 </main><footer class="foot"><div class="wrap">o próximo filme. · Feito para uma boa noite entre amigos. · Dados de filmes via TMDB (não endossado pelo TMDB). Disponibilidade de streaming: JustWatch/TMDB.</div></footer>
 <script>
 'use strict';
@@ -491,7 +538,107 @@ function posterFallback(t){let d=document.createElement('div');d.className='post
 function updateActions(){if(!current)return;$('saveFav').classList.toggle('saved',stored.favorites.some(x=>x.key===key(current)));$('saveFav').textContent=stored.favorites.some(x=>x.key===key(current))?'♥ Nos favoritos':'♡ Favoritar';$('saveSeen').classList.toggle('saved',stored.seen.includes(key(current)));$('saveSeen').textContent=stored.seen.includes(key(current))?'✓ Assistido':'✓ Já assisti'}
 $('saveFav').addEventListener('click',()=>{if(!current)return;const k=key(current),i=stored.favorites.findIndex(x=>x.key===k);if(i>=0)stored.favorites.splice(i,1);else stored.favorites.push({key:k,movie:current});save();updateActions()});$('saveSeen').addEventListener('click',()=>{if(!current)return;const k=key(current),i=stored.seen.indexOf(k);if(i>=0)stored.seen.splice(i,1);else stored.seen.push(k);save();updateActions()});$('retry').addEventListener('click',draw);$('resetFilters').addEventListener('click',()=>{for(const id of ['genre','era','ending','mood','rating','runtime','provider','language','country']) $(id).value='';$('votes').value='0';$('sort').value='popularity.desc';$('skipSeen').checked=false;if(source==='local')updateLocalCount();else updateWorldCount();draw()});
 async function search(){const q=$('searchTerm').value.trim();if(!q)return;$('searchStatus').textContent='Buscando...';$('searchResults').replaceChildren();try{let data=await api('search/movie',{query:q});let arr=(data.results||[]).slice(0,12).map(worldMovie);$('searchStatus').textContent=arr.length+' resultado(s) nesta página.';for(let m of arr){let b=document.createElement('button');b.className='item';b.type='button';let title=document.createElement('strong');title.textContent=m.title;let sub=document.createElement('small');sub.textContent=m.year||'Ano desconhecido';b.append(title,sub);b.addEventListener('click',()=>{showMovie(m);go(4)});$('searchResults').append(b)}}catch(e){$('searchStatus').textContent=e.message}}
-$('searchBtn').addEventListener('click',search);$('searchTerm').addEventListener('keydown',e=>{if(e.key==='Enter')search()});$('favoritesBtn').addEventListener('click',()=>{const favs=stored.favorites;if(!favs.length){alert('Sua lista ainda está vazia. Sorteie um filme e toque em Favoritar.');return}let name=prompt('Sua lista:\n'+favs.map((f,i)=>`${i+1}. ${f.movie.title}`).join('\n')+'\n\nDigite o número do filme para abrir:');let i=Number(name)-1;if(favs[i]){showMovie(favs[i].movie);go(4)}});chooseSource('local');
+$('searchBtn').addEventListener('click',search);$('searchTerm').addEventListener('keydown',e=>{if(e.key==='Enter')search()});$('favoritesBtn').addEventListener('click',()=>{const favs=stored.favorites;if(!favs.length){alert('Sua lista ainda está vazia. Sorteie um filme e toque em Favoritar.');return}let name=prompt('Sua lista:\n'+favs.map((f,i)=>`${i+1}. ${f.movie.title}`).join('\n')+'\n\nDigite o número do filme para abrir:');let i=Number(name)-1;if(favs[i]){showMovie(favs[i].movie);go(4)}});
+/* Busca por descrição: IA real via Cloudflare quando configurada; pesquisa guiada como alternativa. */
+function aiPromptProvider(text){
+  const s=text.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+  if(/netflix/.test(s))return '8';
+  if(/prime video|amazon prime|amazon video/.test(s))return '119';
+  if(/hbo|\bmax\b/.test(s))return '1899';
+  if(/disney/.test(s))return '337';
+  if(/apple tv/.test(s))return '350';
+  if(/globoplay/.test(s))return '307';
+  return '';
+}
+function aiPromptGenres(text){
+  const s=text.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+  if(/suspens|intrig|reviravolt|misteri|investig|tens[ao]|thriller/.test(s))return '53|9648';
+  if(/terror|assust|horror/.test(s))return '27';
+  if(/comedi|engrac|divertid|risad|leve/.test(s))return '35';
+  if(/ficcao cientifica|sci.?fi|espac|futur|distopi/.test(s))return '878';
+  if(/romantic|romance|amor/.test(s))return '10749';
+  if(/animac|desenho/.test(s))return '16';
+  if(/acao|luta|adrenalina/.test(s))return '28';
+  if(/fantasia|magia/.test(s))return '14';
+  if(/emocion|chorar|dramatic|drama/.test(s))return '18';
+  return '';
+}
+function aiWhyFallback(m,prompt){
+  const category=(m.genre||'seu estilo').toLowerCase();
+  return 'Uma opção de '+category+' para considerar na sua sessão.';
+}
+async function aiGuidedFallback(prompt){
+  const genres=aiPromptGenres(prompt),provider=aiPromptProvider(prompt);
+  const query={sort_by:'popularity.desc','vote_count.gte':'30',page:1};
+  if(genres)query.with_genres=genres;
+  if(provider){query.watch_region='BR';query.with_watch_providers=provider;query.with_watch_monetization_types='flatrate';}
+  const first=await api('discover/movie',query);
+  let movies=[...(first.results||[])];
+  if((first.total_pages||0)>1){
+    try{const next=await api('discover/movie',{...query,page:2});movies.push(...(next.results||[]));}catch{}
+  }
+  const clean=[...new Map(movies.filter(x=>x.id && x.title).map(x=>[x.id,x])).values()];
+  // Filtra lançamentos não publicados e descrições vazias, quando possível.
+  const eligible=clean.filter(x=>x.overview && (!x.release_date || x.release_date<=new Date().toISOString().slice(0,10)));
+  const pool=eligible.length>=3?eligible:clean;
+  return {mode:'guided',movies:pool.slice(0,3).map(x=>({
+    ...worldMovie(x),why:aiWhyFallback(worldMovie(x),prompt)
+  }))};
+}
+function aiShowResults(data){
+  const root=$('aiResults');root.replaceChildren();
+  const films=(data.movies||[]).slice(0,3);
+  if(!films.length){$('aiStatus').textContent='Não encontramos três opções agora. Tente descrever o clima de outra forma.';return;}
+  $('aiStatus').textContent=data.mode==='ai'
+    ?'Estas três sugestões foram escolhidas por IA entre filmes encontrados no TMDB.'
+    :'Estas sugestões vieram de uma busca guiada no TMDB. A seleção por IA estará disponível quando o Cloudflare Workers AI for ativado.';
+  for(const m of films){
+    const card=document.createElement('article');card.className='ai-film';
+    if(m.poster){
+      const img=document.createElement('img');img.className='ai-film-art';img.src=m.poster;
+      img.alt='Pôster de '+m.title;img.loading='lazy';
+      img.onerror=()=>{const fallback=document.createElement('div');fallback.className='ai-film-fallback';fallback.textContent=m.title;img.replaceWith(fallback)};
+      card.append(img);
+    }else{const blank=document.createElement('div');blank.className='ai-film-fallback';blank.textContent=m.title;card.append(blank);}
+    const body=document.createElement('div');body.className='ai-film-body';
+    const title=document.createElement('h3');title.textContent=m.title||'Filme';
+    const meta=document.createElement('div');meta.className='ai-meta';meta.textContent=[m.year,m.rating?'TMDB '+Number(m.rating).toFixed(1):''].filter(Boolean).join(' · ');
+    const why=document.createElement('p');why.className='ai-why';why.textContent=m.why||'Pode combinar com o clima que você descreveu.';
+    const synopsis=document.createElement('p');synopsis.className='ai-synopsis';synopsis.textContent=(m.overview||'Sinopse indisponível.').slice(0,220)+((m.overview||'').length>220?'…':'');
+    const btn=document.createElement('button');btn.type='button';btn.className='btn';btn.textContent='Escolher este filme →';
+    btn.addEventListener('click',()=>{showMovie(m);go(4)});
+    body.append(title,meta,why,synopsis,btn);card.append(body);root.append(card);
+  }
+}
+let aiRequestSerial=0;
+async function aiFindMovies(){
+  const prompt=$('aiRequest').value.trim();
+  if(prompt.length<12){$('aiStatus').textContent='Descreva um pouco mais o filme que você quer, com pelo menos 12 caracteres.';return;}
+  const serial=++aiRequestSerial;
+  $('aiFindBtn').disabled=true;$('aiFindBtn').textContent='Buscando...';
+  $('aiResults').replaceChildren();$('aiStatus').textContent='Procurando três filmes que combinam com seu pedido...';
+  try{
+    let data;
+    try{
+      const resp=await fetch(WORKER+'/ai/recommend',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
+      if(!resp.ok)throw Error('IA ainda não configurada ('+resp.status+')');
+      data=await resp.json();
+      if(!Array.isArray(data.movies)||!data.movies.length)throw Error('Sem sugestões da IA');
+    }catch(e){
+      console.info('Buscando pelo TMDB enquanto a IA não está disponível:',e.message);
+      data=await aiGuidedFallback(prompt);
+    }
+    if(serial===aiRequestSerial)aiShowResults(data);
+  }catch(e){if(serial===aiRequestSerial)$('aiStatus').textContent='Não foi possível buscar filmes agora: '+e.message;}
+  finally{if(serial===aiRequestSerial){$('aiFindBtn').disabled=false;$('aiFindBtn').textContent='✧ Encontrar 3 filmes';}}
+}
+$('aiFindBtn').addEventListener('click',aiFindMovies);
+$('aiRequest').addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter')aiFindMovies()});
+document.querySelectorAll('[data-ai-example]').forEach(btn=>btn.addEventListener('click',()=>{
+ $('aiRequest').value=btn.dataset.aiExample;$('aiRequest').focus();
+}));
+
+chooseSource('local');
 </script>
 </body>
 </html>
