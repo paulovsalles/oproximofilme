@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#f8f5ef">
 <meta name="description" content="Uma noite entre amigos merece um bom filme. Sorteie, filtre e descubra o próximo filme.">
-<title>O próximo filme — a escolha da noite</title>
+<title>O próximo filme — o cinema inteiro, uma noite de cada vez</title>
 <style>
 :root{
  --bg:#f8f5ef; --paper:#fffdf9; --ink:#302b30; --muted:#756c70; --wine:#874f5b; --wine-dark:#673b49; --rose:#f0dddd; --sage:#dae5d9; --lav:#e8e2ec; --blue:#dfebec; --butter:#f6e9cd; --line:#e7e0d7;
@@ -212,6 +212,75 @@ h1 em{font-weight:400;font-style:italic;color:var(--wine)}
 }
 @media(prefers-reduced-motion:reduce){.pouler-thermo-choice{transition:none}}
 
+
+/* =======================================================
+   UNIVERSO TMDB · catálogo remoto, com fallback local
+   ======================================================= */
+.source-picker{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:5px;background:#f4eee8;border-radius:14px;margin:-3px 0 17px}
+.source-button{border:1px solid transparent;background:none;color:#766a70;border-radius:10px;padding:11px 7px;font-size:12px;font-weight:750;transition:.18s}
+.source-button[aria-pressed="true"]{background:#fffdfa;border-color:#e6dcd6;color:var(--wine-dark);box-shadow:0 2px 8px #58434b0b}
+.source-subtitle{margin:12px 0 0;color:#81757a;font-size:11px;line-height:1.65}
+.world-draw-tip{font-size:12px;background:#e9efe8;border:1px solid #d6e3d5;border-radius:11px;margin-top:13px;padding:12px;color:#4d6556;line-height:1.5}
+.world-draw-tip a{text-decoration:underline;text-underline-offset:3px;font-weight:750}
+.world{padding:66px 0 86px;position:relative}
+.world-header{display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:25px}
+.world h2{font:500 clamp(35px,4.2vw,56px)/1.06 var(--serif);letter-spacing:-.062em;margin:9px 0 10px}
+.world h2 em{color:var(--wine);font-style:italic}
+.world-sub{font-size:13px;color:var(--muted);line-height:1.75;max-width:600px;margin:0}
+.world-status{font-size:11px;display:flex;align-items:center;gap:9px;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:10px 13px;white-space:nowrap;align-self:flex-start}
+.world-dot{height:8px;width:8px;background:#aa8b7a;border-radius:50%;display:inline-block}
+.world-status.is-on .world-dot{background:#5c926c}
+.world-picks{display:flex;gap:8px;overflow-x:auto;padding:2px 0 17px;scrollbar-width:thin}
+.world-pick{white-space:nowrap;padding:10px 15px;border:1px solid #ddcfcf;border-radius:999px;color:#765660;background:var(--paper);font-size:12px;font-weight:720}
+.world-pick:hover,.world-pick.active{background:var(--wine);border-color:var(--wine);color:white}
+.world-filter-panel{border:1px solid var(--line);border-radius:24px;background:var(--paper);padding:25px;box-shadow:var(--shadow)}
+.world-search{display:flex;gap:10px;margin-bottom:18px}
+.world-search input{flex:1;min-width:0;border-radius:12px;padding:15px 16px;font-size:14px;border:1px solid #e3dad4;background:#faf8f5;color:var(--ink)}
+.world-search button,.world-actions button{background:var(--wine);border:1px solid var(--wine);color:white;border-radius:12px;padding:12px 19px;font-weight:770;font-size:12px}
+.world-search button:hover,.world-actions button:hover{background:var(--wine-dark)}
+.world-fields{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.world-field label{display:block;color:#655a5f;font-size:11px;font-weight:760;margin-bottom:6px}
+.world-field select,.world-field input{width:100%;min-width:0;border:1px solid #e3dad4;border-radius:11px;background:#faf8f5;color:#3a3337;padding:12px 11px;font-size:12px}
+.world-field input::placeholder{color:#afa0a3}
+.world-actions{display:flex;align-items:center;gap:13px;flex-wrap:wrap;margin-top:20px}
+.world-actions .world-reset{background:transparent;border-color:#d6bfc0;color:var(--wine-dark)}
+.world-actions .world-reset:hover{background:var(--rose)}
+.world-actions p{font-size:11px;color:#897e80;margin:0 0 0 auto}
+.world-result-head{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;margin:29px 0 16px}
+.world-result-head strong{font:500 23px/1.2 var(--serif);letter-spacing:-.035em}
+.world-result-head span{font-size:12px;color:#80747a}
+.world-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px}
+.world-film{background:var(--paper);border:1px solid var(--line);border-radius:17px;overflow:hidden;min-width:0;transition:transform .2s,box-shadow .2s}
+.world-film:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(54,31,43,.10)}
+.world-cover{display:block;position:relative;width:100%;aspect-ratio:2/3;border:0;border-radius:0;padding:0;background:linear-gradient(150deg,#e5d9e7,#e4ebde);color:var(--ink);overflow:hidden;text-align:left}
+.world-cover img{display:block;object-fit:cover;width:100%;height:100%;position:absolute;inset:0}
+.world-cover img + .world-poster-fallback{display:none}.world-cover .world-poster-fallback{padding:20px;font:500 21px/1.15 var(--serif);letter-spacing:-.04em;display:block}
+.world-rating{position:absolute;left:10px;bottom:10px;padding:5px 8px;font-size:11px;font-weight:800;border-radius:8px;background:#fffdf9f0;color:var(--wine-dark);backdrop-filter:blur(6px)}
+.world-info{padding:12px 12px 13px}
+.world-info>button{border:0;background:none;padding:0;text-align:left;color:var(--ink);font:600 15px/1.24 var(--serif);letter-spacing:-.025em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:37px}
+.world-info>button:hover{color:var(--wine)}
+.world-meta{font-size:11px;color:#8b7c83;margin:5px 0 11px}
+.world-bottom{display:flex;align-items:center;gap:6px;justify-content:space-between}
+.world-bottom button{background:#f7f1ef;border:1px solid #e9d8d7;border-radius:8px;padding:7px 9px;color:#815666;font-size:11px;font-weight:710}
+.world-bottom button:hover,.world-bottom button.is-on{background:var(--rose);border-color:#d7b9bc}
+.world-empty{grid-column:1/-1;padding:40px 25px;border:1px dashed #d5c5c3;border-radius:17px;text-align:center;color:#887b80;font-size:13px;line-height:1.8}
+.world-loading{grid-column:1/-1;min-height:130px;display:grid;place-items:center;color:#887b80;font-size:13px}
+.world-more{display:block;margin:24px auto 0;border:1px solid #d9b7b9;color:var(--wine-dark);border-radius:999px;background:var(--rose);font-size:12px;padding:13px 23px;font-weight:780}
+.world-more:disabled{opacity:.6}
+.world-connect{border:1px solid #e6dacf;background:#f4ede7;border-radius:17px;margin-top:21px;padding:18px 22px;font-size:12px;color:#66565d;line-height:1.65}
+.world-connect summary{cursor:pointer;font-weight:770;color:var(--wine-dark);font-size:12px}
+.world-connect p{margin:10px 0}
+.world-connect .world-connection-inputs{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.world-connect input{flex:1;min-width:230px;background:white;border:1px solid #e0d1ce;padding:11px;border-radius:9px;font-size:12px}
+.world-connect button{background:var(--wine);border:1px solid var(--wine);color:white;border-radius:9px;padding:10px 14px;font-size:12px;font-weight:730}
+.world-connect button.secondary{background:transparent;color:var(--wine)}
+.world-connect a{color:var(--wine);text-decoration:underline}
+.world-legal{margin:16px 0 0;color:#8b8081;font-size:10px;line-height:1.6}
+.world-legal img{width:89px;height:auto;vertical-align:middle;margin-right:8px}
+@media(max-width:1060px){.world-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.world-fields{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:760px){.world{padding:50px 0 62px}.world-header{display:block}.world-status{display:inline-flex;margin:11px 0 0}.world-filter-panel{padding:16px;border-radius:18px}.world-fields{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.world-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.world-search{gap:7px}.world-search input{padding:12px 10px;font-size:12px}.world-search button{padding:10px 12px}.world-info{padding:10px 9px}.world-info>button{font-size:13px;min-height:33px}.world-actions p{margin-left:0;width:100%}}
+@media(max-width:460px){.world-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.world-fields{grid-template-columns:1fr 1fr}.world-meta{font-size:10px}.world-search button{font-size:11px}}
+
 </style>
 </head>
 <body>
@@ -231,7 +300,7 @@ h1 em{font-weight:400;font-style:italic;color:var(--wine)}
 <header class="header">
  <div class="wrap nav">
   <a href="#inicio" class="logo" aria-label="O próximo filme — início"><span class="logo-mark"><svg class="icon"><use href="#i-clapper"></use></svg></span><span>o próximo <em>filme.</em></span></a>
-  <nav class="links" aria-label="Menu principal"><a href="#sortear">Sortear</a><a href="#colecoes">Descobrir</a><a href="#catalogo">Catálogo</a></nav>
+  <nav class="links" aria-label="Menu principal"><a href="#sortear">Sortear</a><a href="#universo">Acervo mundial</a><a href="#colecoes">Coleções</a><a href="#catalogo">Seleção da casa</a></nav>
   <a href="#catalogo" class="small-cta" id="navFavorites">♡ Minha lista <span id="favCount">0</span></a>
  </div>
 </header>
@@ -242,11 +311,15 @@ h1 em{font-weight:400;font-style:italic;color:var(--wine)}
    <h1>Tudo perfeito.<br>Até o <em>filme.</em></h1>
    <p>Tem coisa melhor que ir à casa da Julia? Dar um oi no Caju, comer a comida da tia Ângela, provar as bebidas do seu Rubens, bater papo com a Nath e o Stênio, jogar e terminar a noite vendo um filme.</p>
    <p class="hero-punch"><strong>O único risco?</strong> O filme ser horrível. Foi pra evitar isso que criamos este espaço.</p>
-   <div class="micro"><span><strong id="heroCount">957</strong> filmes</span><span>19 gêneros</span><span>Sem cadastro</span></div>
+   <div class="micro"><span><strong id="heroCount">957</strong> filmes</span><span>19 gêneros</span><span id="microSource">Sem cadastro</span></div>
    <div class="sketch" aria-hidden="true"><div class="reel"></div><p>A turma reunida.<br>O filme certo.</p><span class="tiny">Sessão na casa da Julia</span></div>
   </div>
   <div class="draw-card" aria-labelledby="drawHeading">
    <div class="card-heading"><h2 id="drawHeading">Escolha sua sessão</h2><span class="ticket-tag">✦ Sorteio</span></div>
+   <div class="source-picker" role="group" aria-label="Origem dos filmes">
+    <button type="button" class="source-button" id="sourceLocal" aria-pressed="true">✦ Seleção da casa</button>
+    <button type="button" class="source-button" id="sourceWorld" aria-pressed="false">◈ Acervo mundial</button>
+   </div>
    <div class="segmented" role="group" aria-label="Modo de sorteio">
     <button type="button" id="modeAll" class="mode active" aria-pressed="true"><svg class="icon"><use href="#i-shuffle"></use></svg>Sem filtros</button>
     <button type="button" id="modeCustom" class="mode" aria-pressed="false"><svg class="icon"><use href="#i-sparkle"></use></svg>Personalizar</button>
@@ -258,6 +331,7 @@ h1 em{font-weight:400;font-style:italic;color:var(--wine)}
     <div class="field"><label for="special">Categoria especial</label><select id="special"><option value="">Qualquer categoria</option><option value="Clássicos do cinema">Clássicos do cinema</option><option value="Finais extraordinários">Final extraordinário</option><option value="Finais WTF">Final WTF</option><option value="Filmes imprevisíveis">Imprevisível</option><option value="Crítica dividida, fãs apaixonados">Amado pelo público</option><option value="Cult, trash e deliciosamente exagerados">Cult / trash</option><option value="Oscar de Melhor Filme">Oscar: Melhor Filme</option><option value="Lançamentos recentes">Lançamentos recentes</option></select></div>
     <div class="field"><label for="vibe">Clima da noite</label><select id="vibe"><option value="">Qualquer clima</option><option value="leve">Leve e divertido</option><option value="emocionante">Emocionante</option><option value="tenso">Tenso e intrigante</option><option value="fantastico">Fora da realidade</option></select></div>
    </div>
+   <div class="world-draw-tip" id="worldDrawTip" hidden>O sorteio mundial usa a base do TMDB. No modo personalizado, aproveita os <a href="#universo">filtros do catálogo mundial</a> abaixo.</div>
    <div class="toggle-row"><label><input type="checkbox" id="skipSeen"/> Não repetir filmes assistidos</label><span class="count" id="matchCount" aria-live="polite">957 opções</span></div>
    <button class="draw-btn" type="button" id="drawBtn"><svg class="icon"><use href="#i-shuffle"></use></svg>Sortear meu filme <svg class="icon"><use href="#i-arrow"></use></svg></button>
    <div class="subtip">Sorteio sem cadastro · Pôsteres e sinopses carregam com internet.</div>
@@ -297,7 +371,7 @@ h1 em{font-weight:400;font-style:italic;color:var(--wine)}
    <details class="movie-options wrap" id="movieOptions">
     <summary>Pôster e sinopse: informações, fonte e opções</summary>
     <div class="movie-options-inner">
-      <p>O site tenta encontrar automaticamente pôster e resumo na Wikipédia, sem cadastro. Para ampliar a cobertura e obter sinopses em português, você pode ativar o TMDB com seu <strong>token pessoal de leitura da API</strong>. Ele fica salvo somente neste navegador e <strong>não</strong> é publicado no HTML do GitHub. <a href="https://www.themoviedb.org/settings/api" target="_blank" rel="noopener noreferrer" style="text-decoration:underline">Como obter um token TMDB ↗</a></p>
+      <p>O site busca pôsteres e sinopses em português automaticamente pelo TMDB, usando a conexão segura com o Cloudflare Worker. <strong>Não é necessário colocar token aqui.</strong> Se o TMDB estiver indisponível, alguns filmes da seleção da casa poderão usar informações da Wikipédia. A opção de token pessoal abaixo é apenas um recurso avançado e não é necessária para navegar.</p>
       <div class="tmdb-setup"><input id="tmdbToken" type="password" autocomplete="off" placeholder="Cole seu token de leitura TMDB" aria-label="Token de leitura da API TMDB"><button type="button" id="saveToken">Ativar TMDB</button><button class="secondary" type="button" id="clearToken">Desativar</button></div>
       <p class="options-note" id="providerNotice">Fonte automática: Wikipédia · Conexão com internet necessária. Alguns filmes podem não ter capa ou sinopse disponível. O catálogo e o sorteio continuam funcionando offline.</p>
       <div class="info-provider"><span class="provider-tag">TMDB</span> Este produto usa a API do TMDB, mas não é endossado nem certificado pelo TMDB. <a href="https://www.themoviedb.org" target="_blank" rel="noopener noreferrer" style="text-decoration:underline">Saiba mais</a>.</div>
@@ -314,6 +388,53 @@ h1 em{font-weight:400;font-style:italic;color:var(--wine)}
    <button type="button" class="curate" data-special="Clássicos do cinema"><svg class="icon"><use href="#i-ticket"></use></svg><strong>Um clássico do cinema</strong><span>Histórias que marcaram gerações</span></button>
   </div>
  </section>
+
+  <section class="wrap world" id="universo">
+   <div class="world-header">
+    <div><div class="kicker">Um universo de histórias</div><h2>O cinema inteiro.<br><em>Uma noite de cada vez.</em></h2><p class="world-sub">Explore o catálogo mundial do TMDB com busca, notas, décadas, gêneros, idiomas, duração e streaming no Brasil. Depois, é só pedir que a sorte escolha.</p></div>
+    <div class="world-status" id="worldStatus"><span class="world-dot"></span><span id="worldStatusText">Conectar acervo mundial</span></div>
+   </div>
+   <div class="world-picks" id="worldPicks" aria-label="Sugestões de exploração">
+    <button class="world-pick" type="button" data-preset="popular">✦ Em alta</button>
+    <button class="world-pick" type="button" data-preset="best">★ Muito bem avaliados</button>
+    <button class="world-pick" type="button" data-preset="classic">◈ Clássicos prováveis</button>
+    <button class="world-pick" type="button" data-preset="recent">◷ Lançamentos</button>
+    <button class="world-pick" type="button" data-preset="surprise">✧ Joias escondidas</button>
+    <button class="world-pick" type="button" data-preset="brasil">🇧🇷 Cinema brasileiro</button>
+    <button class="world-pick" type="button" data-preset="scifi">✧ Ficção científica</button>
+    <button class="world-pick" type="button" data-preset="comedy">☺ Comédia</button>
+    <button class="world-pick" type="button" data-preset="favorites">♡ Minha lista TMDB</button>
+   </div>
+   <div class="world-filter-panel">
+    <form id="worldForm" autocomplete="off">
+     <div class="world-search"><input id="worldSearch" type="search" placeholder="Qual filme você quer encontrar? Pesquise por título..." aria-label="Buscar filme no TMDB"><button type="submit">Buscar filme</button></div>
+     <div class="world-fields">
+      <div class="world-field"><label for="worldGenre">Gênero</label><select id="worldGenre"><option value="">Todos os gêneros</option></select></div>
+      <div class="world-field"><label for="worldStart">Ano inicial</label><input id="worldStart" type="number" min="1880" max="2100" placeholder="Ex.: 1990"></div>
+      <div class="world-field"><label for="worldEnd">Ano final</label><input id="worldEnd" type="number" min="1880" max="2100" placeholder="Ex.: 2020"></div>
+      <div class="world-field"><label for="worldRating">Nota mínima (TMDB)</label><select id="worldRating"><option value="0">Qualquer nota</option><option value="6">6,0 ou mais</option><option value="7">7,0 ou mais</option><option value="7.5">7,5 ou mais</option><option value="8">8,0 ou mais</option><option value="8.5">8,5 ou mais</option></select></div>
+      <div class="world-field"><label for="worldVotes">Mínimo de avaliações</label><select id="worldVotes"><option value="0">Sem mínimo</option><option value="50">50 avaliações</option><option value="200" selected>200 avaliações</option><option value="1000">1.000 avaliações</option><option value="5000">5.000 avaliações</option></select></div>
+      <div class="world-field"><label for="worldRuntime">Duração máxima</label><select id="worldRuntime"><option value="">Qualquer duração</option><option value="90">Até 1h30</option><option value="120">Até 2h</option><option value="150">Até 2h30</option><option value="180">Até 3h</option></select></div>
+      <div class="world-field"><label for="worldLanguage">Idioma original</label><select id="worldLanguage"><option value="">Qualquer idioma</option><option value="en">Inglês</option><option value="pt">Português</option><option value="es">Espanhol</option><option value="fr">Francês</option><option value="ja">Japonês</option><option value="ko">Coreano</option><option value="it">Italiano</option><option value="de">Alemão</option><option value="hi">Hindi</option></select></div>
+      <div class="world-field"><label for="worldCountry">País de origem</label><select id="worldCountry"><option value="">Qualquer país</option><option value="BR">Brasil</option><option value="US">Estados Unidos</option><option value="JP">Japão</option><option value="KR">Coreia do Sul</option><option value="FR">França</option><option value="GB">Reino Unido</option><option value="IN">Índia</option></select></div>
+      <div class="world-field"><label for="worldProvider">Onde assistir? (Brasil)</label><select id="worldProvider"><option value="">Qualquer plataforma</option><option value="8">Netflix</option><option value="119">Prime Video</option><option value="337">Disney+</option><option value="384">Max / HBO Max</option><option value="350">Apple TV+</option></select></div>
+      <div class="world-field"><label for="worldSort">Ordenar por</label><select id="worldSort"><option value="popularity.desc">Mais populares</option><option value="vote_average.desc">Melhores notas</option><option value="primary_release_date.desc">Mais recentes</option><option value="primary_release_date.asc">Mais antigos</option><option value="vote_count.desc">Mais avaliados</option></select></div>
+     </div>
+     <div class="world-actions"><button type="submit">Aplicar filtros</button><button type="button" class="world-reset" id="worldReset">Limpar</button><p id="worldFilterNote">Combinações personalizadas · Filmes e notas fornecidos pelo TMDB</p></div>
+    </form>
+   </div>
+   <div class="world-result-head"><strong id="worldHeading">Filmes para descobrir</strong><span id="worldResultCount" role="status" aria-live="polite">Carregando o acervo mundial…</span></div>
+   <div class="world-grid" id="worldGrid"><div class="world-empty">O acervo mundial será carregado automaticamente. Se não aparecer, confira a conexão com a internet.</div></div>
+   <button type="button" id="worldMore" class="world-more" hidden>Carregar mais filmes</button>
+   <details class="world-connect" id="worldSettings"><summary>⚙ Conexão com o TMDB · Detalhes técnicos</summary>
+    <p>O acervo mundial já está conectado automaticamente pelo Cloudflare Worker. Nenhum visitante precisa fornecer token. <a href="#movieOptions" id="worldTokenLink">Informações sobre pôsteres e sinopses</a>.</p>
+    <p>A conexão está configurada para todos os visitantes. Os controles abaixo são opcionais, para quem quiser testar outro Worker neste navegador.</p>
+    <div class="world-connection-inputs"><input id="workerInput" type="url" placeholder="https://seu-worker.seudominio.workers.dev" aria-label="Endereço do Worker"><button id="worldConnect" type="button">Conectar Worker</button><button id="worldDisconnect" class="secondary" type="button">Desconectar</button></div>
+    <p id="worldConnectionMessage">Conexão automática já configurada para todos os visitantes.</p>
+   </details>
+   <div class="world-legal"><img src="https://www.themoviedb.org/assets/v4/logos/v2/blue_square_1_white-ff84c271cc8c93e00aa0264a425434c329089bdfc6a392987332b5f32903f75c.svg" alt="TMDB" loading="lazy" onerror="this.style.display='none'">Este produto usa a API do TMDB, mas não é endossado nem certificado pelo TMDB. As notas e disponibilidades podem mudar; o filtro de “clássicos prováveis” é uma estimativa, não uma classificação oficial. <a href="https://www.themoviedb.org" target="_blank" rel="noopener noreferrer">Fonte: The Movie Database</a>.</div>
+  </section>
+
  <section class="wrap browse" id="catalogo">
   <div class="section-head"><div><div class="kicker">Sua cinemateca</div><h2>Um mundo de boas histórias.</h2></div><div class="section-sub">Pesquise, marque os assistidos e monte sua lista de favoritos.</div></div>
   <div class="browse-tools"><div class="search-wrap"><svg class="icon"><use href="#i-search"></use></svg><input id="searchMovie" type="search" placeholder="Busque um filme pelo nome..." aria-label="Buscar filme"/></div><select id="catalogSpecial" aria-label="Filtrar por clássicos do cinema"><option value="">Todos os estilos</option><option value="Clássicos do cinema">Só clássicos</option></select><select id="catalogView" aria-label="Filtrar minha lista"><option value="all">Todos os filmes</option><option value="favorites">Meus favoritos ♡</option><option value="seen">Já assisti ✓</option><option value="unseen">Ainda não vi</option></select><select id="sortBy" aria-label="Ordenar filmes"><option value="original">Ordem do catálogo</option><option value="az">Título A–Z</option><option value="recent">Mais recentes</option><option value="old">Mais antigos</option></select><div class="browse-count" id="browseCount">957 filmes</div></div>
@@ -384,11 +505,11 @@ async function requestJSON(url, options={}){
   finally{clearTimeout(timer)}
 }
 async function fetchTMDB(movie){
-  if(!tmdbToken)return null;
+  if(!tmdbToken&&!workerURL)return null;
   let result=null;let best=-1;
   for(const phrase of searchVariants(movie).slice(0,3)){
    const url=new URL('https://api.themoviedb.org/3/search/movie');url.searchParams.set('query',phrase);url.searchParams.set('language','pt-BR');url.searchParams.set('include_adult','false');
-   const data=await requestJSON(url.toString(),{headers:{Authorization:'Bearer '+tmdbToken}});
+   const data=await tmdbAPI('search/movie',url.searchParams);
    for(const item of (data.results||[]).slice(0,12)){
      const score=compareCandidate(movie,item.title,movieYear(item.release_date),item.original_title);
      if(score>best){best=score;result=item}
@@ -398,7 +519,7 @@ async function fetchTMDB(movie){
   if(!result||best<95)return null;
   let overview=result.overview||'';
   if(!overview){
-    try{const detail=await requestJSON('https://api.themoviedb.org/3/movie/'+result.id+'?language=pt-BR',{headers:{Authorization:'Bearer '+tmdbToken}});overview=detail.overview||''}catch{}
+    try{const detail=await tmdbAPI('movie/'+result.id,{language:'pt-BR'});overview=detail.overview||''}catch{}
   }
   return {
    poster:result.poster_path?'https://image.tmdb.org/t/p/w500'+result.poster_path:null,
@@ -443,17 +564,18 @@ async function fetchWikipedia(movie){
 }
 function cachedInfo(movie){const entry=infoCache[movie.id];if(!entry)return null;
   if(Date.now()-entry.when>1000*60*60*24*30)return null;
-  if(entry.provider==='tmdb'&&!tmdbToken)return null;
-  if(tmdbToken&&entry.provider==='wiki')return null;
+  if(entry.provider==='tmdb'&&!tmdbToken&&!workerURL)return null;
+  if((tmdbToken||workerURL)&&entry.provider==='wiki')return null;
   return entry;
 }
 async function getMovieInfo(movie){
- const cached=cachedInfo(movie);if(cached)return cached;
+  if(movie.tmdbId)return {poster:movie.posterUrl||null,overview:clipSynopsis(movie.description,420),source:'TMDB',sourceUrl:'https://www.themoviedb.org/movie/'+movie.tmdbId,rating:movie.rating||null,provider:'tmdb',when:Date.now()};
+  const cached=cachedInfo(movie);if(cached)return cached;
  const id=movie.id;
  if(infoInFlight.has(id))return infoInFlight.get(id);
  const task=(async()=>{
    let info=null;
-   if(tmdbToken){try{info=await fetchTMDB(movie)}catch(error){console.info('TMDB indisponível; tentando Wikipédia.',error?.message)}}
+   if(tmdbToken||workerURL){try{info=await fetchTMDB(movie)}catch(error){console.info('TMDB indisponível; tentando Wikipédia.',error?.message)}}
    if(!info){try{info=await fetchWikipedia(movie)}catch(error){console.info('Wikipédia indisponível.',error?.message)}}
    info=info||{poster:null,overview:'',source:'',sourceUrl:'',provider:'none',when:Date.now()};
    infoCache[id]=info;persistInfo();return info;
@@ -492,23 +614,27 @@ async function hydrateMovie(movie){
  if(info.rating){$('#resultMeta').textContent=movie.year+' · '+(movie.genres[0]||'Cinema')+' · ★ '+Number(info.rating).toFixed(1).replace('.',',')+' no TMDB'}
 }
 function updateProviderNotice(){
- $('#providerNotice').textContent=tmdbToken?'TMDB ativo neste navegador. Se algum título não for encontrado, o site tenta a Wikipédia.':'Fonte automática: Wikipédia. Ative o TMDB acima para ampliar a cobertura. Conexão com internet necessária.';
+ $('#providerNotice').textContent=tmdbToken||workerURL?'TMDB conectado. Para títulos da seleção, uma busca de correspondência encontra capas e sinopses.':'Fonte automática: Wikipédia. Ative o TMDB acima ou conecte um Worker no Acervo mundial.';
 }
 
+const REMOTE_SAVE_KEY='proximoFilmeRemotos_v1';
+let savedRemote={};try{savedRemote=JSON.parse(localStorage.getItem(REMOTE_SAVE_KEY)||'{}')||{}}catch{}
+for(const movie of Object.values(savedRemote)){if(movie?.tmdbId&&movie?.id)byId.set(movie.id,movie)}
+function saveRemote(movie){if(!movie?.tmdbId)return;savedRemote[movie.id]=movie;try{localStorage.setItem(REMOTE_SAVE_KEY,JSON.stringify(savedRemote))}catch{}}
 const KEY='proximoFilmeMinimal_v1';
 function restore(){try{let x=JSON.parse(localStorage.getItem(KEY));return x&&typeof x==='object'?x:{}}catch{return {}}}
 let stored=restore();
 const favorites=new Set((stored.favorites||[]).filter(id=>byId.has(id)));
 const seen=new Set((stored.seen||[]).filter(id=>byId.has(id)));
 let history=Array.isArray(stored.history)?stored.history.filter(id=>byId.has(id)).slice(0,35):[];
-let lastMovie=null,mode='all',catalogGenre='',visibleCount=12,toastTimeout;
+let lastMovie=null,mode='all',movieSource='local',catalogGenre='',visibleCount=12,toastTimeout;
 function save(){try{localStorage.setItem(KEY,JSON.stringify({favorites:[...favorites],seen:[...seen],history}))}catch{}}
 function escapeHTML(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function icon(name){return `<svg class="icon" aria-hidden="true"><use href="#i-${name}"></use></svg>`}
 const palettes=[['#d2b7b8','#f3e7d8'],['#afc8bf','#e9e8d9'],['#d6c8e2','#f6ecea'],['#cbb5b5','#e6dbd5'],['#d3dcb5','#fff1d8'],['#b8cddd','#f4e5df']];
-function colors(m){return palettes[(m.id*7+String(m.title).length)%palettes.length]}
+function colors(m){const n=Number.isFinite(Number(m.id))?Number(m.id):Number(m.tmdbId)||0;return palettes[(n*7+String(m.title).length)%palettes.length]}
 function setPoster(el,m){const [p1,p2]=colors(m);el.style.setProperty('--p1',p1);el.style.setProperty('--p2',p2)}
-function setMode(next){mode=next;$('#modeAll').classList.toggle('active',next==='all');$('#modeCustom').classList.toggle('active',next==='custom');$('#modeAll').setAttribute('aria-pressed',String(next==='all'));$('#modeCustom').setAttribute('aria-pressed',String(next==='custom'));$('#filters').hidden=next==='all';$('#modeHelp').textContent=next==='all'?'Qualquer filme do catálogo pode ser escolhido. Sem pensar demais.':'Escolha o que combina com sua noite. Deixe em branco o que não importar.';updateCount()}
+function setMode(next){mode=next;$('#modeAll').classList.toggle('active',next==='all');$('#modeCustom').classList.toggle('active',next==='custom');$('#modeAll').setAttribute('aria-pressed',String(next==='all'));$('#modeCustom').setAttribute('aria-pressed',String(next==='custom'));$('#filters').hidden=next==='all'||movieSource==='world';$('#worldDrawTip').hidden=movieSource!=='world';$('#modeHelp').textContent=movieSource==='world'?(next==='all'?'Um sorteio surpresa entre milhares de títulos do TMDB.':'O sorteio seguirá os filtros escolhidos em Acervo mundial.'):(next==='all'?'Qualquer filme da seleção pode ser escolhido. Sem pensar demais.':'Escolha o que combina com sua noite. Deixe em branco o que não importar.');updateCount()}
 function matches(m){
  if($('#skipSeen').checked && seen.has(m.id))return false;
  if(mode==='all')return true;
@@ -530,8 +656,8 @@ function matches(m){
  return true;
 }
 function available(){return MOVIES.filter(matches)}
-function updateCount(){let n=available().length;$('#matchCount').textContent=n.toLocaleString('pt-BR')+(n===1?' opção':' opções');$('#drawBtn').disabled=n===0}
-function draw(){const pool=available();if(!pool.length){toast('Nenhum filme corresponde aos filtros. Tente combinar menos opções.');return}
+function updateCount(){if(movieSource==='world'){$('#matchCount').textContent='Acervo TMDB · sorteio remoto';$('#drawBtn').disabled=false;return}let n=available().length;$('#matchCount').textContent=n.toLocaleString('pt-BR')+(n===1?' opção':' opções');$('#drawBtn').disabled=n===0}
+function draw(){if(movieSource==='world'){drawWorld();return}const pool=available();if(!pool.length){toast('Nenhum filme corresponde aos filtros. Tente combinar menos opções.');return}
  const fresh=pool.filter(m=>m.id!==lastMovie?.id&&!history.slice(0,Math.min(pool.length-1,12)).includes(m.id));
  const candidates=fresh.length?fresh:pool.filter(m=>m.id!==lastMovie?.id);
  const choices=candidates.length?candidates:pool;
@@ -582,8 +708,8 @@ function votePouler(value){
 function renderResultButtons(){if(!lastMovie)return;const isFav=favorites.has(lastMovie.id),isSeen=seen.has(lastMovie.id);
  $('#favBtn').classList.toggle('on',isFav);$('#seenBtn').classList.toggle('on',isSeen);$('#favBtn').querySelector('span').textContent=isFav?'Favoritado':'Favoritar';$('#seenBtn').querySelector('span').textContent=isSeen?'Já assistido':'Marcar como visto';
 }
-function toggleFavorite(id){if(favorites.has(id))favorites.delete(id);else favorites.add(id);save();$('#favCount').textContent=favorites.size;renderResultButtons();renderCatalog();toast(favorites.has(id)?'Salvo na sua lista ♡':'Removido dos favoritos')}
-function toggleSeen(id){if(seen.has(id))seen.delete(id);else seen.add(id);save();renderResultButtons();renderCatalog();updateCount();toast(seen.has(id)?'Marcado como assistido ✓':'Removido dos assistidos')}
+function toggleFavorite(id){saveRemote(byId.get(id));if(favorites.has(id))favorites.delete(id);else favorites.add(id);save();$('#favCount').textContent=favorites.size;renderResultButtons();renderCatalog();if(typeof renderWorldCards==='function')renderWorldCards();toast(favorites.has(id)?'Salvo na sua lista ♡':'Removido dos favoritos')}
+function toggleSeen(id){saveRemote(byId.get(id));if(seen.has(id))seen.delete(id);else seen.add(id);save();renderResultButtons();renderCatalog();if(typeof renderWorldCards==='function')renderWorldCards();updateCount();toast(seen.has(id)?'Marcado como assistido ✓':'Removido dos assistidos')}
 function renderPills(){const all=`<button type="button" class="pill ${catalogGenre===''?'selected':''}" data-genre="" aria-pressed="${catalogGenre===''?'true':'false'}">Todos</button>`;
  $('#genrePills').innerHTML=all+GENRES.map(g=>`<button type="button" class="pill ${g===catalogGenre?'selected':''}" data-genre="${escapeHTML(g)}" aria-pressed="${g===catalogGenre?'true':'false'}">${escapeHTML(g)}</button>`).join('')}
 function renderCatalog(){let search=$('#searchMovie').value.trim().toLocaleLowerCase('pt-BR');let view=$('#catalogView').value;let catalogSpecial=$('#catalogSpecial').value;let list=MOVIES.filter(m=>(!catalogGenre||m.genres.includes(catalogGenre))&&(!catalogSpecial||m.collections.includes(catalogSpecial))&&(!search||(m.title+' '+m.description).toLocaleLowerCase('pt-BR').includes(search))&&(view==='all'||(view==='favorites'&&favorites.has(m.id))||(view==='seen'&&seen.has(m.id))||(view==='unseen'&&!seen.has(m.id))));
@@ -640,7 +766,229 @@ function bind(){
  $$('#searchMovie,#catalogView,#catalogSpecial,#sortBy').forEach(el=>el.addEventListener('input',()=>{visibleCount=12;renderCatalog()}));
  $('#loadMore').addEventListener('click',()=>{visibleCount+=12;renderCatalog()});
 }
-bind();renderPills();renderCatalog();setMode('all');
+/* =======================================================
+   O PRÓXIMO FILME — ACERVO MUNDIAL (TMDB v3)
+   Para disponibilizar para todos, coloque aqui seu Worker,
+   NUNCA o token secreto do TMDB:
+   ======================================================= */
+const WORKER_URL = 'https://oproximofilme-api.paulossray.workers.dev'; // API pública do site: token permanece apenas no Cloudflare
+const WORLD_WORKER_KEY='proximoFilmeWorkerUrl_v1';
+let workerURL=WORKER_URL;
+try{if(!workerURL)workerURL=localStorage.getItem(WORLD_WORKER_KEY)||''}catch{}
+const TMDB_GENRES=[
+ [28,'Ação'],[12,'Aventura'],[16,'Animação'],[35,'Comédia'],[80,'Crime'],[99,'Documentário'],
+ [18,'Drama'],[10751,'Família'],[14,'Fantasia'],[36,'História'],[27,'Terror'],[10402,'Música'],
+ [9648,'Mistério'],[10749,'Romance'],[878,'Ficção científica'],[10770,'Cinema para TV'],
+ [53,'Suspense'],[10752,'Guerra'],[37,'Faroeste']
+];
+const worldGenreNames=new Map(TMDB_GENRES);
+const WORLD_IMG='https://image.tmdb.org/t/p/w500';
+let worldItems=[],worldPage=0,worldPages=0,worldTotal=0,worldSequence=0,worldLoading=false,worldPreset='',worldSortLabel='Filmes para descobrir';
+const WORLD_SOURCE_KEY='proximoFilmeFonte_v1';
+function worldEnabled(){return Boolean(workerURL||tmdbToken)}
+function prettyNumber(n){return Number(n||0).toLocaleString('pt-BR')}
+function verifyWorkerURL(value){try{const u=new URL(value);if(u.protocol!=='https:'||u.username||u.password||u.search||u.hash)throw Error();return u.href.replace(/\/+$/,'')}catch{throw new Error('Informe um endereço HTTPS válido do Worker.') }}
+function updateWorldStatus(){
+ const enabled=worldEnabled();
+ $('#worldStatus').classList.toggle('is-on',enabled);
+ $('#worldStatusText').textContent=workerURL?'Acervo mundial · Worker conectado':tmdbToken?'Acervo mundial · token pessoal':'Acervo mundial · conexão necessária';
+ $('#workerInput').value=workerURL;
+ $('#worldConnectionMessage').textContent=workerURL?(WORKER_URL&&workerURL===WORKER_URL?'Worker conectado automaticamente para todos os visitantes.':'Worker personalizado conectado neste navegador.') : tmdbToken?'Token pessoal ativo neste navegador. Para seus visitantes, configure o Worker no HTML.':'Sem conexão: os 957 filmes da seleção original continuam disponíveis.';
+ $('#microSource').textContent=enabled?'TMDB disponível':'Seleção da casa';
+ updateProviderNotice();
+}
+async function tmdbAPI(path,params={}){
+ if(!worldEnabled())throw new Error('Conecte o TMDB para usar o acervo mundial.');
+ const query=new URLSearchParams(params instanceof URLSearchParams?params:Object.entries(params).filter(([,v])=>v!==''&&v!==null&&v!==undefined));
+ if(!query.has('language'))query.set('language','pt-BR');
+ if(!query.has('include_adult'))query.set('include_adult','false');
+ if(workerURL){return requestJSON(workerURL+'/'+path+'?'+query.toString())}
+ return requestJSON('https://api.themoviedb.org/3/'+path+'?'+query.toString(),{headers:{Authorization:'Bearer '+tmdbToken}});
+}
+function worldModel(item){
+ if(!item||!Number.isFinite(Number(item.id)))return null;
+ const id='tmdb:'+item.id;
+ const existing=byId.get(id);
+ const movie={
+  id,tmdbId:Number(item.id),title:item.title||item.original_title||'Sem título',
+  year:Number((item.release_date||'').slice(0,4))||0,
+  genres:(item.genre_ids||[]).map(g=>worldGenreNames.get(g)).filter(Boolean),
+  collections:[],description:item.overview||'Sinopse ainda não disponível em português.',
+  posterUrl:item.poster_path?WORLD_IMG+item.poster_path:null,
+  rating:Number(item.vote_average)||0,votes:Number(item.vote_count)||0,
+  originalLanguage:item.original_language||'',originalTitle:item.original_title||''
+ };
+ if(existing?.description&&!item.overview)movie.description=existing.description;
+ byId.set(id,movie);
+ if(savedRemote[id])saveRemote(movie);
+ return movie;
+}
+function worldParameters(ignoreFilters=false){
+ const params={sort_by:'popularity.desc','vote_count.gte':'200',include_adult:'false',region:'BR'};
+ if(ignoreFilters)return params;
+ const g=$('#worldGenre').value, start=Number($('#worldStart').value), end=Number($('#worldEnd').value);
+ const rating=$('#worldRating').value,votes=$('#worldVotes').value,duration=$('#worldRuntime').value;
+ if(g)params.with_genres=g;
+ if(start&&start>=1880&&start<=2100)params['primary_release_date.gte']=start+'-01-01';
+ if(end&&end>=1880&&end<=2100)params['primary_release_date.lte']=end+'-12-31';
+ if(start&&end&&start>end)throw new Error('O ano inicial não pode ultrapassar o final.');
+ if(Number(rating)>0)params['vote_average.gte']=rating;
+ params['vote_count.gte']=votes||'0';
+ if(duration)params['with_runtime.lte']=duration;
+ if($('#worldLanguage').value)params.with_original_language=$('#worldLanguage').value;
+ if($('#worldCountry').value)params.with_origin_country=$('#worldCountry').value;
+ if($('#worldProvider').value){params.with_watch_providers=$('#worldProvider').value;params.watch_region='BR';params.with_watch_monetization_types='flatrate'}
+ params.sort_by=$('#worldSort').value;
+ return params;
+}
+function worldSearchParams(ignoreFilters=false){
+ if(!ignoreFilters&&$('#worldSearch').value.trim())return {path:'search/movie',params:{query:$('#worldSearch').value.trim(),include_adult:'false'}};
+ return {path:'discover/movie',params:worldParameters(ignoreFilters)};
+}
+function worldNotice(msg){$('#worldResultCount').textContent=msg}
+function renderWorldCards(){
+ const grid=$('#worldGrid');if(!grid)return;
+ if(!worldItems.length){grid.innerHTML='<div class="world-empty">Nenhum filme encontrado. Experimente ampliar os anos, reduzir a nota mínima ou mudar o gênero.</div>';return}
+ grid.innerHTML=worldItems.map(m=>{
+  const fav=favorites.has(m.id),watched=seen.has(m.id);
+  const meta=(m.year||'Ano não informado')+(m.genres.length?' · '+m.genres[0]:'')+' · '+prettyNumber(m.votes)+' votos';
+  return `<article class="world-film">
+    <button class="world-cover" type="button" data-world-open="${m.id}" aria-label="Ver detalhes de ${escapeHTML(m.title)}">
+     ${m.posterUrl?`<img src="${m.posterUrl}" alt="Pôster de ${escapeHTML(m.title)}" loading="lazy" decoding="async" onerror="this.remove()">`:''}
+     <span class="world-poster-fallback">${escapeHTML(m.title)}</span>
+     ${m.votes>0?`<span class="world-rating">★ ${m.rating.toFixed(1).replace('.',',')}</span>`:''}
+    </button>
+    <div class="world-info"><button type="button" data-world-open="${m.id}">${escapeHTML(m.title)}</button>
+     <div class="world-meta">${escapeHTML(meta)}</div>
+     <div class="world-bottom"><button type="button" data-world-fav="${m.id}" class="${fav?'is-on':''}" aria-label="${fav?'Remover favorito':'Adicionar favorito'}">${fav?'♥ Salvo':'♡ Salvar'}</button><button type="button" data-world-seen="${m.id}" class="${watched?'is-on':''}">${watched?'✓ Visto':'Marcar visto'}</button></div>
+    </div>
+   </article>`
+ }).join('');
+}
+async function fetchWorldPage(reset=false){
+ if(!worldEnabled()){
+  $('#worldSettings').open=true;$('#worldStatusText').textContent='Conecte o TMDB primeiro';
+  worldNotice('Configuração necessária');$('#worldGrid').innerHTML='<div class="world-empty">Para abrir milhares de filmes, conecte o TMDB nas configurações abaixo. A seleção de 957 filmes permanece disponível sem API.</div>';return;
+ }
+ if(worldLoading&&!reset)return;
+ const requestId=++worldSequence;
+ const page=reset?1:worldPage+1;
+ worldLoading=true;
+ $('#worldMore').hidden=true;
+ if(reset){worldItems=[];$('#worldGrid').innerHTML='<div class="world-loading">Procurando boas histórias no acervo mundial…</div>';worldNotice('Buscando filmes…')}
+ try{
+  const {path,params}=worldSearchParams();
+  if(path==='search/movie'){$('#worldFilterNote').textContent='Busca por título: os filtros avançados se aplicam à exploração sem pesquisa de texto.'}
+  else $('#worldFilterNote').textContent='Filtros combinados no TMDB · Streaming sujeito à disponibilidade no Brasil';
+  const data=await tmdbAPI(path,{...params,page});
+  if(requestId!==worldSequence)return;
+  worldPage=page;worldPages=Math.min(Number(data.total_pages)||1,500);worldTotal=Number(data.total_results)||0;
+  const entries=(data.results||[]).map(worldModel).filter(Boolean);
+  worldItems=reset?entries:worldItems.concat(entries.filter(m=>!worldItems.some(x=>x.id===m.id)));
+  $('#worldHeading').textContent=worldPreset?worldSortLabel:'Filmes para descobrir';
+  renderWorldCards();worldNotice(prettyNumber(worldTotal)+' resultados · página '+worldPage+'/'+worldPages);
+  $('#worldMore').hidden=worldPage>=worldPages||worldItems.length===0;
+ }catch(error){
+  if(requestId!==worldSequence)return;
+  if(reset)$('#worldGrid').innerHTML='<div class="world-empty">Não foi possível carregar o acervo mundial. Confira a conexão e tente novamente. A seleção da casa segue funcionando.</div>';
+  worldNotice('Falha na consulta: '+String(error.message||error));
+ }finally{if(requestId===worldSequence)worldLoading=false}
+}
+function worldSelectSource(next){
+ movieSource=next;
+ $('#sourceLocal').setAttribute('aria-pressed',String(next==='local'));
+ $('#sourceWorld').setAttribute('aria-pressed',String(next==='world'));
+ setMode(mode);
+ try{localStorage.setItem(WORLD_SOURCE_KEY,next)}catch{}
+ if(next==='world'&&!worldEnabled()){$('#worldSettings').open=true;toast('Conecte o TMDB para liberar o sorteio mundial.');}
+}
+async function drawWorld(){
+ if(!worldEnabled()){$('#worldSettings').open=true;$('#universo').scrollIntoView({behavior:'smooth'});toast('Primeiro, conecte a API do TMDB.');return}
+ const btn=$('#drawBtn');btn.disabled=true;const original=btn.innerHTML;btn.textContent='Sorteando no universo do cinema…';
+ try{
+  const {path,params}=worldSearchParams(mode==='all');
+  const first=await tmdbAPI(path,{...params,page:1});
+  const pages=Math.min(Math.max(1,Number(first.total_pages)||1),500);
+  if(!Number(first.total_results))throw new Error('Nenhum filme corresponde aos filtros.');
+  let pool=[];
+  // Páginas aleatórias trazem opções além da primeira vitrine de populares.
+  for(let attempt=0;attempt<4;attempt++){
+   const page=1+Math.floor(Math.random()*pages);
+   const response=page===1?first:await tmdbAPI(path,{...params,page});
+   pool=(response.results||[]).map(worldModel).filter(Boolean);
+   if($('#skipSeen').checked)pool=pool.filter(x=>!seen.has(x.id));
+   if(pool.some(m=>m.id!==lastMovie?.id&&!history.includes(m.id)))break;
+  }
+  const fresh=pool.filter(m=>m.id!==lastMovie?.id&&!history.includes(m.id));
+  const candidate=fresh.length?fresh:pool.filter(m=>m.id!==lastMovie?.id);
+  const candidates=candidate.length?candidate:pool;
+  if(!candidates.length)throw new Error('Não encontrei filme não assistido neste recorte; amplie os filtros.');
+  const picked=candidates[Math.floor(Math.random()*candidates.length)];
+  showMovie(picked,true);saveRemote(picked);history.unshift(picked.id);history=history.slice(0,35);save();
+  $('#resultado').scrollIntoView({behavior:'smooth',block:'start'});
+ }catch(error){toast(String(error.message||'Falha ao sortear no TMDB.'));}
+ finally{btn.innerHTML=original;updateCount()}
+}
+function worldPresetApply(type){
+ worldPreset=type;worldSortLabel={popular:'Em alta no cinema',best:'Melhores avaliações',classic:'Clássicos prováveis',recent:'Lançamentos recentes',surprise:'Joias escondidas',brasil:'Cinema brasileiro',scifi:'Ficção científica',comedy:'Comédias para a noite',favorites:'Minha lista do acervo mundial'}[type]||'Descobertas';
+ $('#worldForm').reset();$('#worldSearch').value='';
+ $$('#worldPicks [data-preset]').forEach(b=>b.classList.toggle('active',b.dataset.preset===type));
+ const year=new Date().getFullYear();
+ if(type==='best'){$('#worldRating').value='8';$('#worldVotes').value='1000';$('#worldSort').value='vote_average.desc'}
+ if(type==='classic'){$('#worldEnd').value='2002';$('#worldRating').value='7.5';$('#worldVotes').value='1000';$('#worldSort').value='vote_count.desc'}
+ if(type==='recent'){$('#worldStart').value=year-1;$('#worldSort').value='primary_release_date.desc';$('#worldVotes').value='50'}
+ if(type==='surprise'){$('#worldVotes').value='50';$('#worldRating').value='7.5';$('#worldSort').value='vote_average.desc'}
+ if(type==='brasil'){$('#worldCountry').value='BR';$('#worldVotes').value='0'}
+ if(type==='scifi')$('#worldGenre').value='878';
+ if(type==='comedy')$('#worldGenre').value='35';
+ if(type==='favorites'){
+  ++worldSequence;worldItems=[...byId.values()].filter(m=>m.tmdbId&&favorites.has(m.id));worldTotal=worldItems.length;worldPage=1;worldPages=1;
+  $('#worldHeading').textContent=worldSortLabel;worldNotice(prettyNumber(worldTotal)+' filmes salvos neste navegador');renderWorldCards();$('#worldMore').hidden=true;return;
+ }
+ fetchWorldPage(true);
+}
+async function setWorker(){
+ try{
+  const url=verifyWorkerURL($('#workerInput').value.trim());
+  $('#worldConnectionMessage').textContent='Testando conexão…';
+  const response=await requestJSON(url+'/genre/movie/list?language=pt-BR');
+  if(!Array.isArray(response.genres))throw new Error('Esse endereço não respondeu como uma API de filmes.');
+  workerURL=url;try{localStorage.setItem(WORLD_WORKER_KEY,url)}catch{}
+  updateWorldStatus();worldSelectSource('world');await fetchWorldPage(true);toast('Acervo mundial conectado!');
+ }catch(error){$('#worldConnectionMessage').textContent=String(error.message||error);toast('Verifique o endereço do Worker.')}
+}
+function initWorld(){
+ $('#worldGenre').innerHTML+=[...TMDB_GENRES].sort((a,b)=>a[1].localeCompare(b[1],'pt-BR')).map(([id,title])=>`<option value="${id}">${escapeHTML(title)}</option>`).join('');
+ $('#worldForm').addEventListener('submit',event=>{event.preventDefault();worldPreset='';$$('#worldPicks [data-preset]').forEach(b=>b.classList.remove('active'));fetchWorldPage(true)});
+ $('#worldReset').addEventListener('click',()=>{worldPresetApply('popular')});
+ $('#worldPicks').addEventListener('click',e=>{const button=e.target.closest('[data-preset]');if(button)worldPresetApply(button.dataset.preset)});
+ $('#worldMore').addEventListener('click',()=>fetchWorldPage());
+ $('#worldGrid').addEventListener('click',e=>{
+  const open=e.target.closest('[data-world-open]'),fav=e.target.closest('[data-world-fav]'),watched=e.target.closest('[data-world-seen]');
+  if(open){showMovie(byId.get(open.dataset.worldOpen));$('#resultado').scrollIntoView({behavior:'smooth',block:'start'})}
+  else if(fav)toggleFavorite(fav.dataset.worldFav);
+  else if(watched)toggleSeen(watched.dataset.worldSeen);
+ });
+ $('#worldConnect').addEventListener('click',setWorker);
+ $('#worldDisconnect').addEventListener('click',()=>{
+  workerURL=WORKER_URL;try{localStorage.removeItem(WORLD_WORKER_KEY)}catch{}updateWorldStatus();
+  worldItems=[];worldPage=0;worldPages=0;$('#worldGrid').innerHTML='<div class="world-empty">Worker desconectado. O acervo original continua disponível.</div>';worldNotice(worldEnabled()?'Token pessoal ainda conectado':'Conecte o TMDB para explorar');
+ });
+ $('#worldTokenLink').addEventListener('click',()=>{$('#movieOptions').open=true});
+ $('#sourceLocal').addEventListener('click',()=>worldSelectSource('local'));
+ $('#sourceWorld').addEventListener('click',()=>worldSelectSource('world'));
+ $('#saveToken').addEventListener('click',()=>{if(tmdbToken){updateWorldStatus();worldSelectSource('world');fetchWorldPage(true)}});
+ $('#clearToken').addEventListener('click',()=>{updateWorldStatus();if(!worldEnabled())worldSelectSource('local')});
+ $('#navFavorites').addEventListener('click',()=>worldSelectSource('local'));
+ updateWorldStatus();
+ let saved='local';try{saved=localStorage.getItem(WORLD_SOURCE_KEY)||'local'}catch{}
+ if(saved==='world'&&worldEnabled())worldSelectSource('world');
+ else if(worldEnabled())worldSelectSource('world');
+ else worldSelectSource('local');
+ if(worldEnabled())fetchWorldPage(true);
+}
+
+bind();renderPills();renderCatalog();setMode('all');initWorld();
 </script>
 </body>
 </html>
