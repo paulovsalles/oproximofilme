@@ -1,44 +1,1103 @@
-✳o próximo filme.
-Sortear
-Explorar acervo
-♡ Minha lista 0
-UMA NOITE ENTRE AMIGOS
-O filme certo. Sem complicar.
-Na casa da Julia tem Caju, a comida da tia Ângela, as bebidas do seu Rubens, papo com a Nath e o Stênio. Só falta decidir o que assistir.
-✳
-UMA NOITE
-UM FILME
-UMA HISTÓRIA
-A EXPERIÊNCIA
-Um filme.
-Quatro passos.
-01
-O acervo
-02
-Seus filtros
-03
-Confirmar
-04
-O filme
-Poucas escolhas. Muitas possibilidades. Deixe o resto com a gente.
-PRIMEIRO, A ORIGEM
-01 / 04
-De onde vem seu filme?
-Duas formas de descobrir. Uma seleção especial ou o cinema do mundo inteiro.
-✧
-Seleção da casa
-Uma curadoria com clássicos, finais surpreendentes e histórias para toda ocasião.
-✓ SELECIONADO
-◌
-Acervo mundial
-Explore o catálogo do TMDB com gênero, época, nota e muito mais.
-ESCOLHER
-A seleção da casa funciona mesmo sem internet. O acervo mundial precisa de conexão com o TMDB.
-Escolha uma das duas opções para continuar.
-Próximo passo
-→
-Prefere escolher com calma?
-Explorar o catálogo ↗
-o próximo filme.  O cinema é melhor quando a escolha é simples.
-Inspirado nas noites na casa da Julia.   Dados do TMDB (não endossado pelo TMDB). Favoritos salvos neste navegador.
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f9f9f7">
+<title>O Próximo Filme — Uma escolha por vez</title>
+<style>
+:root {
+  --bg:#f9f9f7;
+  --ink:#171717;
+  --muted:#777;
+  --line:#e5e5e2;
+  --sage:#e8eee8;
+  --rose:#f3e8e8;
+  --lilac:#eeebf3;
+}
+* {box-sizing:border-box}
+html {scroll-behavior:smooth}
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:14px/1.6 -apple-system,BlinkMacSystemFont,
+    "Segoe UI",Arial,sans-serif;
+}
+button,input,select {font:inherit}
+button {cursor:pointer}
+button:disabled {opacity:.45;cursor:not-allowed}
+a {color:inherit;text-decoration:none}
+[hidden] {display:none!important}
+.wrap {max-width:1040px;margin:auto;padding:0 22px}
+.top {border-bottom:1px solid var(--line);background:#fff}
+.top-in {
+  height:76px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+.logo {font:28px Georgia,serif;letter-spacing:-1.2px}
+.logo em {font-weight:400}
+.top button {
+  background:transparent;
+  border:1px solid #ddd;
+  padding:9px 15px;
+  border-radius:30px;
+  font-size:12px;
+}
+.hero {text-align:center;padding:64px 0 43px}
+.eyebrow {
+  text-transform:uppercase;
+  letter-spacing:2.8px;
+  font-size:10px;
+  font-weight:700;
+  color:#777;
+}
+.hero h1 {
+  font:normal clamp(47px,8vw,81px)/1.03 Georgia,serif;
+  letter-spacing:-3px;
+  margin:19px 0;
+}
+.hero h1 em {color:#8b8990;font-weight:400}
+.hero p {
+  color:#777;
+  max-width:610px;
+  margin:auto;
+  font-size:13px;
+  line-height:1.9;
+}
+.wizard {
+  max-width:760px;
+  margin:0 auto 75px;
+  border:1px solid #e2e2df;
+  border-radius:21px;
+  background:#fff;
+  overflow:hidden;
+  box-shadow:0 18px 70px #11111108;
+}
+.progress {
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:24px 32px;
+  background:#fbfbfa;
+  border-bottom:1px solid var(--line);
+}
+.progress div {
+  font-size:11px;
+  color:#a0a0a0;
+  display:flex;
+  align-items:center;
+  gap:7px;
+}
+.progress b {
+  width:23px;
+  height:23px;
+  display:grid;
+  place-items:center;
+  border:1px solid #ddd;
+  border-radius:50%;
+  font-size:10px;
+}
+.progress .active {color:#151515;font-weight:700}
+.progress .active b {
+  background:#171717;
+  color:#fff;
+  border-color:#171717;
+}
+.progress .done b {
+  background:var(--sage);
+  border-color:var(--sage);
+  color:#29442f;
+}
+.inner {padding:40px clamp(22px,6%,54px) 32px}
+.step h2 {
+  font:normal clamp(34px,5vw,49px)/1.13 Georgia,serif;
+  letter-spacing:-1.5px;
+  margin:8px 0 14px;
+}
+.sub {
+  color:var(--muted);
+  margin:0 0 27px;
+  font-size:13px;
+}
+.choices {display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice {
+  min-height:160px;
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:14px;
+  padding:21px;
+  text-align:left;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.choice .symbol {font:35px Georgia,serif}
+.choice strong {font:23px Georgia,serif}
+.choice small {color:#777;line-height:1.5}
+.choice.selected {
+  border:2px solid #222;
+  background:var(--sage);
+}
+.grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px;
+}
+.field label {
+  display:block;
+  font-size:11px;
+  font-weight:700;
+  margin-bottom:7px;
+}
+.field select,.field input {
+  background:#fafaf9;
+  border:1px solid #ddd;
+  border-radius:11px;
+  width:100%;
+  padding:12px;
+  color:#222;
+  min-width:0;
+}
+.field.full {grid-column:1/-1}
+.note {
+  background:var(--sage);
+  border:1px solid #dce7dc;
+  color:#4a584c;
+  padding:14px 15px;
+  border-radius:10px;
+  font-size:12px;
+  margin:19px 0;
+}
+.small {font-size:11px;color:#858585}
+.chipline {display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 22px}
+.chip {
+  border:1px solid #ddd;
+  border-radius:30px;
+  background:#fff;
+  padding:8px 12px;
+  font-size:12px;
+}
+.chip:hover {background:var(--lilac)}
+.check {
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:12px;
+  margin-top:20px;
+}
+.check input {accent-color:#222}
+.nav {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:14px;
+  border-top:1px solid var(--line);
+  padding-top:23px;
+  margin-top:31px;
+}
+.btn {
+  border:1px solid #222;
+  background:#191919;
+  color:#fff;
+  border-radius:10px;
+  padding:12px 22px;
+  font-size:13px;
+  font-weight:650;
+}
+.btn.secondary {
+  color:#222;
+  background:#fff;
+  border-color:#ddd;
+}
+.btn:hover {filter:brightness(.92)}
+.summary {
+  background:var(--lilac);
+  border-radius:13px;
+  padding:21px;
+  line-height:2;
+}
+.summary strong {font-size:12px}
+.summary p {margin:0;font-size:13px}
+.result {
+  display:grid;
+  grid-template-columns:195px 1fr;
+  gap:24px;
+  align-items:start;
+}
+.poster {
+  width:100%;
+  aspect-ratio:2/3;
+  object-fit:cover;
+  background:var(--rose);
+  border-radius:12px;
+}
+.poster-empty {
+  background:var(--rose);
+  min-height:260px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  text-align:center;
+  padding:15px;
+  font:22px Georgia,serif;
+}
+.result h3 {
+  font:normal 32px/1.15 Georgia,serif;
+  margin:0 0 9px;
+}
+.result p {
+  font-size:13px;
+  color:#696969;
+  line-height:1.8;
+}
+.result .meta {font-size:11px;color:#888}
+.actions {display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.actions button {
+  padding:10px 12px;
+  border:1px solid #ddd;
+  border-radius:9px;
+  background:#fff;
+  color:#222;
+  font-size:12px;
+}
+.actions button.saved {background:var(--rose)}
+.explore {
+  max-width:760px;
+  margin:0 auto 85px;
+  padding:0 22px;
+}
+.explore details {
+  border-top:1px solid #ddd;
+  border-bottom:1px solid #ddd;
+  padding:21px 0;
+}
+.explore summary {cursor:pointer;font:25px Georgia,serif}
+.searchline {display:flex;gap:9px;margin-top:20px}
+.searchline input {
+  min-width:0;
+  flex:1;
+  border:1px solid #ddd;
+  border-radius:10px;
+  padding:12px;
+}
+.searchline .btn {white-space:nowrap}
+.list {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin-top:20px;
+}
+.item {
+  border:1px solid #e5e5e2;
+  border-radius:11px;
+  padding:14px;
+  background:white;
+  text-align:left;
+}
+.item small {display:block;color:#888;margin-top:4px}
+.foot {
+  border-top:1px solid #e8e8e6;
+  padding:25px 0;
+  color:#888;
+  text-align:center;
+  font-size:11px;
+}
+@media(max-width:600px) {
+  .top-in {height:62px}
+  .logo {font-size:22px}
+  .hero {padding:44px 0 28px}
+  .hero h1 {letter-spacing:-2px}
+  .wizard {border-radius:16px}
+  .progress {padding:16px 14px;gap:5px}
+  .progress div {font-size:10px;gap:4px}
+  .progress b {width:20px;height:20px}
+  .inner {padding:27px 19px}
+  .choices {grid-template-columns:1fr}
+  .choice {min-height:125px}
+  .grid {gap:12px}
+  .result {grid-template-columns:1fr}
+  .poster,.poster-empty {max-width:220px}
+  .list {grid-template-columns:1fr}
+  .searchline {flex-direction:column}
+  .nav .btn {padding:11px 15px}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap top-in">
+    <a class="logo" href="#inicio">o próximo <em>filme.</em></a>
+    <button id="favoritesBtn" type="button">
+      ♡ Minha lista <span id="favCount">0</span>
+    </button>
+  </div>
+</header>
+
+<main id="inicio">
+  <div class="wrap hero">
+    <div class="eyebrow">Uma noite entre amigos</div>
+    <h1>O filme certo.<br><em>Sem complicar.</em></h1>
+    <p>Na casa da Julia tem Caju, comida da tia Ângela,
+      bebidas do seu Rubens e conversa com a Nath e o
+      Stênio. Falta só escolher o filme.</p>
+  </div>
+
+  <div class="wizard">
+    <div class="progress" id="progress">
+      <div class="active"><b>1</b> Acervo</div>
+      <div><b>2</b> Filtros</div>
+      <div><b>3</b> Confirmar</div>
+      <div><b>4</b> Filme</div>
+    </div>
+
+    <div class="inner">
+
+      <section class="step" data-step="1">
+        <div class="eyebrow">Etapa 01 / 04</div>
+        <h2>De onde vem o filme?</h2>
+        <p class="sub">Escolha uma origem. Depois você personaliza.</p>
+
+        <div class="choices">
+          <button type="button" class="choice selected" data-source="local">
+            <span class="symbol">✧</span>
+            <strong>Seleção da casa</strong>
+            <small>Filmes escolhidos a dedo, incluindo clássicos e finais especiais.</small>
+          </button>
+
+          <button type="button" class="choice" data-source="world">
+            <span class="symbol">◌</span>
+            <strong>Acervo mundial</strong>
+            <small>Milhares de títulos do TMDB, com filtros de nota, duração e streaming.</small>
+          </button>
+        </div>
+      </section>
+
+      <section class="step" data-step="2" hidden>
+        <div class="eyebrow">Etapa 02 / 04</div>
+        <h2>Qual é o clima da noite?</h2>
+        <p class="sub">Escolha quantos filtros quiser. Também pode deixar tudo livre.</p>
+
+        <div class="grid">
+          <div class="field">
+            <label for="genre">Gênero</label>
+            <select id="genre"></select>
+          </div>
+          <div class="field">
+            <label for="era">Época</label>
+            <select id="era">
+              <option value="">Qualquer época</option>
+              <option value="recent">Últimos 5 anos</option>
+              <option value="current">Ano atual</option>
+              <option value="before2000">Antes de 2000</option>
+              <option value="1980">Anos 80</option>
+              <option value="1990">Anos 90</option>
+              <option value="2000">Anos 2000</option>
+              <option value="2010">Anos 2010</option>
+              <option value="2020">Anos 2020</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="localFilters">
+          <div class="grid" style="margin-top:15px">
+            <div class="field">
+              <label for="ending">Tipo de final / categoria</label>
+              <select id="ending">
+                <option value="">Qualquer categoria</option>
+                <option value="wtf">Final WTF</option>
+                <option value="surpresa">Final imprevisível</option>
+                <option value="marcante">Final inesquecível</option>
+                <option value="classico">Clássicos</option>
+                <option value="oscar">Premiados</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="mood">Experiência</label>
+              <select id="mood">
+                <option value="">Qualquer clima</option>
+                <option value="leve">Leve e divertido</option>
+                <option value="tenso">Tenso e intrigante</option>
+                <option value="emocionante">Emocionante</option>
+                <option value="fantastico">Fora da realidade</option>
+              </select>
+            </div>
+          </div>
+          <div class="note">
+            Os tipos de final são classificações da nossa seleção,
+            não do TMDB. Sem revelar spoilers.
+          </div>
+        </div>
+
+        <div id="worldFilters" hidden>
+          <div class="chipline">
+            <button class="chip" data-quick="rating" type="button">Nota 7+</button>
+            <button class="chip" data-quick="short" type="button">Até 2 horas</button>
+            <button class="chip" data-quick="recent" type="button">Últimos 5 anos</button>
+            <button class="chip" data-quick="netflix" type="button">Netflix</button>
+          </div>
+
+          <div class="grid">
+            <div class="field">
+              <label for="rating">Nota mínima TMDB</label>
+              <select id="rating">
+                <option value="">Qualquer nota</option>
+                <option value="6">6+</option>
+                <option value="7">7+</option>
+                <option value="7.5">7,5+</option>
+                <option value="8">8+</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="runtime">Duração máxima</label>
+              <select id="runtime">
+                <option value="">Qualquer duração</option>
+                <option value="90">1h30</option>
+                <option value="120">2 horas</option>
+                <option value="150">2h30</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="provider">Streaming no Brasil</label>
+              <select id="provider">
+                <option value="">Qualquer serviço</option>
+                <option value="8">Netflix</option>
+                <option value="9">Prime Video</option>
+                <option value="337">Disney+</option>
+                <option value="1899">Max</option>
+                <option value="119">Globoplay</option>
+                <option value="350">Apple TV+</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="votes">Mínimo de avaliações</label>
+              <select id="votes">
+                <option value="50">50 votos</option>
+                <option value="200" selected>200 votos</option>
+                <option value="1000">1.000 votos</option>
+              </select>
+            </div>
+          </div>
+
+          <details style="margin-top:18px">
+            <summary class="small">Mais filtros: idioma, país, ordenação</summary>
+            <div class="grid" style="margin-top:12px">
+              <div class="field">
+                <label for="language">Idioma original</label>
+                <select id="language">
+                  <option value="">Qualquer idioma</option>
+                  <option value="en">Inglês</option>
+                  <option value="pt">Português</option>
+                  <option value="ko">Coreano</option>
+                  <option value="ja">Japonês</option>
+                  <option value="es">Espanhol</option>
+                  <option value="fr">Francês</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="country">País</label>
+                <select id="country">
+                  <option value="">Qualquer país</option>
+                  <option value="BR">Brasil</option>
+                  <option value="US">Estados Unidos</option>
+                  <option value="KR">Coreia do Sul</option>
+                  <option value="JP">Japão</option>
+                  <option value="FR">França</option>
+                </select>
+              </div>
+              <div class="field full">
+                <label for="sort">Ordenar por</label>
+                <select id="sort">
+                  <option value="popularity.desc">Popularidade</option>
+                  <option value="vote_average.desc">Melhores notas</option>
+                  <option value="primary_release_date.desc">Mais recentes</option>
+                </select>
+              </div>
+            </div>
+          </details>
+
+          <div class="note">
+            Filtrar por final surpreendente no catálogo inteiro não é
+            possível: o TMDB não classifica finais desse modo.
+          </div>
+        </div>
+
+        <label class="check">
+          <input id="skipSeen" type="checkbox">
+          Não repetir filmes que marquei como assistidos
+        </label>
+      </section>
+
+      <section class="step" data-step="3" hidden>
+        <div class="eyebrow">Etapa 03 / 04</div>
+        <h2>Pronto para o cinema?</h2>
+        <p class="sub">Uma última conferida. Depois deixe a sorte decidir.</p>
+        <div class="summary" id="summary"></div>
+        <p class="small" style="margin-top:20px">
+          Não é necessário cadastro ou inserir token de API.
+        </p>
+      </section>
+
+      <section class="step" data-step="4" hidden>
+        <div class="eyebrow">Etapa 04 / 04</div>
+        <h2>O filme da noite.</h2>
+        <p class="sub" id="status">Estamos escolhendo...</p>
+
+        <div class="result" id="result" hidden>
+          <div id="posterBox"></div>
+          <div>
+            <h3 id="movieTitle"></h3>
+            <div class="meta" id="movieMeta"></div>
+            <p id="moviePlot"></p>
+            <div class="actions">
+              <button id="saveFav" type="button">♡ Favoritar</button>
+              <button id="saveSeen" type="button">✓ Já assisti</button>
+              <button id="retry" type="button">↻ Sortear outro</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="nav">
+        <button class="btn secondary" id="back" type="button" hidden>
+          ← Voltar
+        </button>
+        <span></span>
+        <button class="btn" id="next" type="button">
+          Continuar →
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <section class="explore">
+    <details id="browse">
+      <summary>Prefere procurar pelo nome? ↗</summary>
+      <p class="small">
+        Busque filmes diretamente no acervo mundial do TMDB.
+      </p>
+      <div class="searchline">
+        <input type="search" id="searchTerm" placeholder="Ex.: Interestelar">
+        <button type="button" class="btn" id="searchBtn">Buscar</button>
+      </div>
+      <p class="small" id="searchStatus"></p>
+      <div id="searchResults" class="list"></div>
+    </details>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    o próximo filme. · Feito para uma boa noite entre amigos.
+    · Dados de filmes via TMDB (não endossado pelo TMDB).
+  </div>
+</footer>
+
+<script>
+'use strict';
+
+const WORKER = 'https://oproximofilme-api.paulossray.workers.dev';
+const IMAGE = 'https://image.tmdb.org/t/p/w500';
+
+const GENRES = [
+  ['','Todos os gêneros'],
+  ['28','Ação'],
+  ['12','Aventura'],
+  ['16','Animação'],
+  ['35','Comédia'],
+  ['80','Crime'],
+  ['18','Drama'],
+  ['10751','Família'],
+  ['14','Fantasia'],
+  ['27','Terror'],
+  ['9648','Mistério'],
+  ['10749','Romance'],
+  ['878','Ficção científica'],
+  ['53','Suspense']
+];
+
+const PICKS = [
+  ['O Sexto Sentido',1999,'Mistério','wtf','tenso'],
+  ['Clube da Luta',1999,'Drama','wtf','tenso'],
+  ['Ilha do Medo',2010,'Suspense','surpresa','tenso'],
+  ['Os Suspeitos',1995,'Crime','wtf','tenso'],
+  ['O Grande Truque',2006,'Mistério','surpresa','tenso'],
+  ['Seven: Os Sete Crimes Capitais',1995,'Suspense','marcante','tenso'],
+  ['A Origem',2010,'Ficção científica','surpresa','fantastico'],
+  ['Interestelar',2014,'Ficção científica','marcante','emocionante'],
+  ['A Chegada',2016,'Ficção científica','marcante','emocionante'],
+  ['Parasita',2019,'Suspense','surpresa','tenso'],
+  ['Corra!',2017,'Terror','surpresa','tenso'],
+  ['Garota Exemplar',2014,'Suspense','surpresa','tenso'],
+  ['Oldboy',2003,'Suspense','wtf','tenso'],
+  ['Amnésia',2000,'Mistério','surpresa','tenso'],
+  ['O Homem Duplicado',2013,'Suspense','wtf','tenso'],
+  ['Donnie Darko',2001,'Ficção científica','wtf','fantastico'],
+  ['O Show de Truman',1998,'Drama','marcante','emocionante'],
+  ['Whiplash: Em Busca da Perfeição',2014,'Drama','marcante','emocionante'],
+  ['Um Sonho de Liberdade',1994,'Drama','marcante','emocionante'],
+  ['Forrest Gump',1994,'Drama','classico','emocionante'],
+  ['A Lista de Schindler',1993,'Drama','oscar','emocionante'],
+  ['O Poderoso Chefão',1972,'Crime','classico','tenso'],
+  ['Pulp Fiction: Tempo de Violência',1994,'Crime','classico','tenso'],
+  ['2001: Uma Odisseia no Espaço',1968,'Ficção científica','classico','fantastico'],
+  ['Matrix',1999,'Ficção científica','classico','fantastico'],
+  ['De Volta para o Futuro',1985,'Aventura','classico','leve'],
+  ['O Senhor dos Anéis: O Retorno do Rei',2003,'Fantasia','oscar','fantastico'],
+  ['Tudo em Todo o Lugar ao Mesmo Tempo',2022,'Ficção científica','oscar','fantastico'],
+  ['La La Land: Cantando Estações',2016,'Romance','marcante','emocionante'],
+  ['Brilho Eterno de uma Mente sem Lembranças',2004,'Romance','marcante','emocionante'],
+  ['Pequena Miss Sunshine',2006,'Comédia','','leve'],
+  ['Superbad: É Hoje',2007,'Comédia','','leve'],
+  ['O Fabuloso Destino de Amélie Poulain',2001,'Romance','','leve'],
+  ['Divertida Mente',2015,'Animação','','emocionante'],
+  ['Toy Story',1995,'Animação','classico','leve'],
+  ['Os Incríveis',2004,'Animação','','leve'],
+  ['A Viagem de Chihiro',2001,'Animação','oscar','fantastico'],
+  ['O Labirinto do Fauno',2006,'Fantasia','marcante','fantastico'],
+  ['O Farol',2019,'Terror','wtf','tenso'],
+  ['Hereditário',2018,'Terror','marcante','tenso'],
+  ['O Iluminado',1980,'Terror','classico','tenso'],
+  ['Psicose',1960,'Suspense','classico','tenso'],
+  ['Janela Indiscreta',1954,'Mistério','classico','tenso'],
+  ['O Silêncio dos Inocentes',1991,'Suspense','oscar','tenso'],
+  ['Cidade de Deus',2002,'Crime','marcante','tenso'],
+  ['Central do Brasil',1998,'Drama','marcante','emocionante'],
+  ['O Auto da Compadecida',2000,'Comédia','classico','leve']
+];
+
+const $ = id => document.getElementById(id);
+const stepEls = [...document.querySelectorAll('.step')];
+
+let step = 1;
+let source = 'local';
+let current = null;
+
+const storeKey = 'oproximofilme_passoapasso_v1';
+let stored = {favorites:[],seen:[]};
+
+try {
+  stored = {
+    ...stored,
+    ...JSON.parse(localStorage.getItem(storeKey) || '{}')
+  };
+} catch {}
+
+if (!Array.isArray(stored.favorites)) stored.favorites = [];
+if (!Array.isArray(stored.seen)) stored.seen = [];
+
+function save() {
+  try {
+    localStorage.setItem(storeKey,JSON.stringify(stored));
+  } catch {}
+  $('favCount').textContent = stored.favorites.length;
+}
+save();
+
+function key(movie) {
+  return movie.localId ||
+    (movie.tmdbId ? 'tmdb:' + movie.tmdbId :
+      'local:' + movie.title + ':' + movie.year);
+}
+
+function opt(id,items) {
+  $(id).innerHTML = items.map(x =>
+    '<option value="' + x[0] + '">' + x[1] + '</option>'
+  ).join('');
+}
+
+opt('genre',GENRES);
+
+function chooseSource(s) {
+  source = s;
+  document.querySelectorAll('[data-source]').forEach(b =>
+    b.classList.toggle('selected',b.dataset.source === s)
+  );
+  $('localFilters').hidden = s !== 'local';
+  $('worldFilters').hidden = s !== 'world';
+}
+
+document.querySelectorAll('[data-source]').forEach(b =>
+  b.addEventListener('click',() => chooseSource(b.dataset.source))
+);
+
+document.querySelectorAll('[data-quick]').forEach(b =>
+  b.addEventListener('click',() => {
+    if (b.dataset.quick === 'rating') $('rating').value = '7';
+    if (b.dataset.quick === 'short') $('runtime').value = '120';
+    if (b.dataset.quick === 'recent') $('era').value = 'recent';
+    if (b.dataset.quick === 'netflix') $('provider').value = '8';
+  })
+);
+
+function go(n) {
+  step = n;
+  stepEls.forEach(el =>
+    el.hidden = Number(el.dataset.step) !== step
+  );
+  [...$('progress').children].forEach((e,i) => {
+    e.className = i+1 === step ? 'active' : i+1 < step ? 'done' : '';
+  });
+  $('back').hidden = step === 1;
+  $('next').textContent =
+    step === 3 ? 'Sortear filme ✦' :
+    step === 4 ? 'Começar de novo ↻' : 'Continuar →';
+
+  document.querySelector('.wizard').scrollIntoView({
+    behavior:'smooth',
+    block:'start'
+  });
+  if (step === 3) summary();
+}
+
+$('back').addEventListener('click',() => go(step-1));
+
+$('next').addEventListener('click',() => {
+  if (step === 4) {go(1);return}
+  if (step === 3) {go(4);draw();return}
+  go(step+1);
+});
+
+function selectedText(id) {
+  return $(id).selectedOptions[0]?.textContent || '';
+}
+
+function summary() {
+  let rows = [
+    ['Acervo',source === 'local' ? 'Seleção da casa' : 'Acervo mundial'],
+    ['Gênero',selectedText('genre')],
+    ['Época',selectedText('era')]
+  ];
+
+  if (source === 'local') {
+    rows.push(
+      ['Final',selectedText('ending')],
+      ['Clima',selectedText('mood')]
+    );
+  } else {
+    rows.push(
+      ['Nota',selectedText('rating')],
+      ['Duração',selectedText('runtime')],
+      ['Streaming',selectedText('provider')]
+    );
+  }
+
+  if ($('skipSeen').checked) rows.push(['Assistidos','Não repetir']);
+
+  $('summary').replaceChildren(...rows.map(([k,v]) => {
+    let p = document.createElement('p');
+    let b = document.createElement('strong');
+    b.textContent = k + ': ';
+    p.append(b,document.createTextNode(v));
+    return p;
+  }));
+}
+
+function yearRange() {
+  const v = $('era').value;
+  const yr = new Date().getFullYear();
+  if (v === 'recent') return [yr-4,yr];
+  if (v === 'current') return [yr,yr];
+  if (v === 'before2000') return [1900,1999];
+  if (v) return [Number(v),Number(v)+9];
+  return [1900,yr];
+}
+
+function localMatch(p) {
+  let [name,y,genre,end,mood] = p;
+  let [from,to] = yearRange();
+  let g = GENRES.find(x => x[0] === $('genre').value)?.[1];
+  if (y < from || y > to) return false;
+  if (g && g !== genre) return false;
+  if ($('ending').value && $('ending').value !== end) return false;
+  if ($('mood').value && $('mood').value !== mood) return false;
+  return !$('skipSeen').checked ||
+    !stored.seen.includes('local:' + name + ':' + y);
+}
+
+function localMovie(p) {
+  return {
+    title:p[0],
+    year:p[1],
+    genre:p[2],
+    overview:'Uma indicação escolhida da nossa seleção da casa.',
+    localId:'local:' + p[0] + ':' + p[1],
+    tmdbId:null,
+    poster:null
+  };
+}
+
+async function api(path,params={}) {
+  const u = new URL(WORKER + '/' + path);
+  Object.entries(params).forEach(([k,v]) => {
+    if (v !== '' && v != null) u.searchParams.set(k,v);
+  });
+  const r = await fetch(u);
+  if (!r.ok) throw Error(
+    'Não foi possível consultar os filmes (' + r.status + ').'
+  );
+  return r.json();
+}
+
+async function details(m) {
+  try {
+    const q = await api('search/movie',{query:m.title});
+    let match = (q.results || []).find(x =>
+      Number(x.release_date?.slice(0,4)) === m.year
+    ) || q.results?.[0];
+
+    if (match) {
+      m.tmdbId = match.id;
+      m.poster = match.poster_path ? IMAGE + match.poster_path : null;
+      m.overview = match.overview || m.overview;
+      m.rating = match.vote_average;
+    }
+  } catch {}
+  return m;
+}
+
+function worldQuery() {
+  const [from,to] = yearRange();
+  const v = {
+    with_genres:$('genre').value,
+    'primary_release_date.gte':from + '-01-01',
+    'primary_release_date.lte':to + '-12-31',
+    'vote_count.gte':$('votes').value,
+    sort_by:$('sort').value
+  };
+
+  if ($('rating').value)
+    v['vote_average.gte'] = $('rating').value;
+
+  if ($('runtime').value)
+    v['with_runtime.lte'] = $('runtime').value;
+
+  if ($('provider').value) {
+    v.watch_region = 'BR';
+    v.with_watch_providers = $('provider').value;
+    v.with_watch_monetization_types = 'flatrate';
+  }
+
+  if ($('language').value)
+    v.with_original_language = $('language').value;
+
+  if ($('country').value)
+    v.with_origin_country = $('country').value;
+
+  return v;
+}
+
+function worldMovie(x) {
+  return {
+    title:x.title || x.original_title || 'Sem título',
+    year:Number((x.release_date || '').slice(0,4)) || '',
+    genre:(x.genre_ids || []).map(id =>
+      GENRES.find(g => Number(g[0]) === id)?.[1]
+    ).filter(Boolean).slice(0,2).join(', '),
+    tmdbId:x.id,
+    poster:x.poster_path ? IMAGE + x.poster_path : null,
+    overview:x.overview || 'Sinopse não disponível em português.',
+    rating:x.vote_average
+  };
+}
+
+async function draw() {
+  current = null;
+  $('result').hidden = true;
+  $('status').textContent = 'Escolhendo o filme...';
+
+  try {
+    let movie;
+
+    if (source === 'local') {
+      let candidates = PICKS.filter(localMatch);
+      if (!candidates.length) throw Error(
+        'Nenhum filme dessa seleção atende a todos os filtros. ' +
+        'Volte e experimente opções mais amplas.'
+      );
+      movie = localMovie(
+        candidates[Math.floor(Math.random()*candidates.length)]
+      );
+      movie = await details(movie);
+    } else {
+      let query = worldQuery();
+      let first = await api('discover/movie',{...query,page:1});
+      const pages = Math.min(500,Number(first.total_pages) || 1);
+      let page = Math.floor(Math.random()*pages)+1;
+      let data = page === 1 ? first :
+        await api('discover/movie',{...query,page});
+
+      let candidates = (data.results || []).map(worldMovie).filter(m =>
+        !$('skipSeen').checked ||
+        !stored.seen.includes(key(m))
+      );
+
+      if (!candidates.length) throw Error(
+        'Não encontramos um filme com esses filtros. ' +
+        'Experimente diminuir as restrições.'
+      );
+      movie = candidates[
+        Math.floor(Math.random()*candidates.length)
+      ];
+    }
+
+    showMovie(movie);
+  } catch (e) {
+    $('status').textContent =
+      e.message || 'Não foi possível carregar os filmes.';
+  }
+}
+
+function posterFallback(t) {
+  let d = document.createElement('div');
+  d.className = 'poster-empty';
+  d.textContent = t;
+  return d;
+}
+
+function showMovie(m) {
+  current = m;
+  $('status').textContent = 'Uma boa sessão começa aqui.';
+  $('result').hidden = false;
+  $('posterBox').replaceChildren();
+
+  if (m.poster) {
+    let img = document.createElement('img');
+    img.className = 'poster';
+    img.src = m.poster;
+    img.alt = 'Pôster de ' + m.title;
+    img.onerror = () => {
+      img.replaceWith(posterFallback(m.title));
+    };
+    $('posterBox').append(img);
+  } else {
+    $('posterBox').append(posterFallback(m.title));
+  }
+
+  $('movieTitle').textContent = m.title;
+  $('movieMeta').textContent = [
+    m.year,
+    m.genre,
+    m.rating ? 'TMDB ' + Number(m.rating).toFixed(1) : ''
+  ].filter(Boolean).join(' · ');
+
+  $('moviePlot').textContent =
+    m.overview || 'Sinopse indisponível.';
+
+  updateActions();
+}
+
+function updateActions() {
+  if (!current) return;
+  const favorite = stored.favorites.some(x =>
+    x.key === key(current)
+  );
+  const seen = stored.seen.includes(key(current));
+
+  $('saveFav').classList.toggle('saved',favorite);
+  $('saveFav').textContent =
+    favorite ? '♥ Nos favoritos' : '♡ Favoritar';
+
+  $('saveSeen').classList.toggle('saved',seen);
+  $('saveSeen').textContent =
+    seen ? '✓ Assistido' : '✓ Já assisti';
+}
+
+$('saveFav').addEventListener('click',() => {
+  if (!current) return;
+  const k = key(current);
+  const i = stored.favorites.findIndex(x => x.key === k);
+
+  if (i >= 0) stored.favorites.splice(i,1);
+  else stored.favorites.push({key:k,movie:current});
+
+  save();
+  updateActions();
+});
+
+$('saveSeen').addEventListener('click',() => {
+  if (!current) return;
+  const k = key(current);
+  const i = stored.seen.indexOf(k);
+
+  if (i >= 0) stored.seen.splice(i,1);
+  else stored.seen.push(k);
+
+  save();
+  updateActions();
+});
+
+$('retry').addEventListener('click',draw);
+
+async function search() {
+  const q = $('searchTerm').value.trim();
+  if (!q) return;
+
+  $('searchStatus').textContent = 'Buscando...';
+  $('searchResults').replaceChildren();
+
+  try {
+    let data = await api('search/movie',{query:q});
+    let arr = (data.results || []).slice(0,12).map(worldMovie);
+    $('searchStatus').textContent =
+      arr.length + ' resultado(s) nesta página.';
+
+    for (let m of arr) {
+      let b = document.createElement('button');
+      b.className = 'item';
+      b.type = 'button';
+
+      let title = document.createElement('strong');
+      title.textContent = m.title;
+
+      let sub = document.createElement('small');
+      sub.textContent = m.year || 'Ano desconhecido';
+
+      b.append(title,sub);
+      b.addEventListener('click',() => {
+        showMovie(m);
+        go(4);
+      });
+      $('searchResults').append(b);
+    }
+  } catch (e) {
+    $('searchStatus').textContent = e.message;
+  }
+}
+
+$('searchBtn').addEventListener('click',search);
+$('searchTerm').addEventListener('keydown',e => {
+  if (e.key === 'Enter') search();
+});
+
+$('favoritesBtn').addEventListener('click',() => {
+  const favs = stored.favorites;
+  if (!favs.length) {
+    alert('Sua lista ainda está vazia. Sorteie um filme e toque em Favoritar.');
+    return;
+  }
+
+  let name = prompt(
+    'Sua lista:\n' +
+    favs.map((f,i) => `${i+1}. ${f.movie.title}`).join('\n') +
+    '\n\nDigite o número do filme para abrir:'
+  );
+
+  let i = Number(name)-1;
+  if (favs[i]) {
+    showMovie(favs[i].movie);
+    go(4);
+  }
+});
+
+chooseSource('local');
+</script>
+</body>
+</html>
