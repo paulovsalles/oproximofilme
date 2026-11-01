@@ -1,569 +1,167 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#f9f9f7">
-<title>O Próximo Filme</title>
+<title>O Próximo Filme — Uma escolha por vez</title>
 <style>
-:root {
- --bg:#f9f9f7;
- --ink:#171717;
- --muted:#777;
- --line:#e5e5e2;
- --sage:#e8eee8;
- --rose:#f3e8e8;
- --lilac:#eeebf3;
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
- margin:0;background:var(--bg);color:var(--ink);
- font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif
-}
-button,input,select{font:inherit}
-button{cursor:pointer}
-button:disabled{opacity:.45;cursor:not-allowed}
-a{color:inherit;text-decoration:none}
-[hidden]{display:none!important}
-.wrap{max-width:1040px;margin:auto;padding:0 22px}
-.top{border-bottom:1px solid var(--line);background:#fff}
-.top-in{height:76px;display:flex;justify-content:space-between;align-items:center;gap:12px}
-.logo{font:28px Georgia,serif;letter-spacing:-1.2px}
-.logo em{font-weight:400}
-.top button{background:transparent;border:1px solid #ddd;padding:9px 15px;border-radius:30px;font-size:12px}
-.hero{text-align:center;padding:64px 0 43px}
-.eyebrow{text-transform:uppercase;letter-spacing:2.8px;font-size:10px;font-weight:700;color:#777}
-.hero h1{font:normal clamp(47px,8vw,81px)/1.03 Georgia,serif;letter-spacing:-3px;margin:19px 0}
-.hero h1 em{color:#8b8990;font-weight:400}
-.hero p{color:#777;max-width:610px;margin:auto;font-size:13px;line-height:1.9}
+:root{--bg:#f9f9f7;--ink:#171717;--muted:#777;--line:#e5e5e2;--sage:#e8eee8;--rose:#f3e8e8;--lilac:#eeebf3}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}a{color:inherit;text-decoration:none}[hidden]{display:none!important}
+.wrap{max-width:1040px;margin:auto;padding:0 22px}.top{border-bottom:1px solid var(--line);background:#fff}.top-in{height:76px;display:flex;justify-content:space-between;align-items:center;gap:12px}.logo{font:28px Georgia,serif;letter-spacing:-1.2px}.logo em{font-weight:400}.top button{background:transparent;border:1px solid #ddd;padding:9px 15px;border-radius:30px;font-size:12px}
+.hero{text-align:center;padding:64px 0 43px}.eyebrow{text-transform:uppercase;letter-spacing:2.8px;font-size:10px;font-weight:700;color:#777}.hero h1{font:normal clamp(47px,8vw,81px)/1.03 Georgia,serif;letter-spacing:-3px;margin:19px 0}.hero h1 em{color:#8b8990;font-weight:400}.hero p{color:#777;max-width:610px;margin:auto;font-size:13px;line-height:1.9}
 .wizard{max-width:760px;margin:0 auto 75px;border:1px solid #e2e2df;border-radius:21px;background:#fff;overflow:hidden;box-shadow:0 18px 70px #11111108}
-.progress{display:flex;justify-content:space-between;gap:12px;padding:24px 32px;background:#fbfbfa;border-bottom:1px solid var(--line)}
-.progress div{font-size:11px;color:#a0a0a0;display:flex;align-items:center;gap:7px}
-.progress b{width:23px;height:23px;display:grid;place-items:center;border:1px solid #ddd;border-radius:50%;font-size:10px}
-.progress .active{color:#151515;font-weight:700}
-.progress .active b{background:#171717;color:#fff;border-color:#171717}
-.progress .done b{background:var(--sage);border-color:var(--sage);color:#29442f}
-.inner{padding:40px clamp(22px,6%,54px) 32px}
-.step h2{font:normal clamp(34px,5vw,49px)/1.13 Georgia,serif;letter-spacing:-1.5px;margin:8px 0 14px}
-.sub{color:var(--muted);margin:0 0 27px;font-size:13px}
-.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.choice{min-height:160px;border:1px solid var(--line);background:#fff;border-radius:14px;padding:21px;text-align:left;display:flex;flex-direction:column;gap:10px}
-.choice .symbol{font:35px Georgia,serif}
-.choice strong{font:23px Georgia,serif}
-.choice small{color:#777;line-height:1.5}
-.choice.selected{border:2px solid #222;background:var(--sage)}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.field label{display:block;font-size:11px;font-weight:700;margin-bottom:7px}
-.field select,.field input{background:#fafaf9;border:1px solid #ddd;border-radius:11px;width:100%;padding:12px;color:#222;min-width:0}
-.field.full{grid-column:1/-1}
-.note{background:var(--sage);border:1px solid #dce7dc;color:#4a584c;padding:14px 15px;border-radius:10px;font-size:12px;margin:19px 0}
-.small{font-size:11px;color:#858585}
-.chipline{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 22px}
-.chip{border:1px solid #ddd;border-radius:30px;background:#fff;padding:8px 12px;font-size:12px}
-.chip:hover{background:var(--lilac)}
-.check{display:flex;align-items:center;gap:9px;font-size:12px;margin-top:20px}
-.check input{accent-color:#222}
-.nav{display:flex;justify-content:space-between;align-items:center;gap:14px;border-top:1px solid var(--line);padding-top:23px;margin-top:31px}
-.btn{border:1px solid #222;background:#191919;color:#fff;border-radius:10px;padding:12px 22px;font-size:13px;font-weight:650}
-.btn.secondary{color:#222;background:#fff;border-color:#ddd}
-.btn:hover{filter:brightness(.92)}
-.summary{background:var(--lilac);border-radius:13px;padding:21px;line-height:2}
-.summary strong{font-size:12px}
-.summary p{margin:0;font-size:13px}
-.result{display:grid;grid-template-columns:195px 1fr;gap:24px;align-items:start}
-.poster{width:100%;aspect-ratio:2/3;object-fit:cover;background:var(--rose);border-radius:12px}
-.poster-empty{background:var(--rose);min-height:260px;display:grid;place-items:center;border-radius:12px;text-align:center;padding:15px;font:22px Georgia,serif}
-.result h3{font:normal 32px/1.15 Georgia,serif;margin:0 0 9px}
-.result p{font-size:13px;color:#696969;line-height:1.8}
-.result .meta{font-size:11px;color:#888}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
-.actions button{padding:10px 12px;border:1px solid #ddd;border-radius:9px;background:#fff;color:#222;font-size:12px}
-.actions button.saved{background:var(--rose)}
-.explore{max-width:760px;margin:0 auto 85px;padding:0 22px}
-.explore details{border-top:1px solid #ddd;border-bottom:1px solid #ddd;padding:21px 0}
-.explore summary{cursor:pointer;font:25px Georgia,serif}
-.searchline{display:flex;gap:9px;margin-top:20px}
-.searchline input{min-width:0;flex:1;border:1px solid #ddd;border-radius:10px;padding:12px}
-.list{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:20px}
-.item{border:1px solid var(--line);border-radius:11px;padding:14px;background:white;text-align:left}
-.item small{display:block;color:#888;margin-top:4px}
-.foot{border-top:1px solid #e8e8e6;padding:25px 0;color:#888;text-align:center;font-size:11px}
-@media(max-width:600px){
- .top-in{height:62px}
- .logo{font-size:22px}
- .hero{padding:44px 0 28px}
- .hero h1{letter-spacing:-2px}
- .wizard{border-radius:16px}
- .progress{padding:16px 14px;gap:5px}
- .progress div{font-size:10px;gap:4px}
- .progress b{width:20px;height:20px}
- .inner{padding:27px 19px}
- .choices{grid-template-columns:1fr}
- .choice{min-height:125px}
- .grid{gap:12px}
- .result{grid-template-columns:1fr}
- .poster,.poster-empty{max-width:220px}
- .list{grid-template-columns:1fr}
- .searchline{flex-direction:column}
- .nav .btn{padding:11px 15px}
-}
+.progress{display:flex;justify-content:space-between;gap:12px;padding:24px 32px;background:#fbfbfa;border-bottom:1px solid var(--line)}.progress div{font-size:11px;color:#a0a0a0;display:flex;align-items:center;gap:7px}.progress b{width:23px;height:23px;display:grid;place-items:center;border:1px solid #ddd;border-radius:50%;font-size:10px}.progress .active{color:#151515;font-weight:700}.progress .active b{background:#171717;color:#fff;border-color:#171717}.progress .done b{background:var(--sage);border-color:var(--sage);color:#29442f}
+.inner{padding:40px clamp(22px,6%,54px) 32px}.step h2{font:normal clamp(34px,5vw,49px)/1.13 Georgia,serif;letter-spacing:-1.5px;margin:8px 0 14px}.sub{color:var(--muted);margin:0 0 27px;font-size:13px}.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}.choice{min-height:160px;border:1px solid var(--line);background:#fff;border-radius:14px;padding:21px;text-align:left;display:flex;flex-direction:column;gap:10px}.choice .symbol{font:35px Georgia,serif}.choice strong{font:23px Georgia,serif}.choice small{color:#777;line-height:1.5}.choice.selected{border:2px solid #222;background:var(--sage)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.field label{display:block;font-size:11px;font-weight:700;margin-bottom:7px}.field select,.field input{background:#fafaf9;border:1px solid #ddd;border-radius:11px;width:100%;padding:12px;color:#222;min-width:0}.field.full{grid-column:1/-1}.note{background:var(--sage);border:1px solid #dce7dc;color:#4a584c;padding:14px 15px;border-radius:10px;font-size:12px;margin:19px 0}.small{font-size:11px;color:#858585}.chipline{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 22px}.chip{border:1px solid #ddd;border-radius:30px;background:#fff;padding:8px 12px;font-size:12px}.chip:hover{background:var(--lilac)}.check{display:flex;align-items:center;gap:9px;font-size:12px;margin-top:20px}.check input{accent-color:#222}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:14px;border-top:1px solid var(--line);padding-top:23px;margin-top:31px}.btn{border:1px solid #222;background:#191919;color:#fff;border-radius:10px;padding:12px 22px;font-size:13px;font-weight:650}.btn.secondary{color:#222;background:#fff;border-color:#ddd}.btn:hover{filter:brightness(.92)}.summary{background:var(--lilac);border-radius:13px;padding:21px;line-height:2}.summary strong{font-size:12px}.summary p{margin:0;font-size:13px}
+.result{display:grid;grid-template-columns:195px 1fr;gap:24px;align-items:start}.poster{width:100%;aspect-ratio:2/3;object-fit:cover;background:var(--rose);border-radius:12px}.poster-empty{background:var(--rose);min-height:260px;display:grid;place-items:center;border-radius:12px;text-align:center;padding:15px;font:22px Georgia,serif}.result h3{font:normal 32px/1.15 Georgia,serif;margin:0 0 9px}.result p{font-size:13px;color:#696969;line-height:1.8}.result .meta{font-size:11px;color:#888}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}.actions button{padding:10px 12px;border:1px solid #ddd;border-radius:9px;background:#fff;color:#222;font-size:12px}.actions button.saved{background:var(--rose)}
+.explore{max-width:760px;margin:0 auto 85px;padding:0 22px}.explore details{border-top:1px solid #ddd;border-bottom:1px solid #ddd;padding:21px 0}.explore summary{cursor:pointer;font:25px Georgia,serif}.searchline{display:flex;gap:9px;margin-top:20px}.searchline input{min-width:0;flex:1;border:1px solid #ddd;border-radius:10px;padding:12px}.searchline .btn{white-space:nowrap}.list{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:20px}.item{border:1px solid #e5e5e2;border-radius:11px;padding:14px;background:white;text-align:left}.item small{display:block;color:#888;margin-top:4px}.foot{border-top:1px solid #e8e8e6;padding:25px 0;color:#888;text-align:center;font-size:11px}
+@media(max-width:600px){.top-in{height:62px}.logo{font-size:22px}.hero{padding:44px 0 28px}.hero h1{letter-spacing:-2px}.wizard{border-radius:16px}.progress{padding:16px 14px;gap:5px}.progress div{font-size:10px;gap:4px}.progress b{width:20px;height:20px}.inner{padding:27px 19px}.choices{grid-template-columns:1fr}.choice{min-height:125px}.grid{gap:12px}.result{grid-template-columns:1fr}.poster{max-width:220px}.poster-empty{max-width:220px}.list{grid-template-columns:1fr}.searchline{flex-direction:column}.nav .btn{padding:11px 15px}}
 </style>
 </head>
 <body>
-<header class="top">
- <div class="wrap top-in">
-  <a class="logo" href="#inicio">o próximo <em>filme.</em></a>
-  <button id="favoritesBtn" type="button">♡ Minha lista <span id="favCount">0</span></button>
- </div>
-</header>
+<header class="top"><div class="wrap top-in"><a class="logo" href="#inicio">o próximo <em>filme.</em></a><button id="favoritesBtn" type="button">♡ Minha lista <span id="favCount">0</span></button></div></header>
 <main id="inicio">
- <div class="wrap hero">
-  <div class="eyebrow">Uma noite entre amigos</div>
-  <h1>O filme certo.<br><em>Sem complicar.</em></h1>
-  <p>Na casa da Julia tem Caju, comida da tia Ângela, bebidas do seu Rubens e conversa com a Nath e o Stênio. Falta só escolher o filme.</p>
- </div>
- <div class="wizard">
-  <div class="progress" id="progress">
-   <div class="active"><b>1</b> Acervo</div>
-   <div><b>2</b> Filtros</div>
-   <div><b>3</b> Confirmar</div>
-   <div><b>4</b> Filme</div>
-  </div>
-  <div class="inner">
-   <section class="step" data-step="1">
-    <div class="eyebrow">Etapa 01 / 04</div>
-    <h2>De onde vem o filme?</h2>
-    <p class="sub">Escolha uma origem. Depois você personaliza.</p>
-    <div class="choices">
-     <button type="button" class="choice selected" data-source="local">
-      <span class="symbol">✧</span>
-      <strong>Seleção da casa</strong>
-      <small>Clássicos, favoritos e finais especiais.</small>
-     </button>
-     <button type="button" class="choice" data-source="world">
-      <span class="symbol">◌</span>
-      <strong>Acervo mundial</strong>
-      <small>Milhares de filmes do TMDB, com filtros detalhados.</small>
-     </button>
+<div class="wrap hero"><div class="eyebrow">Uma noite entre amigos</div><h1>O filme certo.<br><em>Sem complicar.</em></h1><p>Na casa da Julia tem Caju, comida da tia Ângela, bebidas do seu Rubens e conversa com a Nath e o Stênio. Falta só escolher o filme.</p></div>
+<div class="wizard">
+ <div class="progress" id="progress"><div class="active"><b>1</b> Acervo</div><div><b>2</b> Filtros</div><div><b>3</b> Confirmar</div><div><b>4</b> Filme</div></div>
+ <div class="inner">
+  <section class="step" data-step="1"><div class="eyebrow">Etapa 01 / 04</div><h2>De onde vem o filme?</h2><p class="sub">Escolha uma origem. Depois você personaliza.</p><div class="choices"><button type="button" class="choice selected" data-source="local"><span class="symbol">✧</span><strong>Seleção da casa</strong><small>Filmes escolhidos a dedo, incluindo clássicos e finais especiais.</small></button><button type="button" class="choice" data-source="world"><span class="symbol">◌</span><strong>Acervo mundial</strong><small>Milhares de títulos do TMDB, com filtros de nota, duração e streaming.</small></button></div></section>
+  <section class="step" data-step="2" hidden><div class="eyebrow">Etapa 02 / 04</div><h2>Qual é o clima da noite?</h2><p class="sub">Escolha quantos filtros quiser. Também pode deixar tudo livre.</p>
+   <div class="grid"><div class="field"><label for="genre">Gênero</label><select id="genre"></select></div><div class="field"><label for="era">Época</label><select id="era"><option value="">Qualquer época</option><option value="recent">Últimos 5 anos</option><option value="current">Ano atual</option><option value="before2000">Antes de 2000</option><option value="1980">Anos 80</option><option value="1990">Anos 90</option><option value="2000">Anos 2000</option><option value="2010">Anos 2010</option><option value="2020">Anos 2020</option></select></div></div>
+   <div class="grid" style="margin-top:17px">
+    <div class="field full">
+     <label for="provider">Onde assistir? · Brasil</label>
+     <select id="provider">
+      <option value="">Qualquer plataforma</option>
+      <option value="8">Netflix</option>
+      <option value="9">Prime Video (assinatura)</option>
+      <option value="1899">Max / HBO Max</option>
+      <option value="337">Disney+</option>
+      <option value="350">Apple TV+</option>
+      <option value="307">Globoplay</option>
+     </select>
+     <p class="small" style="margin:7px 0 0">Somente títulos disponíveis por assinatura no Brasil, segundo o TMDB/JustWatch. O catálogo pode mudar.</p>
     </div>
-   </section>
-
-   <section class="step" data-step="2" hidden>
-    <div class="eyebrow">Etapa 02 / 04</div>
-    <h2>Qual é o clima da noite?</h2>
-    <p class="sub">Escolha os filtros ou deixe tudo livre.</p>
-    <div class="grid">
-     <div class="field">
-      <label for="genre">Gênero</label>
-      <select id="genre"></select>
-     </div>
-     <div class="field">
-      <label for="era">Época</label>
-      <select id="era">
-       <option value="">Qualquer época</option>
-       <option value="recent">Últimos 5 anos</option>
-       <option value="current">Ano atual</option>
-       <option value="before2000">Antes de 2000</option>
-       <option value="1980">Anos 80</option>
-       <option value="1990">Anos 90</option>
-       <option value="2000">Anos 2000</option>
-       <option value="2010">Anos 2010</option>
-       <option value="2020">Anos 2020</option>
-      </select>
-     </div>
-     <div class="field full">
-      <label for="provider">Onde assistir? · Brasil</label>
-      <select id="provider">
-       <option value="">Qualquer plataforma</option>
-       <option value="8">Netflix</option>
-       <option value="9">Prime Video</option>
-       <option value="1899">Max / HBO Max</option>
-       <option value="337">Disney+</option>
-       <option value="350">Apple TV+</option>
-       <option value="307">Globoplay</option>
-      </select>
-      <p class="small">Disponibilidade por assinatura no Brasil, conforme dados do TMDB/JustWatch.</p>
-     </div>
-    </div>
-    <div id="localFilters">
-     <div class="grid" style="margin-top:17px">
-      <div class="field">
-       <label for="ending">Tipo de final</label>
-       <select id="ending">
-        <option value="">Qualquer categoria</option>
-        <option value="wtf">Final WTF</option>
-        <option value="surpresa">Final imprevisível</option>
-        <option value="marcante">Final inesquecível</option>
-        <option value="classico">Clássicos</option>
-        <option value="oscar">Premiados</option>
-       </select>
-      </div>
-      <div class="field">
-       <label for="mood">Experiência</label>
-       <select id="mood">
-        <option value="">Qualquer clima</option>
-        <option value="leve">Leve e divertido</option>
-        <option value="tenso">Tenso e intrigante</option>
-        <option value="emocionante">Emocionante</option>
-        <option value="fantastico">Fora da realidade</option>
-       </select>
-      </div>
-     </div>
-     <div class="note">Os tipos de final são classificados na Seleção da casa, sem revelar spoilers.</div>
-    </div>
-    <div id="worldFilters" hidden>
-     <div class="chipline">
-      <button class="chip" data-quick="rating" type="button">Nota 7+</button>
-      <button class="chip" data-quick="short" type="button">Até 2 horas</button>
-      <button class="chip" data-quick="recent" type="button">Últimos 5 anos</button>
-      <button class="chip" data-quick="netflix" type="button">Netflix</button>
-     </div>
-     <div class="grid">
-      <div class="field">
-       <label for="rating">Nota mínima TMDB</label>
-       <select id="rating">
-        <option value="">Qualquer nota</option>
-        <option value="6">6+</option>
-        <option value="7">7+</option>
-        <option value="7.5">7,5+</option>
-        <option value="8">8+</option>
-       </select>
-      </div>
-      <div class="field">
-       <label for="runtime">Duração máxima</label>
-       <select id="runtime">
-        <option value="">Qualquer duração</option>
-        <option value="90">1h30</option>
-        <option value="120">2 horas</option>
-        <option value="150">2h30</option>
-       </select>
-      </div>
-      <div class="field">
-       <label for="votes">Mínimo de avaliações</label>
-       <select id="votes">
-        <option value="50">50 votos</option>
-        <option value="200" selected>200 votos</option>
-        <option value="1000">1.000 votos</option>
-       </select>
-      </div>
-     </div>
-     <details style="margin-top:18px">
-      <summary class="small">Mais filtros: idioma, país e ordenação</summary>
-      <div class="grid" style="margin-top:12px">
-       <div class="field">
-        <label for="language">Idioma original</label>
-        <select id="language">
-         <option value="">Qualquer idioma</option>
-         <option value="en">Inglês</option>
-         <option value="pt">Português</option>
-         <option value="ko">Coreano</option>
-         <option value="ja">Japonês</option>
-         <option value="es">Espanhol</option>
-         <option value="fr">Francês</option>
-        </select>
-       </div>
-       <div class="field">
-        <label for="country">País de origem</label>
-        <select id="country">
-         <option value="">Qualquer país</option>
-         <option value="BR">Brasil</option>
-         <option value="US">Estados Unidos</option>
-         <option value="KR">Coreia do Sul</option>
-         <option value="JP">Japão</option>
-         <option value="FR">França</option>
-        </select>
-       </div>
-       <div class="field full">
-        <label for="sort">Ordenar por</label>
-        <select id="sort">
-         <option value="popularity.desc">Popularidade</option>
-         <option value="vote_average.desc">Melhores notas</option>
-         <option value="primary_release_date.desc">Mais recentes</option>
-        </select>
-       </div>
-      </div>
-     </details>
-     <div class="note">As categorias de final são exclusivas da Seleção da casa, porque o TMDB não oferece esse tipo de classificação.</div>
-    </div>
-    <label class="check">
-     <input id="skipSeen" type="checkbox">
-     Não repetir filmes assistidos
-    </label>
-   </section>
-
-   <section class="step" data-step="3" hidden>
-    <div class="eyebrow">Etapa 03 / 04</div>
-    <h2>Pronto para o cinema?</h2>
-    <p class="sub">Confira suas escolhas e deixe a sorte decidir.</p>
-    <div class="summary" id="summary"></div>
-    <p class="small">Sem cadastro. Sem precisar inserir token.</p>
-   </section>
-
-   <section class="step" data-step="4" hidden>
-    <div class="eyebrow">Etapa 04 / 04</div>
-    <h2>O filme da noite.</h2>
-    <p class="sub" id="status">Estamos escolhendo...</p>
-    <button class="btn secondary" id="resetFilters" type="button" hidden>
-     Limpar filtros e tentar novamente
-    </button>
-    <div class="result" id="result" hidden>
-     <div id="posterBox"></div>
-     <div>
-      <h3 id="movieTitle"></h3>
-      <div class="meta" id="movieMeta"></div>
-      <p id="moviePlot"></p>
-      <div class="actions">
-       <button id="saveFav" type="button">♡ Favoritar</button>
-       <button id="saveSeen" type="button">✓ Já assisti</button>
-       <button id="retry" type="button">↻ Sortear outro</button>
-      </div>
-     </div>
-    </div>
-   </section>
-
-   <div class="nav">
-    <button class="btn secondary" id="back" type="button" hidden>← Voltar</button>
-    <span></span>
-    <button class="btn" id="next" type="button">Continuar →</button>
    </div>
-  </div>
+   <div id="localFilters"><p class="note" id="localCount" aria-live="polite">Carregando seleção de filmes...</p><div class="grid" style="margin-top:15px"><div class="field"><label for="ending">Tipo de final / categoria</label><select id="ending"><option value="">Qualquer categoria</option><option value="wtf">Final WTF</option><option value="surpresa">Final imprevisível</option><option value="marcante">Final inesquecível</option><option value="classico">Clássicos</option><option value="oscar">Premiados</option></select></div><div class="field"><label for="mood">Experiência</label><select id="mood"><option value="">Qualquer clima</option><option value="leve">Leve e divertido</option><option value="tenso">Tenso e intrigante</option><option value="emocionante">Emocionante</option><option value="fantastico">Fora da realidade</option></select></div></div><div class="note">Os tipos de final são classificações da nossa seleção, não do TMDB. Sem revelar spoilers.</div></div>
+   <div id="worldFilters" hidden><div class="chipline"><button class="chip" data-quick="rating" type="button">Nota 7+</button><button class="chip" data-quick="short" type="button">Até 2 horas</button><button class="chip" data-quick="recent" type="button">Últimos 5 anos</button><button class="chip" data-quick="netflix" type="button">Netflix</button></div><div class="grid"><div class="field"><label for="rating">Nota mínima TMDB</label><select id="rating"><option value="">Qualquer nota</option><option value="6">6+</option><option value="7">7+</option><option value="7.5">7,5+</option><option value="8">8+</option></select></div><div class="field"><label for="runtime">Duração máxima</label><select id="runtime"><option value="">Qualquer duração</option><option value="90">1h30</option><option value="120">2 horas</option><option value="150">2h30</option></select></div><div class="field"><label for="votes">Mínimo de avaliações</label><select id="votes"><option value="50">50 votos</option><option value="200" selected>200 votos</option><option value="1000">1.000 votos</option></select></div></div><details style="margin-top:18px"><summary class="small">Mais filtros: idioma, país, ordenação</summary><div class="grid" style="margin-top:12px"><div class="field"><label for="language">Idioma original</label><select id="language"><option value="">Qualquer idioma</option><option value="en">Inglês</option><option value="pt">Português</option><option value="ko">Coreano</option><option value="ja">Japonês</option><option value="es">Espanhol</option><option value="fr">Francês</option></select></div><div class="field"><label for="country">País</label><select id="country"><option value="">Qualquer país</option><option value="BR">Brasil</option><option value="US">Estados Unidos</option><option value="KR">Coreia do Sul</option><option value="JP">Japão</option><option value="FR">França</option></select></div><div class="field full"><label for="sort">Ordenar por</label><select id="sort"><option value="popularity.desc">Popularidade</option><option value="vote_average.desc">Melhores notas</option><option value="primary_release_date.desc">Mais recentes</option></select></div></div></details><div class="note">Os filtros de streaming consideram apenas opções de assinatura no Brasil. Finais WTF e imprevisíveis são classificações exclusivas da Seleção da casa.</div></div>
+   <label class="check"><input id="skipSeen" type="checkbox"> Não repetir filmes que marquei como assistidos</label>
+  </section>
+  <section class="step" data-step="3" hidden><div class="eyebrow">Etapa 03 / 04</div><h2>Pronto para o cinema?</h2><p class="sub">Uma última conferida. Depois deixe a sorte decidir.</p><div class="summary" id="summary"></div><p class="small" style="margin-top:20px">Não é necessário cadastro ou inserir token de API.</p></section>
+  <section class="step" data-step="4" hidden><div class="eyebrow">Etapa 04 / 04</div><h2>O filme da noite.</h2><p class="sub" id="status">Estamos escolhendo...</p><button type="button" class="btn secondary" id="resetFilters" hidden>Limpar filtros e tentar novamente</button><div class="result" id="result" hidden><div id="posterBox"></div><div><h3 id="movieTitle"></h3><div class="meta" id="movieMeta"></div><p id="moviePlot"></p><div class="actions"><button id="saveFav" type="button">♡ Favoritar</button><button id="saveSeen" type="button">✓ Já assisti</button><button id="retry" type="button">↻ Sortear outro</button></div></div></div></section>
+  <div class="nav"><button class="btn secondary" id="back" type="button" hidden>← Voltar</button><span></span><button class="btn" id="next" type="button">Continuar →</button></div>
  </div>
-
- <section class="explore">
-  <details>
-   <summary>Prefere procurar pelo nome? ↗</summary>
-   <p class="small">Busque filmes diretamente no TMDB.</p>
-   <div class="searchline">
-    <input type="search" id="searchTerm" placeholder="Ex.: Interestelar">
-    <button class="btn" id="searchBtn" type="button">Buscar</button>
-   </div>
-   <p class="small" id="searchStatus"></p>
-   <div id="searchResults" class="list"></div>
-  </details>
- </section>
-</main>
-<footer class="foot">
- <div class="wrap">
-  o próximo filme. · Uma noite entre amigos.
-  · Dados via TMDB. Streaming via TMDB/JustWatch.
- </div>
-</footer>
-
+</div>
+<section class="explore"><details id="browse"><summary>Prefere procurar pelo nome? ↗</summary><p class="small">Busque filmes diretamente no acervo mundial do TMDB.</p><div class="searchline"><input type="search" id="searchTerm" placeholder="Ex.: Interestelar"><button type="button" class="btn" id="searchBtn">Buscar</button></div><p class="small" id="searchStatus"></p><div id="searchResults" class="list"></div></details></section>
+</main><footer class="foot"><div class="wrap">o próximo filme. · Feito para uma boa noite entre amigos. · Dados de filmes via TMDB (não endossado pelo TMDB). Disponibilidade de streaming: JustWatch/TMDB.</div></footer>
 <script>
 'use strict';
-
-const WORKER = 'https://oproximofilme-api.paulossray.workers.dev';
-const IMAGE = 'https://image.tmdb.org/t/p/w500';
-
-const GENRES = [
- ['','Todos os gêneros'],
- ['28','Ação'],['12','Aventura'],
- ['16','Animação'],['35','Comédia'],
- ['80','Crime'],['18','Drama'],
- ['10751','Família'],['14','Fantasia'],
- ['27','Terror'],['9648','Mistério'],
- ['10749','Romance'],['878','Ficção científica'],
- ['53','Suspense']
+const WORKER='https://oproximofilme-api.paulossray.workers.dev';
+const IMAGE='https://image.tmdb.org/t/p/w500';
+const GENRES=[['','Todos os gêneros'],['28','Ação'],['12','Aventura'],['16','Animação'],['35','Comédia'],['80','Crime'],['18','Drama'],['10751','Família'],['14','Fantasia'],['27','Terror'],['9648','Mistério'],['10749','Romance'],['878','Ficção científica'],['53','Suspense']];
+const LOCAL_GENRES=["Animação", "Aventura", "Ação", "Cinema brasileiro", "Comédia", "Crime e máfia", "Documentários", "Drama", "Esportes", "Família e infantojuvenil", "Fantasia", "Faroeste e neo-western", "Ficção científica", "Guerra e história", "Mistério e investigação", "Musicais e música", "Romance", "Suspense e thriller", "Terror"];
+const LOCAL_COLLECTIONS=["Anos 2020", "Cinema brasileiro", "Crítica dividida, fãs apaixonados", "Cult, trash e deliciosamente exagerados", "Filmes imprevisíveis", "Finais WTF", "Finais extraordinários", "Lançamentos recentes", "Muito reconhecidos pela crítica (nem sempre fáceis)", "Oscar de Melhor Filme", "Para ver de mente aberta (obras polarizadoras)"];
+// Os 957 filmes originais foram compactados para manter tudo em um único HTML.
+const PACKED_LIBRARY='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';
+const SHORT_PICKS=[
+['O Sexto Sentido',1999,'Mistério','wtf','tenso'],['Clube da Luta',1999,'Drama','wtf','tenso'],['Ilha do Medo',2010,'Suspense','surpresa','tenso'],['Os Suspeitos',1995,'Crime','wtf','tenso'],['O Grande Truque',2006,'Mistério','surpresa','tenso'],['Seven: Os Sete Crimes Capitais',1995,'Suspense','marcante','tenso'],['A Origem',2010,'Ficção científica','surpresa','fantastico'],['Interestelar',2014,'Ficção científica','marcante','emocionante'],['A Chegada',2016,'Ficção científica','marcante','emocionante'],['Parasita',2019,'Suspense','surpresa','tenso'],['Corra!',2017,'Terror','surpresa','tenso'],['Garota Exemplar',2014,'Suspense','surpresa','tenso'],['Oldboy',2003,'Suspense','wtf','tenso'],['Amnésia',2000,'Mistério','surpresa','tenso'],['O Homem Duplicado',2013,'Suspense','wtf','tenso'],['Donnie Darko',2001,'Ficção científica','wtf','fantastico'],['O Show de Truman',1998,'Drama','marcante','emocionante'],['Whiplash: Em Busca da Perfeição',2014,'Drama','marcante','emocionante'],['Um Sonho de Liberdade',1994,'Drama','marcante','emocionante'],['Forrest Gump',1994,'Drama','classico','emocionante'],['A Lista de Schindler',1993,'Drama','oscar','emocionante'],['O Poderoso Chefão',1972,'Crime','classico','tenso'],['Pulp Fiction: Tempo de Violência',1994,'Crime','classico','tenso'],['2001: Uma Odisseia no Espaço',1968,'Ficção científica','classico','fantastico'],['Matrix',1999,'Ficção científica','classico','fantastico'],['De Volta para o Futuro',1985,'Aventura','classico','leve'],['O Senhor dos Anéis: O Retorno do Rei',2003,'Fantasia','oscar','fantastico'],['Tudo em Todo o Lugar ao Mesmo Tempo',2022,'Ficção científica','oscar','fantastico'],['La La Land: Cantando Estações',2016,'Romance','marcante','emocionante'],['Brilho Eterno de uma Mente sem Lembranças',2004,'Romance','marcante','emocionante'],['Pequena Miss Sunshine',2006,'Comédia','','leve'],['Superbad: É Hoje',2007,'Comédia','','leve'],['O Fabuloso Destino de Amélie Poulain',2001,'Romance','','leve'],['Divertida Mente',2015,'Animação','','emocionante'],['Toy Story',1995,'Animação','classico','leve'],['Os Incríveis',2004,'Animação','','leve'],['A Viagem de Chihiro',2001,'Animação','oscar','fantastico'],['O Labirinto do Fauno',2006,'Fantasia','marcante','fantastico'],['O Farol',2019,'Terror','wtf','tenso'],['Hereditário',2018,'Terror','marcante','tenso'],['O Iluminado',1980,'Terror','classico','tenso'],['Psicose',1960,'Suspense','classico','tenso'],['Janela Indiscreta',1954,'Mistério','classico','tenso'],['O Silêncio dos Inocentes',1991,'Suspense','oscar','tenso'],['Cidade de Deus',2002,'Crime','marcante','tenso'],['Central do Brasil',1998,'Drama','marcante','emocionante'],['O Auto da Compadecida',2000,'Comédia','classico','leve']
 ];
-
-const PICKS = [
- ['O Sexto Sentido',1999,'Mistério','wtf','tenso'],
- ['Clube da Luta',1999,'Drama','wtf','tenso'],
- ['Ilha do Medo',2010,'Suspense','surpresa','tenso'],
- ['Os Suspeitos',1995,'Crime','wtf','tenso'],
- ['O Grande Truque',2006,'Mistério','surpresa','tenso'],
- ['Seven: Os Sete Crimes Capitais',1995,'Suspense','marcante','tenso'],
- ['A Origem',2010,'Ficção científica','surpresa','fantastico'],
- ['Interestelar',2014,'Ficção científica','marcante','emocionante'],
- ['A Chegada',2016,'Ficção científica','marcante','emocionante'],
- ['Parasita',2019,'Suspense','surpresa','tenso'],
- ['Corra!',2017,'Terror','surpresa','tenso'],
- ['Garota Exemplar',2014,'Suspense','surpresa','tenso'],
- ['Oldboy',2003,'Suspense','wtf','tenso'],
- ['Amnésia',2000,'Mistério','surpresa','tenso'],
- ['O Homem Duplicado',2013,'Suspense','wtf','tenso'],
- ['Donnie Darko',2001,'Ficção científica','wtf','fantastico'],
- ['O Show de Truman',1998,'Drama','marcante','emocionante'],
- ['Whiplash: Em Busca da Perfeição',2014,'Drama','marcante','emocionante'],
- ['Um Sonho de Liberdade',1994,'Drama','marcante','emocionante'],
- ['Forrest Gump',1994,'Drama','classico','emocionante'],
- ['A Lista de Schindler',1993,'Drama','oscar','emocionante'],
- ['O Poderoso Chefão',1972,'Crime','classico','tenso'],
- ['Pulp Fiction: Tempo de Violência',1994,'Crime','classico','tenso'],
- ['2001: Uma Odisseia no Espaço',1968,'Ficção científica','classico','fantastico'],
- ['Matrix',1999,'Ficção científica','classico','fantastico'],
- ['De Volta para o Futuro',1985,'Aventura','classico','leve'],
- ['O Senhor dos Anéis: O Retorno do Rei',2003,'Fantasia','oscar','fantastico'],
- ['Tudo em Todo o Lugar ao Mesmo Tempo',2022,'Ficção científica','oscar','fantastico'],
- ['La La Land: Cantando Estações',2016,'Romance','marcante','emocionante'],
- ['Brilho Eterno de uma Mente sem Lembranças',2004,'Romance','marcante','emocionante'],
- ['Pequena Miss Sunshine',2006,'Comédia','','leve'],
- ['Superbad: É Hoje',2007,'Comédia','','leve'],
- ['O Fabuloso Destino de Amélie Poulain',2001,'Romance','','leve'],
- ['Divertida Mente',2015,'Animação','','emocionante'],
- ['Toy Story',1995,'Animação','classico','leve'],
- ['Os Incríveis',2004,'Animação','','leve'],
- ['A Viagem de Chihiro',2001,'Animação','oscar','fantastico'],
- ['O Labirinto do Fauno',2006,'Fantasia','marcante','fantastico'],
- ['O Farol',2019,'Terror','wtf','tenso'],
- ['Hereditário',2018,'Terror','marcante','tenso'],
- ['O Iluminado',1980,'Terror','classico','tenso'],
- ['Psicose',1960,'Suspense','classico','tenso'],
- ['Janela Indiscreta',1954,'Mistério','classico','tenso'],
- ['O Silêncio dos Inocentes',1991,'Suspense','oscar','tenso'],
- ['Cidade de Deus',2002,'Crime','marcante','tenso'],
- ['Central do Brasil',1998,'Drama','marcante','emocionante'],
- ['O Auto da Compadecida',2000,'Comédia','classico','leve']
-];
-
-const $ = id => document.getElementById(id);
-let step = 1, source = 'local', current = null;
-const steps = [...document.querySelectorAll('.step')];
-let stored = {favorites:[],seen:[]};
-const storeKey = 'oproximofilme_passoapasso_v1';
-
-try {
- stored = {
-  ...stored,
-  ...JSON.parse(localStorage.getItem(storeKey)||'{}')
- };
-} catch {}
-
-if (!Array.isArray(stored.favorites)) stored.favorites=[];
-if (!Array.isArray(stored.seen)) stored.seen=[];
-
-function save(){
- try{localStorage.setItem(storeKey,JSON.stringify(stored))}catch{}
- $('favCount').textContent=stored.favorites.length;
+let PICKS=SHORT_PICKS.map(p=>({title:p[0],year:p[1],genres:[p[2]],collections:[],mood:p[4]}));
+let libraryPromise;
+async function loadLibrary(){
+ if(!libraryPromise) libraryPromise=(async()=>{
+  if(typeof DecompressionStream==='undefined') throw Error('Seu navegador precisa suportar descompactação gzip. Atualize o navegador para carregar os 957 filmes.');
+  const binary=atob(PACKED_LIBRARY);
+  const bytes=Uint8Array.from(binary,c=>c.charCodeAt(0));
+  const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
+  const tuples=JSON.parse(await new Response(stream).text());
+  PICKS=tuples.map(([title,year,genres,collections])=>({
+   title,year,genres:genres.map(i=>LOCAL_GENRES[i]),collections:collections.map(i=>LOCAL_COLLECTIONS[i])
+  }));
+  updateLocalCount();
+  return PICKS;
+ })();
+ return libraryPromise;
 }
-save();
-
-function key(m){
- return m.localId || (m.tmdbId?'tmdb:'+m.tmdbId:'local:'+m.title+':'+m.year);
-}
-
-$('genre').innerHTML=GENRES.map(g=>
- '<option value="'+g[0]+'">'+g[1]+'</option>'
-).join('');
-
+const $=id=>document.getElementById(id);
+const stepEls=[...document.querySelectorAll('.step')];let step=1,source='local',current=null;
+const storeKey='oproximofilme_passoapasso_v1';let stored={favorites:[],seen:[]};try{stored={...stored,...JSON.parse(localStorage.getItem(storeKey)||'{}')}}catch{};
+if(!Array.isArray(stored.favorites))stored.favorites=[];if(!Array.isArray(stored.seen))stored.seen=[];
+const save=()=>{try{localStorage.setItem(storeKey,JSON.stringify(stored))}catch{}; $('favCount').textContent=stored.favorites.length};save();
+function key(movie){return movie.localId|| (movie.tmdbId?'tmdb:'+movie.tmdbId:'local:'+movie.title+':'+movie.year)}
+function opt(id,items){$(id).innerHTML=items.map(x=>'<option value="'+x[0]+'">'+x[1]+'</option>').join('')}
+opt('genre',[['','Todos os gêneros'],...GENRES.slice(1)]);
 function chooseSource(s){
  source=s;
- document.querySelectorAll('[data-source]').forEach(b=>
-  b.classList.toggle('selected',b.dataset.source===s)
- );
+ document.querySelectorAll('[data-source]').forEach(b=>b.classList.toggle('selected',b.dataset.source===s));
  $('localFilters').hidden=s!=='local';
  $('worldFilters').hidden=s!=='world';
+ const choices=s==='local' ? [['','Todos os gêneros'],...LOCAL_GENRES.map(g=>[g,g])] : GENRES;
+ opt('genre',choices);
+ updateLocalCount();
 }
-
-document.querySelectorAll('[data-source]').forEach(b=>
- b.addEventListener('click',()=>chooseSource(b.dataset.source))
-);
-
-document.querySelectorAll('[data-quick]').forEach(b=>
- b.addEventListener('click',()=>{
-  const v=b.dataset.quick;
-  if(v==='rating')$('rating').value='7';
-  if(v==='short')$('runtime').value='120';
-  if(v==='recent')$('era').value='recent';
-  if(v==='netflix')$('provider').value='8';
- })
-);
-
-function go(n){
- step=n;
- steps.forEach(el=>el.hidden=Number(el.dataset.step)!==n);
- [...$('progress').children].forEach((e,i)=>{
-  e.className=i+1===n?'active':i+1<n?'done':'';
- });
- $('back').hidden=n===1;
- $('next').textContent=n===3?'Sortear filme ✦':
-  n===4?'Começar de novo ↻':'Continuar →';
- if(n===3)summary();
- document.querySelector('.wizard').scrollIntoView({behavior:'smooth',block:'start'});
-}
-
-$('back').onclick=()=>go(step-1);
-$('next').onclick=()=>{
- if(step===4){go(1);return}
- if(step===3){go(4);draw();return}
- go(step+1);
+document.querySelectorAll('[data-source]').forEach(b=>b.addEventListener('click',()=>chooseSource(b.dataset.source)));
+document.querySelectorAll('[data-quick]').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.quick==='rating')$('rating').value='7';if(b.dataset.quick==='short')$('runtime').value='120';if(b.dataset.quick==='recent')$('era').value='recent';if(b.dataset.quick==='netflix')$('provider').value='8';}));
+function go(n){step=n;stepEls.forEach(el=>el.hidden=Number(el.dataset.step)!==step);[...$('progress').children].forEach((e,i)=>{e.className=i+1===step?'active':i+1<step?'done':''});$('back').hidden=step===1;$('next').textContent=step===3?'Sortear filme ✦':step===4?'Começar de novo ↻':'Continuar →';document.querySelector('.wizard').scrollIntoView({behavior:'smooth',block:'start'});if(step===3)summary();updateLocalCount()}
+$('back').addEventListener('click',()=>go(step-1));$('next').addEventListener('click',()=>{if(step===4){go(1);return}if(step===3){go(4);draw();return}go(step+1)});
+function selectedText(id){return $(id).selectedOptions[0]?.textContent||''}
+function summary(){let rows=[['Acervo',source==='local'?'Seleção da casa':'Acervo mundial'],['Gênero',selectedText('genre')],['Época',selectedText('era')]];if(source==='local'){rows.push(['Final',selectedText('ending')],['Clima',selectedText('mood')])}else{rows.push(['Nota',selectedText('rating')],['Duração',selectedText('runtime')],['Plataforma',selectedText('provider')])}if($('provider').value && source==='local')rows.push(['Plataforma',selectedText('provider')]);if($('skipSeen').checked)rows.push(['Assistidos','Não repetir']);$('summary').replaceChildren(...rows.map(([k,v])=>{let p=document.createElement('p');let b=document.createElement('strong');b.textContent=k+': ';p.append(b,document.createTextNode(v));return p}))}
+function yearRange(){const v=$('era').value,yr=new Date().getFullYear();if(v==='recent')return [yr-4,yr];if(v==='current')return[yr,yr];if(v==='before2000')return[1900,1999];if(v)return[Number(v),Number(v)+9];return[1900,yr]}
+const FINAL_CATEGORIES={
+ wtf:'Finais WTF', surpresa:'Filmes imprevisíveis',
+ marcante:'Finais extraordinários',oscar:'Oscar de Melhor Filme'
 };
-
-function selectedText(id){
- return $(id).selectedOptions[0]?.textContent||'';
-}
-
-function summary(){
- const rows=[
-  ['Acervo',source==='local'?'Seleção da casa':'Acervo mundial'],
-  ['Gênero',selectedText('genre')],
-  ['Época',selectedText('era')],
-  ['Streaming',selectedText('provider')]
- ];
- if(source==='local'){
-  rows.push(['Final',selectedText('ending')],['Clima',selectedText('mood')]);
- } else {
-  rows.push(['Nota',selectedText('rating')],['Duração',selectedText('runtime')]);
- }
- if($('skipSeen').checked)rows.push(['Assistidos','Não repetir']);
- $('summary').replaceChildren(...rows.map(([a,b])=>{
-  let p=document.createElement('p');
-  let strong=document.createElement('strong');
-  strong.textContent=a+': ';
-  p.append(strong,document.createTextNode(b));
-  return p;
- }));
-}
-
-function yearRange(){
- let v=$('era').value,y=new Date().getFullYear();
- if(v==='recent')return[y-4,y];
- if(v==='current')return[y,y];
- if(v==='before2000')return[1900,1999];
- if(v)return[Number(v),Number(v)+9];
- return[1900,y];
-}
-
+const MOOD_GENRES={
+ leve:['Comédia','Animação','Família e infantojuvenil','Musicais e música'],
+ tenso:['Suspense e thriller','Terror','Mistério e investigação','Crime e máfia'],
+ emocionante:['Drama','Romance','Esportes'],
+ fantastico:['Fantasia','Ficção científica','Aventura']
+};
 function localMatch(p){
- let [name,y,genre,end,mood]=p;
- let [from,to]=yearRange();
- let chosen=$('genre').value;
- let g=GENRES.find(x=>x[0]===chosen)?.[1];
- if(y<from||y>to)return false;
- if(chosen&&g!==genre)return false;
- if($('ending').value&&$('ending').value!==end)return false;
- if($('mood').value&&$('mood').value!==mood)return false;
- return !$('skipSeen').checked ||
-  !stored.seen.includes('local:'+name+':'+y);
+ const [from,to]=yearRange();
+ if(p.year<from || p.year>to) return false;
+ const genre=$('genre').value;
+ if(genre && !p.genres.includes(genre)) return false;
+ const ending=$('ending').value;
+ if(ending==='classico' && p.year>1999) return false;
+ if(ending && ending!=='classico' && !(p.collections||[]).includes(FINAL_CATEGORIES[ending]))return false;
+ const mood=$('mood').value;
+ if(mood && !p.genres.some(g=>(MOOD_GENRES[mood]||[]).includes(g)))return false;
+ if($('skipSeen').checked && stored.seen.includes('local:'+p.title+':'+p.year))return false;
+ return true;
 }
-
 function localMovie(p){
- return {
-  title:p[0],year:p[1],genre:p[2],
-  localId:'local:'+p[0]+':'+p[1],
-  tmdbId:null,poster:null,
-  overview:'Uma indicação da Seleção da casa.'
- };
+ return {title:p.title,year:p.year,genre:p.genres.join(', '),
+  localId:'local:'+p.title+':'+p.year,tmdbId:null,poster:null,
+  overview:'Um filme da nossa seleção especial. Sem spoilers.'};
 }
-
-async function api(path,params={}){
- const u=new URL(WORKER+'/'+path);
- Object.entries(params).forEach(([k,v])=>{
-  if(v!==''&&v!=null)u.searchParams.set(k,v);
- });
- const r=await fetch(u);
- if(!r.ok)throw Error('Erro na API ('+r.status+').');
- return r.json();
+function updateLocalCount(){
+ const el=$('localCount');if(!el)return;
+ if(source!=='local')return;
+ const number=PICKS.filter(localMatch).length;
+ const streaming=Boolean($('provider').value);
+ el.textContent=`${number} filme${number===1?'':'s'} ${number===1?'corresponde':'correspondem'} aos filtros${streaming?' antes de conferir o streaming no Brasil':''}.`+
+ (number===0?' Retire algum filtro para continuar.':'');
+ if(step===2)$('next').disabled=number===0;
+ else $('next').disabled=false;
 }
-
+document.querySelectorAll('#genre,#era,#ending,#mood,#provider,#skipSeen').forEach(el=>{
+ el.addEventListener('change',updateLocalCount);
+});
+async function api(path,params={}){const u=new URL(WORKER+'/'+path);Object.entries(params).forEach(([k,v])=>{if(v!==''&&v!=null)u.searchParams.set(k,v)});const r=await fetch(u);if(!r.ok)throw Error('Não foi possível consultar os filmes ('+r.status+').');return r.json()}
 async function details(m){
  try{
-  let q=await api('search/movie',{query:m.title});
-  let match=(q.results||[]).find(x=>
-   Number(x.release_date?.slice(0,4))===m.year
-  ) || q.results?.[0];
+  const query=m.title.replace(/\s*\([^)]*\)\s*$/,'');
+  const q=await api('search/movie',{query});
+  const candidates=q.results||[];
+  const normalize=x=>String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
+  const target=normalize(query);
+  const match=candidates.find(x=>Number((x.release_date||'').slice(0,4))===m.year &&
+   [x.title,x.original_title].some(t=>normalize(t)===target)) ||
+   candidates.find(x=>Number((x.release_date||'').slice(0,4))===m.year);
   if(match){
    m.tmdbId=match.id;
    m.poster=match.poster_path?IMAGE+match.poster_path:null;
@@ -573,255 +171,105 @@ async function details(m){
  }catch{}
  return m;
 }
+function worldQuery(){const [from,to]=yearRange();const v={with_genres:$('genre').value,'primary_release_date.gte':from+'-01-01','primary_release_date.lte':to+'-12-31','vote_count.gte':$('votes').value,sort_by:$('sort').value};if($('rating').value)v['vote_average.gte']=$('rating').value;if($('runtime').value)v['with_runtime.lte']=$('runtime').value;if($('provider').value){v.watch_region='BR';v.with_watch_providers=$('provider').value;v.with_watch_monetization_types='flatrate'}if($('language').value)v.with_original_language=$('language').value;if($('country').value)v.with_origin_country=$('country').value;return v}
+function worldMovie(x){return{title:x.title||x.original_title||'Sem título',year:Number((x.release_date||'').slice(0,4))||'',genre:(x.genre_ids||[]).map(id=>GENRES.find(g=>Number(g[0])===id)?.[1]).filter(Boolean).slice(0,2).join(', '),tmdbId:x.id,poster:x.poster_path?IMAGE+x.poster_path:null,overview:x.overview||'Sinopse não disponível em português.',rating:x.vote_average}}
+const streamingCache = new Map();
 
-function worldQuery(){
- const [from,to]=yearRange();
- const v={
-  with_genres:$('genre').value,
-  'primary_release_date.gte':from+'-01-01',
-  'primary_release_date.lte':to+'-12-31',
-  'vote_count.gte':$('votes').value,
-  sort_by:$('sort').value
- };
- if($('rating').value)v['vote_average.gte']=$('rating').value;
- if($('runtime').value)v['with_runtime.lte']=$('runtime').value;
- if($('provider').value){
-  v.watch_region='BR';
-  v.with_watch_providers=$('provider').value;
-  v.with_watch_monetization_types='flatrate';
- }
- if($('language').value)v.with_original_language=$('language').value;
- if($('country').value)v.with_origin_country=$('country').value;
- return v;
-}
-
-function worldMovie(x){
- return {
-  title:x.title||x.original_title||'Sem título',
-  year:Number((x.release_date||'').slice(0,4))||'',
-  genre:(x.genre_ids||[]).map(id=>
-   GENRES.find(g=>Number(g[0])===id)?.[1]
-  ).filter(Boolean).slice(0,2).join(', '),
-  tmdbId:x.id,
-  poster:x.poster_path?IMAGE+x.poster_path:null,
-  overview:x.overview||'Sinopse não disponível.',
-  rating:x.vote_average
- };
-}
-
-const streamingCache=new Map();
-
-async function localStreamingMatch(p,providerId){
- const m=await details(localMovie(p));
- if(!m.tmdbId)return null;
- let brazil;
- if(streamingCache.has(m.tmdbId)){
-  brazil=streamingCache.get(m.tmdbId);
- }else{
-  let data;
-  try{
-   data=await api('movie/'+m.tmdbId+'/watch/providers');
-  }catch(e){
-   if(String(e.message).includes('404')){
-    throw Error('É preciso liberar a rota de streaming no Cloudflare Worker.');
-   }
-   throw e;
-  }
-  brazil=data.results?.BR?.flatrate||[];
-  streamingCache.set(m.tmdbId,brazil);
- }
- return brazil.some(x=>Number(x.provider_id)===Number(providerId))?m:null;
-}
-
-function shuffle(a){
- for(let i=a.length-1;i>0;i--){
-  const j=Math.floor(Math.random()*(i+1));
-  [a[i],a[j]]=[a[j],a[i]];
- }
- return a;
-}
-
-async function draw(){
- current=null;
- $('result').hidden=true;
- $('resetFilters').hidden=true;
- $('status').textContent='Escolhendo o filme...';
- try{
-  let movie;
-  if(source==='local'){
-   let candidates=PICKS.filter(localMatch);
-   if(!candidates.length)throw Error(
-    'Nenhum filme atende a essa combinação. Retire algum filtro.'
-   );
-   if($('provider').value){
-    candidates=shuffle([...candidates]);
-    movie=null;
-    for(let i=0;i<candidates.length;i+=3){
-     $('status').textContent='Conferindo streaming... '+Math.min(i+3,candidates.length)+'/'+candidates.length;
-     let batch=await Promise.all(
-      candidates.slice(i,i+3).map(p=>
-       localStreamingMatch(p,$('provider').value)
-      )
-     );
-     const available=batch.filter(Boolean);
-     if(available.length){
-      movie=available[Math.floor(Math.random()*available.length)];
-      break;
-     }
+async function localStreamingMatch(p, providerId) {
+  const m = await details(localMovie(p));
+  if (!m.tmdbId) return null;
+  const cacheKey = m.tmdbId;
+  let brazil;
+  if (streamingCache.has(cacheKey)) {
+    brazil = streamingCache.get(cacheKey);
+  } else {
+    // Requer uma única alteração na rota permitida do Cloudflare Worker.
+    let response;
+    try {
+      response = await api('movie/' + m.tmdbId + '/watch/providers');
+    } catch (e) {
+      if (String(e.message).includes('(404)')) {
+        throw Error('A consulta de streaming da Seleção da casa ainda precisa ser liberada no Cloudflare Worker. Veja a instrução enviada junto do HTML.');
+      }
+      throw e;
     }
-    if(!movie)throw Error(
-     'Nenhum filme confirmado nessa plataforma com esses filtros.'
-    );
-   }else{
-    movie=await details(localMovie(
-     candidates[Math.floor(Math.random()*candidates.length)]
-    ));
-   }
-  }else{
-   const query=worldQuery();
-   const first=await api('discover/movie',{...query,page:1});
-   const pages=Math.min(500,Number(first.total_pages)||1);
-   if(!first.results?.length)throw Error(
-    'Nenhum filme encontrado. Experimente menos filtros.'
-   );
-   for(let attempt=0;attempt<4;attempt++){
-    const page=Math.floor(Math.random()*pages)+1;
-    const data=page===1?first:await api('discover/movie',{...query,page});
-    const options=(data.results||[]).map(worldMovie).filter(m=>
-     !$('skipSeen').checked||!stored.seen.includes(key(m))
-    );
-    if(options.length){
-     movie=options[Math.floor(Math.random()*options.length)];
-     break;
+    brazil = response.results?.BR?.flatrate || [];
+    streamingCache.set(cacheKey, brazil);
+  }
+  const available = brazil.some(p => Number(p.provider_id) === Number(providerId));
+  return available ? m : null;
+}
+
+function shuffleArray(a) {
+  for (let i = a.length-1; i>0; i--) {
+    let j = Math.floor(Math.random() * (i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+async function draw() {
+  current = null;
+  $('result').hidden = true;
+  $('resetFilters').hidden = true;
+  $('status').textContent = 'Escolhendo o filme...';
+  try {
+    let movie;
+    if (source === 'local') {
+      await loadLibrary(); let candidates = PICKS.filter(localMatch);
+      if (!candidates.length) throw Error('Essa combinação não tem filmes na Seleção da casa. Tente retirar algum filtro.');
+      if ($('provider').value) {
+        candidates = shuffleArray([...candidates]);
+        movie = null;
+        for (let i=0; i<Math.min(30,candidates.length); i+=3) {
+          $('status').textContent = 'Conferindo streaming no Brasil... ' + Math.min(i+3,Math.min(30,candidates.length)) + '/' + Math.min(30,candidates.length);
+          const batch = await Promise.all(
+            candidates.slice(i,i+3).map(p => localStreamingMatch(p, $('provider').value))
+          );
+          const available = batch.filter(Boolean);
+          if (available.length) {
+            movie = available[Math.floor(Math.random() * available.length)];
+            break;
+          }
+        }
+        if (!movie) throw Error('Não encontrei um filme nessa plataforma entre os títulos verificados agora. Tente sortear novamente, escolha outra plataforma ou use menos filtros.');
+      } else {
+        movie = await details(localMovie(candidates[Math.floor(Math.random()*candidates.length)]));
+      }
+    } else {
+      const query = worldQuery();
+      const first = await api('discover/movie',{...query,page:1});
+      const pages = Math.min(500,Number(first.total_pages)||1);
+      if (!first.results?.length || !first.total_results) throw Error('Nenhum filme encontrado no Acervo mundial. Experimente menos filtros.');
+      let movieFound = null;
+      // Tenta algumas páginas caso todos os filmes da primeira sorteada já estejam marcados como vistos.
+      for (let attempt=0;attempt<4;attempt++) {
+        const page = attempt===0 ? Math.floor(Math.random()*pages)+1 : Math.floor(Math.random()*pages)+1;
+        const data = page===1 ? first : await api('discover/movie',{...query,page});
+        const candidates = (data.results||[]).map(worldMovie).filter(m =>
+          !$('skipSeen').checked || !stored.seen.includes(key(m))
+        );
+        if (candidates.length) {
+          movieFound = candidates[Math.floor(Math.random()*candidates.length)];
+          break;
+        }
+      }
+      if (!movieFound) throw Error('Todos os filmes encontrados nessas páginas já foram vistos. Experimente retirar algum filtro.');
+      movie = movieFound;
     }
-   }
-   if(!movie)throw Error(
-    'Não encontramos filmes ainda não assistidos nessas páginas.'
-   );
+    showMovie(movie);
+  } catch(e) {
+    $('status').textContent = e.message || 'Não foi possível carregar o filme. Tente novamente.';
+    $('resetFilters').hidden = false;
   }
-  showMovie(movie);
- }catch(e){
-  $('status').textContent=e.message||'Não foi possível buscar o filme.';
-  $('resetFilters').hidden=false;
- }
 }
 
-function posterFallback(t){
- let d=document.createElement('div');
- d.className='poster-empty';
- d.textContent=t;
- return d;
-}
-
-function showMovie(m){
- current=m;
- $('status').textContent='Uma boa sessão começa aqui.';
- $('result').hidden=false;
- $('posterBox').replaceChildren();
- if(m.poster){
-  let img=document.createElement('img');
-  img.className='poster';
-  img.src=m.poster;
-  img.alt='Pôster de '+m.title;
-  img.onerror=()=>img.replaceWith(posterFallback(m.title));
-  $('posterBox').append(img);
- }else{
-  $('posterBox').append(posterFallback(m.title));
- }
- $('movieTitle').textContent=m.title;
- $('movieMeta').textContent=[
-  m.year,m.genre,m.rating?'TMDB '+Number(m.rating).toFixed(1):''
- ].filter(Boolean).join(' · ');
- $('moviePlot').textContent=m.overview||'Sinopse indisponível.';
- updateActions();
-}
-
-function updateActions(){
- if(!current)return;
- const favorite=stored.favorites.some(x=>x.key===key(current));
- const seen=stored.seen.includes(key(current));
- $('saveFav').classList.toggle('saved',favorite);
- $('saveFav').textContent=favorite?'♥ Nos favoritos':'♡ Favoritar';
- $('saveSeen').classList.toggle('saved',seen);
- $('saveSeen').textContent=seen?'✓ Assistido':'✓ Já assisti';
-}
-
-$('saveFav').onclick=()=>{
- if(!current)return;
- const k=key(current);
- const i=stored.favorites.findIndex(x=>x.key===k);
- if(i>=0)stored.favorites.splice(i,1);
- else stored.favorites.push({key:k,movie:current});
- save();updateActions();
-};
-
-$('saveSeen').onclick=()=>{
- if(!current)return;
- const k=key(current);
- const i=stored.seen.indexOf(k);
- if(i>=0)stored.seen.splice(i,1);
- else stored.seen.push(k);
- save();updateActions();
-};
-
-$('retry').onclick=draw;
-$('resetFilters').onclick=()=>{
- for(const id of [
-  'genre','era','ending','mood','rating',
-  'runtime','provider','language','country'
- ])$(id).value='';
- $('votes').value='200';
- $('sort').value='popularity.desc';
- $('skipSeen').checked=false;
- draw();
-};
-
-async function search(){
- const q=$('searchTerm').value.trim();
- if(!q)return;
- $('searchStatus').textContent='Buscando...';
- $('searchResults').replaceChildren();
- try{
-  const data=await api('search/movie',{query:q});
-  const arr=(data.results||[]).slice(0,12).map(worldMovie);
-  $('searchStatus').textContent=arr.length+' resultado(s).';
-  for(let m of arr){
-   let b=document.createElement('button');
-   b.className='item';
-   let title=document.createElement('strong');
-   title.textContent=m.title;
-   let sub=document.createElement('small');
-   sub.textContent=m.year||'Ano desconhecido';
-   b.append(title,sub);
-   b.onclick=()=>{showMovie(m);go(4)};
-   $('searchResults').append(b);
-  }
- }catch(e){
-  $('searchStatus').textContent=e.message;
- }
-}
-
-$('searchBtn').onclick=search;
-$('searchTerm').onkeydown=e=>{
- if(e.key==='Enter')search();
-};
-
-$('favoritesBtn').onclick=()=>{
- const favs=stored.favorites;
- if(!favs.length){
-  alert('Sua lista está vazia. Sorteie um filme e toque em Favoritar.');
-  return;
- }
- const n=prompt(
-  'Sua lista:\n'+
-  favs.map((f,i)=>(i+1)+'. '+f.movie.title).join('\n')+
-  '\n\nDigite o número para abrir:'
- );
- const i=Number(n)-1;
- if(favs[i]){showMovie(favs[i].movie);go(4)}
-};
-
-chooseSource('local');
+function showMovie(m){current=m;$('status').textContent='Uma boa sessão começa aqui.';$('result').hidden=false;$('posterBox').replaceChildren();if(m.poster){let img=document.createElement('img');img.className='poster';img.src=m.poster;img.alt='Pôster de '+m.title;img.onerror=()=>{img.replaceWith(posterFallback(m.title))};$('posterBox').append(img)}else $('posterBox').append(posterFallback(m.title));$('movieTitle').textContent=m.title;$('movieMeta').textContent=[m.year,m.genre,m.rating?'TMDB '+Number(m.rating).toFixed(1):''].filter(Boolean).join(' · ');$('moviePlot').textContent=m.overview||'Sinopse indisponível.';updateActions()}
+function posterFallback(t){let d=document.createElement('div');d.className='poster-empty';d.textContent=t;return d}
+function updateActions(){if(!current)return;$('saveFav').classList.toggle('saved',stored.favorites.some(x=>x.key===key(current)));$('saveFav').textContent=stored.favorites.some(x=>x.key===key(current))?'♥ Nos favoritos':'♡ Favoritar';$('saveSeen').classList.toggle('saved',stored.seen.includes(key(current)));$('saveSeen').textContent=stored.seen.includes(key(current))?'✓ Assistido':'✓ Já assisti'}
+$('saveFav').addEventListener('click',()=>{if(!current)return;const k=key(current),i=stored.favorites.findIndex(x=>x.key===k);if(i>=0)stored.favorites.splice(i,1);else stored.favorites.push({key:k,movie:current});save();updateActions()});$('saveSeen').addEventListener('click',()=>{if(!current)return;const k=key(current),i=stored.seen.indexOf(k);if(i>=0)stored.seen.splice(i,1);else stored.seen.push(k);save();updateActions()});$('retry').addEventListener('click',draw);$('resetFilters').addEventListener('click',()=>{for(const id of ['genre','era','ending','mood','rating','runtime','provider','language','country']) $(id).value='';$('votes').value='200';$('sort').value='popularity.desc';$('skipSeen').checked=false;draw()});
+async function search(){const q=$('searchTerm').value.trim();if(!q)return;$('searchStatus').textContent='Buscando...';$('searchResults').replaceChildren();try{let data=await api('search/movie',{query:q});let arr=(data.results||[]).slice(0,12).map(worldMovie);$('searchStatus').textContent=arr.length+' resultado(s) nesta página.';for(let m of arr){let b=document.createElement('button');b.className='item';b.type='button';let title=document.createElement('strong');title.textContent=m.title;let sub=document.createElement('small');sub.textContent=m.year||'Ano desconhecido';b.append(title,sub);b.addEventListener('click',()=>{showMovie(m);go(4)});$('searchResults').append(b)}}catch(e){$('searchStatus').textContent=e.message}}
+$('searchBtn').addEventListener('click',search);$('searchTerm').addEventListener('keydown',e=>{if(e.key==='Enter')search()});$('favoritesBtn').addEventListener('click',()=>{const favs=stored.favorites;if(!favs.length){alert('Sua lista ainda está vazia. Sorteie um filme e toque em Favoritar.');return}let name=prompt('Sua lista:\n'+favs.map((f,i)=>`${i+1}. ${f.movie.title}`).join('\n')+'\n\nDigite o número do filme para abrir:');let i=Number(name)-1;if(favs[i]){showMovie(favs[i].movie);go(4)}});chooseSource('local');loadLibrary().catch(e=>{console.warn(e);updateLocalCount()});
 </script>
 </body>
 </html>
