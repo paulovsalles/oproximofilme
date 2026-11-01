@@ -223,7 +223,7 @@ body{background:var(--bg);color:var(--ink)}
 'use strict';
 const WORKER='https://oproximofilme-api.paulossray.workers.dev';
 const IMAGE='https://image.tmdb.org/t/p/w500';
-const GENRES=[['','Todos os gêneros'],['28','Ação'],['12','Aventura'],['16','Animação'],['35','Comédia'],['80','Crime'],['18','Drama'],['10751','Família'],['14','Fantasia'],['27','Terror'],['9648','Mistério'],['10749','Romance'],['878','Ficção científica'],['53','Suspense']];
+const GENRES=[['','Todos os gêneros'],['28','Ação'],['12','Aventura'],['16','Animação'],['35','Comédia'],['35,10749','Comédia romântica'],['80','Crime'],['18','Drama'],['10751','Família'],['14','Fantasia'],['27','Terror'],['9648','Mistério'],['10749','Romance'],['878','Ficção científica'],['53','Suspense']];
 const LOCAL_GENRES=["Animação", "Aventura", "Ação", "Cinema brasileiro", "Comédia", "Crime e máfia", "Documentários", "Drama", "Esportes", "Família e infantojuvenil", "Fantasia", "Faroeste e neo-western", "Ficção científica", "Guerra e história", "Mistério e investigação", "Musicais e música", "Romance", "Suspense e thriller", "Terror"];
 const LOCAL_COLLECTIONS=["Anos 2020", "Cinema brasileiro", "Crítica dividida, fãs apaixonados", "Cult, trash e deliciosamente exagerados", "Filmes imprevisíveis", "Finais WTF", "Finais extraordinários", "Lançamentos recentes", "Muito reconhecidos pela crítica (nem sempre fáceis)", "Oscar de Melhor Filme", "Para ver de mente aberta (obras polarizadoras)"];
 // Os 957 filmes originais foram compactados para manter tudo em um único HTML.
@@ -262,7 +262,7 @@ function chooseSource(s){
  document.querySelectorAll('[data-source]').forEach(b=>b.classList.toggle('selected',b.dataset.source===s));
  $('localFilters').hidden=s!=='local';
  $('worldFilters').hidden=s!=='world';
- const choices=s==='local' ? [['','Todos os gêneros'],...LOCAL_GENRES.map(g=>[g,g])] : GENRES;
+ const choices=s==='local' ? [['','Todos os gêneros'],...LOCAL_GENRES.flatMap(g=>g==='Comédia'?[[g,g],['Comédia romântica','Comédia romântica']]:[[g,g]])] : GENRES;
  opt('genre',choices);
  if(s==='local')updateLocalCount();else{localCountVersion++;updateWorldCount()}
 }
@@ -283,16 +283,48 @@ const MOOD_GENRES={
  emocionante:['Drama','Romance','Esportes'],
  fantastico:['Fantasia','Ficção científica','Aventura']
 };
+// Comédias românticas identificadas na curadoria, inclusive quando o filme
+// estava registrado apenas como Romance ou apenas como Comédia.
+const ROMCOM_TITLES=new Set([
+ "Palm Springs",
+ "Feitiço do Tempo",
+ "Simplesmente Amor",
+ "500 Dias com Ela",
+ "Um Lugar Chamado Notting Hill",
+ "Harry e Sally: Feitos um para o Outro",
+ "Uma Linda Mulher",
+ "O Amor Não Tira Férias",
+ "10 Coisas que Eu Odeio em Você",
+ "Sintonia de Amor",
+ "Mensagem para Você",
+ "Escrito nas Estrelas (Serendipity)",
+ "Simplesmente Acontece (Love, Rosie)",
+ "A Proposta",
+ "Podres de Ricos (Crazy Rich Asians)",
+ "Amor a Toda Prova",
+ "Feitiço da Lua (Moonstruck)",
+ "Se Meu Apartamento Falasse (The Apartment)",
+ "Questão de Tempo",
+ "Amor e Outras Drogas",
+ "Ligeiramente Grávidos",
+ "O Virgem de 40 Anos",
+ "O Homem que Copiava",
+ "Sim Senhor (Yes Man)"
+]);
+function isRomCom(p){return ROMCOM_TITLES.has(p.title) ||
+ (p.genres.includes('Comédia') && p.genres.includes('Romance'));}
 function localMatch(p){
  const [from,to]=yearRange();
  if(p.year<from || p.year>to) return false;
  const genre=$('genre').value;
- if(genre && !p.genres.includes(genre)) return false;
+ if(genre==='Comédia romântica') {
+   if(!isRomCom(p)) return false;
+ } else if(genre && !p.genres.includes(genre)) return false;
  const ending=$('ending').value;
  if(ending==='classico' && p.year>1999) return false;
  if(ending && ending!=='classico' && !(p.collections||[]).includes(FINAL_CATEGORIES[ending]))return false;
  const mood=$('mood').value;
- if(mood && !p.genres.some(g=>(MOOD_GENRES[mood]||[]).includes(g)))return false;
+ if(mood && !p.genres.some(g=>(MOOD_GENRES[mood]||[]).includes(g)) && !(mood==='leve' && isRomCom(p)))return false;
  if($('skipSeen').checked && stored.seen.includes('local:'+p.title+':'+p.year))return false;
  return true;
 }
@@ -554,6 +586,7 @@ function aiPromptGenres(text){
   const s=text.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
   if(/suspens|intrig|reviravolt|misteri|investig|tens[ao]|thriller/.test(s))return '53|9648';
   if(/terror|assust|horror/.test(s))return '27';
+  if(/comedia romantica|romcom|romance com humor/.test(s))return '35,10749';
   if(/comedi|engrac|divertid|risad|leve/.test(s))return '35';
   if(/ficcao cientifica|sci.?fi|espac|futur|distopi/.test(s))return '878';
   if(/romantic|romance|amor/.test(s))return '10749';
