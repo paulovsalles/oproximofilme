@@ -81,6 +81,9 @@ body{background:var(--bg);color:var(--ink)}
   font-style: italic;
 }
 
+/* Mensagens do contador legíveis em celular */
+#localCount,#worldCount{overflow-wrap:anywhere}
+#clearLocalFilters{color:#262626;background:#fff;border:1px solid #b8c7b9}
 </style>
 </head>
 <body>
@@ -108,7 +111,7 @@ body{background:var(--bg);color:var(--ink)}
      <p class="small" style="margin:7px 0 0">Somente títulos disponíveis por assinatura no Brasil, segundo o TMDB/JustWatch. O catálogo pode mudar.</p>
     </div>
    </div>
-   <div id="localFilters"><div class="note" aria-live="polite"><div id="localCount">Carregando seleção de filmes...</div><div class="count-progress" id="localProgress" hidden><span id="localProgressBar" style="width:0%"></span></div></div><div class="grid" style="margin-top:15px"><div class="field"><label for="ending">Tipo de final / categoria</label><select id="ending"><option value="">Qualquer categoria</option><option value="wtf">Final WTF</option><option value="surpresa">Final imprevisível</option><option value="marcante">Final inesquecível</option><option value="classico">Clássicos</option><option value="oscar">Premiados</option></select></div><div class="field"><label for="mood">Experiência</label><select id="mood"><option value="">Qualquer clima</option><option value="leve">Leve e divertido</option><option value="tenso">Tenso e intrigante</option><option value="emocionante">Emocionante</option><option value="fantastico">Fora da realidade</option></select></div></div><div class="note">Os tipos de final são classificações da nossa seleção, não do TMDB. Sem revelar spoilers.</div></div>
+   <div id="localFilters"><div class="note" aria-live="polite"><div id="localCount">Carregando seleção de filmes...</div><button type="button" class="chip" id="clearLocalFilters" hidden style="margin-top:11px">Limpar filtros</button><div class="count-progress" id="localProgress" hidden><span id="localProgressBar" style="width:0%"></span></div></div><div class="grid" style="margin-top:15px"><div class="field"><label for="ending">Tipo de final / categoria</label><select id="ending"><option value="">Qualquer categoria</option><option value="wtf">Final WTF</option><option value="surpresa">Final imprevisível</option><option value="marcante">Final inesquecível</option><option value="classico">Clássicos</option><option value="oscar">Premiados</option></select></div><div class="field"><label for="mood">Experiência</label><select id="mood"><option value="">Qualquer clima</option><option value="leve">Leve e divertido</option><option value="tenso">Tenso e intrigante</option><option value="emocionante">Emocionante</option><option value="fantastico">Fora da realidade</option></select></div></div><div class="note">Os tipos de final são classificações da nossa seleção, não do TMDB. Sem revelar spoilers.</div></div>
    <div id="worldFilters" hidden><div class="note" id="worldCount" aria-live="polite">Escolha seus filtros para consultar o acervo mundial.</div><div class="chipline"><button class="chip" data-quick="rating" type="button">Nota 7+</button><button class="chip" data-quick="short" type="button">Até 2 horas</button><button class="chip" data-quick="recent" type="button">Últimos 5 anos</button><button class="chip" data-quick="netflix" type="button">Netflix</button></div><div class="grid"><div class="field"><label for="rating">Nota mínima TMDB</label><select id="rating"><option value="">Qualquer nota</option><option value="6">6+</option><option value="7">7+</option><option value="7.5">7,5+</option><option value="8">8+</option></select></div><div class="field"><label for="runtime">Duração máxima</label><select id="runtime"><option value="">Qualquer duração</option><option value="90">1h30</option><option value="120">2 horas</option><option value="150">2h30</option></select></div><div class="field"><label for="votes">Mínimo de avaliações</label> 
 <select id="votes">
   <option value="0" selected>Todas (inclusive 0 votos)</option>
@@ -183,6 +186,7 @@ const SHORT_PICKS=[
 ];
 let PICKS=SHORT_PICKS.map(p=>({title:p[0],year:p[1],genres:[p[2]],collections:[],mood:p[4]}));
 let libraryPromise;
+let libraryReady=false;
 async function loadLibrary(){
  if(!libraryPromise) libraryPromise=(async()=>{
   if(typeof DecompressionStream==='undefined') throw Error('Seu navegador precisa suportar descompactação gzip. Atualize o navegador para carregar os 957 filmes.');
@@ -193,9 +197,9 @@ async function loadLibrary(){
   PICKS=tuples.map(([title,year,genres,collections])=>({
    title,year,genres:genres.map(i=>LOCAL_GENRES[i]),collections:collections.map(i=>LOCAL_COLLECTIONS[i])
   }));
-  updateLocalCount();
+  libraryReady=true;
   return PICKS;
- })();
+ })().catch(error=>{libraryPromise=null;throw error});
  return libraryPromise;
 }
 const $=id=>document.getElementById(id);
@@ -217,7 +221,7 @@ function chooseSource(s){
 }
 document.querySelectorAll('[data-source]').forEach(b=>b.addEventListener('click',()=>chooseSource(b.dataset.source)));
 document.querySelectorAll('[data-quick]').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.quick==='rating')$('rating').value='7';if(b.dataset.quick==='short')$('runtime').value='120';if(b.dataset.quick==='recent')$('era').value='recent';if(b.dataset.quick==='netflix')$('provider').value='8';updateWorldCount();}));
-function go(n){step=n;stepEls.forEach(el=>el.hidden=Number(el.dataset.step)!==step);[...$('progress').children].forEach((e,i)=>{e.className=i+1===step?'active':i+1<step?'done':''});$('back').hidden=step===1;$('next').textContent=step===3?'Sortear filme ✦':step===4?'Começar de novo ↻':'Continuar →';document.querySelector('.wizard').scrollIntoView({behavior:'smooth',block:'start'});if(step===3)summary();if(source==='local')updateLocalCount();else updateWorldCount()}
+function go(n){step=n;$('next').disabled=false;stepEls.forEach(el=>el.hidden=Number(el.dataset.step)!==step);[...$('progress').children].forEach((e,i)=>{e.className=i+1===step?'active':i+1<step?'done':''});$('back').hidden=step===1;$('next').textContent=step===3?'Sortear filme ✦':step===4?'Começar de novo ↻':'Continuar →';document.querySelector('.wizard').scrollIntoView({behavior:'smooth',block:'start'});if(step===3)summary();if(source==='local')updateLocalCount();else updateWorldCount()}
 $('back').addEventListener('click',()=>go(step-1));$('next').addEventListener('click',()=>{if(step===4){go(1);return}if(step===3){go(4);draw();return}go(step+1)});
 function selectedText(id){return $(id).selectedOptions[0]?.textContent||''}
 function summary(){let rows=[['Acervo',source==='local'?'Seleção da casa':'Acervo mundial'],['Gênero',selectedText('genre')],['Época',selectedText('era')]];if(source==='local'){rows.push(['Final',selectedText('ending')],['Clima',selectedText('mood')])}else{rows.push(['Nota',selectedText('rating')],['Duração',selectedText('runtime')],['Plataforma',selectedText('provider')])}if($('provider').value && source==='local')rows.push(['Plataforma',selectedText('provider')]);if($('skipSeen').checked)rows.push(['Assistidos','Não repetir']);$('summary').replaceChildren(...rows.map(([k,v])=>{let p=document.createElement('p');let b=document.createElement('strong');b.textContent=k+': ';p.append(b,document.createTextNode(v));return p}))}
@@ -286,45 +290,82 @@ let localCountVersion=0;
 function updateLocalCount(){
  const version=++localCountVersion;
  if(source!=='local')return;
+ const el=$('localCount');
+ const progress=$('localProgress');
+ const bar=$('localProgressBar');
+ const clear=$('clearLocalFilters');
+ clear.hidden=true;
+ bar.style.width='0%';
+ if(!libraryReady){
+   progress.hidden=true;
+   el.textContent='Carregando os 957 filmes da Seleção da casa…';
+   if(step===2)$('next').disabled=true;
+   loadLibrary().then(()=>{
+     if(version===localCountVersion && source==='local')updateLocalCount();
+   }).catch(error=>{
+     if(version!==localCountVersion || source!=='local')return;
+     el.textContent='Não foi possível carregar a seleção de filmes: '+error.message;
+     clear.hidden=false;
+     if(step===2)$('next').disabled=true;
+   });
+   return;
+ }
  const candidates=PICKS.filter(localMatch);
  const selected=$('provider').value;
- const el=$('localCount');
- $('localProgress').hidden=!selected;
+ if(!candidates.length){
+   progress.hidden=true;
+   el.textContent='Nenhum filme da Seleção da casa atende aos filtros de gênero, época, tipo de final e clima. A plataforma de streaming ainda não foi consultada.';
+   clear.hidden=false;
+   if(step===2)$('next').disabled=true;
+   return;
+ }
  if(!selected){
-   el.textContent=`${candidates.length} filme${candidates.length===1?'':'s'} na Seleção da casa com esses filtros.`;
-   $('next').disabled=step===2 && candidates.length===0;
+   progress.hidden=true;
+   el.textContent=`${candidates.length} filme${candidates.length===1?'':'s'} da Seleção da casa correspondem aos filtros.`;
+   if(step===2)$('next').disabled=false;
    return;
  }
  const name=selectedText('provider');
  const failed=new Set();
+ progress.hidden=false;
  const redraw=()=>{
-   if(version!==localCountVersion||source!=='local')return;
+   if(version!==localCountVersion || source!=='local')return;
    const verified=candidates.filter(p=>cachedProviderInfo(p));
    const matches=verified.filter(p=>cachedProviderInfo(p).ids.includes(Number(selected)));
-   const pending=candidates.length-verified.length-failed.size;
-   el.textContent=`${matches.length} filme${matches.length===1?'':'s'} confirmado${matches.length===1?'':'s'} no ${name} · ${verified.length} de ${candidates.length} verificados`+
-     (failed.size?` · ${failed.size} não puderam ser verificados`:'')+
-     (pending>0?' · conferindo os demais…':'.');
-   $('localProgressBar').style.width=(candidates.length?100*verified.length/candidates.length:100)+'%';
-   // Só permita seguir se houver algum filme cuja plataforma já foi confirmada.
+   const processed=verified.length+failed.size;
+   const remaining=candidates.length-processed;
+   if(!processed){
+     el.textContent=`Preparando consulta ao ${name}: 0 de ${candidates.length} filmes verificados…`;
+   }else if(remaining>0){
+     el.textContent=`${matches.length} filme${matches.length===1?'':'s'} confirmado${matches.length===1?'':'s'} no ${name} · ${processed} de ${candidates.length} consultados`+
+       (failed.size?` · ${failed.size} consultas falharam`:'')+' · verificando os demais…';
+   }else if(failed.size===candidates.length){
+     el.textContent=`Não foi possível consultar o streaming dos ${candidates.length} filmes. Confira a conexão e tente novamente.`;
+   }else{
+     el.textContent=`Verificação concluída: ${matches.length} filme${matches.length===1?'':'s'} confirmado${matches.length===1?'':'s'} no ${name} entre ${verified.length} verificados`+
+       (failed.size?` (${failed.size} consultas falharam).`:'.');
+   }
+   bar.style.width=`${Math.round(100*processed/candidates.length)}%`;
    if(step===2)$('next').disabled=matches.length===0;
  };
  redraw();
- if(candidates.length===0)return;
  const missing=candidates.filter(p=>!cachedProviderInfo(p));
  (async()=>{
-   // Lotes pequenos evitam sobrecarregar o navegador e a API.
    for(let i=0;i<missing.length;i+=4){
-     if(version!==localCountVersion||source!=='local')return;
-     const batch=missing.slice(i,i+4);
-     await Promise.all(batch.map(async p=>{
-       try{await getProviderInfo(p)}catch(e){failed.add(pickKey(p))}
+     if(version!==localCountVersion || source!=='local')return;
+     await Promise.all(missing.slice(i,i+4).map(async p=>{
+       try{await getProviderInfo(p)}catch(e){failed.add(pickKey(p)); console.warn('Consulta do filme falhou:',p.title,e.message)}
      }));
      persistProviderCache();
      redraw();
    }
  })();
 }
+$('clearLocalFilters').addEventListener('click',()=>{
+ for(const id of ['genre','era','ending','mood'])$(id).value='';
+ $('skipSeen').checked=false;
+ updateLocalCount();
+});
 let worldCountVersion=0,worldCountTimer;
 function updateWorldCount(){
  const version=++worldCountVersion;
@@ -450,7 +491,7 @@ function posterFallback(t){let d=document.createElement('div');d.className='post
 function updateActions(){if(!current)return;$('saveFav').classList.toggle('saved',stored.favorites.some(x=>x.key===key(current)));$('saveFav').textContent=stored.favorites.some(x=>x.key===key(current))?'♥ Nos favoritos':'♡ Favoritar';$('saveSeen').classList.toggle('saved',stored.seen.includes(key(current)));$('saveSeen').textContent=stored.seen.includes(key(current))?'✓ Assistido':'✓ Já assisti'}
 $('saveFav').addEventListener('click',()=>{if(!current)return;const k=key(current),i=stored.favorites.findIndex(x=>x.key===k);if(i>=0)stored.favorites.splice(i,1);else stored.favorites.push({key:k,movie:current});save();updateActions()});$('saveSeen').addEventListener('click',()=>{if(!current)return;const k=key(current),i=stored.seen.indexOf(k);if(i>=0)stored.seen.splice(i,1);else stored.seen.push(k);save();updateActions()});$('retry').addEventListener('click',draw);$('resetFilters').addEventListener('click',()=>{for(const id of ['genre','era','ending','mood','rating','runtime','provider','language','country']) $(id).value='';$('votes').value='0';$('sort').value='popularity.desc';$('skipSeen').checked=false;if(source==='local')updateLocalCount();else updateWorldCount();draw()});
 async function search(){const q=$('searchTerm').value.trim();if(!q)return;$('searchStatus').textContent='Buscando...';$('searchResults').replaceChildren();try{let data=await api('search/movie',{query:q});let arr=(data.results||[]).slice(0,12).map(worldMovie);$('searchStatus').textContent=arr.length+' resultado(s) nesta página.';for(let m of arr){let b=document.createElement('button');b.className='item';b.type='button';let title=document.createElement('strong');title.textContent=m.title;let sub=document.createElement('small');sub.textContent=m.year||'Ano desconhecido';b.append(title,sub);b.addEventListener('click',()=>{showMovie(m);go(4)});$('searchResults').append(b)}}catch(e){$('searchStatus').textContent=e.message}}
-$('searchBtn').addEventListener('click',search);$('searchTerm').addEventListener('keydown',e=>{if(e.key==='Enter')search()});$('favoritesBtn').addEventListener('click',()=>{const favs=stored.favorites;if(!favs.length){alert('Sua lista ainda está vazia. Sorteie um filme e toque em Favoritar.');return}let name=prompt('Sua lista:\n'+favs.map((f,i)=>`${i+1}. ${f.movie.title}`).join('\n')+'\n\nDigite o número do filme para abrir:');let i=Number(name)-1;if(favs[i]){showMovie(favs[i].movie);go(4)}});chooseSource('local');loadLibrary().catch(e=>{console.warn(e);updateLocalCount()});
+$('searchBtn').addEventListener('click',search);$('searchTerm').addEventListener('keydown',e=>{if(e.key==='Enter')search()});$('favoritesBtn').addEventListener('click',()=>{const favs=stored.favorites;if(!favs.length){alert('Sua lista ainda está vazia. Sorteie um filme e toque em Favoritar.');return}let name=prompt('Sua lista:\n'+favs.map((f,i)=>`${i+1}. ${f.movie.title}`).join('\n')+'\n\nDigite o número do filme para abrir:');let i=Number(name)-1;if(favs[i]){showMovie(favs[i].movie);go(4)}});chooseSource('local');
 </script>
 </body>
 </html>
