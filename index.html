@@ -281,6 +281,50 @@ h1 em{font-weight:400;font-style:italic;color:var(--wine)}
 @media(max-width:760px){.world{padding:50px 0 62px}.world-header{display:block}.world-status{display:inline-flex;margin:11px 0 0}.world-filter-panel{padding:16px;border-radius:18px}.world-fields{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.world-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.world-search{gap:7px}.world-search input{padding:12px 10px;font-size:12px}.world-search button{padding:10px 12px}.world-info{padding:10px 9px}.world-info>button{font-size:13px;min-height:33px}.world-actions p{margin-left:0;width:100%}}
 @media(max-width:460px){.world-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.world-fields{grid-template-columns:1fr 1fr}.world-meta{font-size:10px}.world-search button{font-size:11px}}
 
+
+/* Filtros com prioridade visual, atalhos e opções progressivas */
+.world-filter-panel{padding:31px 31px 27px}
+.world-panel-heading{display:flex;gap:22px;justify-content:space-between;align-items:center;margin-bottom:20px}
+.world-panel-kicker{font-size:10px;font-weight:850;letter-spacing:.14em;color:var(--wine);margin-bottom:6px}
+.world-panel-heading h3{font:500 clamp(24px,2.7vw,34px)/1.15 var(--serif);letter-spacing:-.042em;margin:0 0 6px}
+.world-panel-heading p{color:var(--muted);font-size:12px;line-height:1.6;margin:0;max-width:620px}
+.world-panel-count{font-size:11px;border:1px solid #decfd0;color:var(--wine-dark);background:#f7eeee;border-radius:999px;padding:9px 13px;white-space:nowrap;font-weight:750}
+.world-search{margin-bottom:5px}.world-search input{background:#fffdfb}.world-search button{white-space:nowrap}
+.world-search-hint{color:#9b8c91;font-size:11px;line-height:1.5;margin:3px 0 19px}
+.world-search-hint.is-search{background:#fcf0df;color:#795638;border:1px solid #f0dac0;padding:10px 12px;border-radius:10px}
+.world-quick-title,.world-section-label{font-size:12px;font-weight:760;color:#65505a;margin:18px 0 11px}
+.world-section-label{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.world-section-label span{color:#a19195;font-weight:500;font-size:11px}
+.world-quick{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:25px}
+.world-quick button{border:1px solid #e7dad8;background:#faf6f1;color:#76626b;font-size:12px;line-height:1.3;font-weight:650;border-radius:999px;padding:9px 13px;transition:.18s}
+.world-quick button:hover{border-color:#bb8c96;transform:translateY(-1px)}
+.world-quick button[aria-pressed="true"]{border-color:#a5697a;background:#f2dfe3;color:#7e4354;font-weight:770}
+.world-main-fields{grid-template-columns:repeat(3,minmax(0,1fr));gap:17px 15px}
+.world-field label{font-size:12px;margin-bottom:8px}.world-field select,.world-field input{background-color:#fcfaf7;border-radius:12px;padding:13px 12px;font-size:12px;min-height:45px}
+.world-field select:focus-visible,.world-field input:focus-visible,.world-search input:focus-visible{outline:2px solid #bd8b97;outline-offset:1px}
+.world-advanced{margin-top:22px;border:1px solid var(--line);border-radius:15px;background:#faf7f2;overflow:hidden}
+.world-advanced summary{display:flex;align-items:center;gap:13px;padding:14px 16px;cursor:pointer;list-style:none}
+.world-advanced summary::-webkit-details-marker{display:none}
+.world-advanced summary:hover{background:#f6eee9}
+.world-advanced-icon{width:30px;height:30px;display:grid;place-items:center;background:#f0e3e1;color:var(--wine-dark);border-radius:9px;font-size:20px;font-weight:400}
+.world-advanced summary strong{display:block;color:#68545d;font-size:12px}
+.world-advanced summary small{display:block;margin-top:3px;color:#93878b;font-size:11px;line-height:1.4}
+.world-advanced-chevron{margin-left:auto;font-size:18px;color:#957f86;transition:transform .2s}
+.world-advanced[open] .world-advanced-chevron{transform:rotate(180deg)}
+.world-extra-fields{grid-template-columns:repeat(3,minmax(0,1fr));padding:18px 17px 21px;border-top:1px solid var(--line);gap:16px 14px}
+.world-active-wrap{margin-top:18px}
+.world-active-wrap[hidden]{display:none}
+.world-active-wrap .world-section-label{margin-bottom:10px}
+.world-active-tags{display:flex;flex-wrap:wrap;gap:7px}
+.world-active-tags button{border:1px solid #dec4c7;border-radius:100px;background:#f6e9e8;color:#825560;padding:7px 10px;font-size:11px;font-weight:720}
+.world-active-tags button:hover{background:#edd7da}
+.world-active-tags span{margin-left:5px;font-size:13px}
+.world-actions{border-top:1px solid var(--line);padding-top:21px;margin-top:21px}
+.world-actions button[type="submit"]{padding:13px 21px}
+.world-actions p{font-size:10px;max-width:280px;text-align:right}
+@media(max-width:900px){.world-panel-heading{align-items:flex-start}.world-panel-count{display:none}.world-main-fields,.world-extra-fields{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.world-filter-panel{padding:20px 15px}.world-panel-heading{margin-bottom:16px}.world-search{display:grid;grid-template-columns:1fr}.world-search button{width:100%}.world-quick{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;white-space:nowrap;padding-bottom:8px}.world-quick button{flex:none}.world-main-fields,.world-extra-fields{gap:12px 10px}.world-panel-heading h3{font-size:27px}.world-actions{gap:10px}.world-actions button[type="submit"]{flex:1}.world-actions .world-reset{flex:0}.world-actions p{max-width:none;text-align:left;margin:0}}
+@media(max-width:380px){.world-main-fields,.world-extra-fields{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -406,21 +450,42 @@ h1 em{font-weight:400;font-style:italic;color:var(--wine)}
     <button class="world-pick" type="button" data-preset="favorites">♡ Minha lista TMDB</button>
    </div>
    <div class="world-filter-panel">
+    <div class="world-panel-heading">
+     <div><div class="world-panel-kicker">ENCONTRE O FILME CERTO</div><h3>Do seu jeito, sem complicar.</h3><p>Escolha o que importa para a noite. Os detalhes ficam guardados para quando precisar.</p></div>
+     <span class="world-panel-count" id="worldFilterCount" aria-live="polite">Filtros personalizados</span>
+    </div>
     <form id="worldForm" autocomplete="off">
-     <div class="world-search"><input id="worldSearch" type="search" placeholder="Qual filme você quer encontrar? Pesquise por título..." aria-label="Buscar filme no TMDB"><button type="submit">Buscar filme</button></div>
-     <div class="world-fields">
-      <div class="world-field"><label for="worldGenre">Gênero</label><select id="worldGenre"><option value="">Todos os gêneros</option></select></div>
-      <div class="world-field"><label for="worldStart">Ano inicial</label><input id="worldStart" type="number" min="1880" max="2100" placeholder="Ex.: 1990"></div>
-      <div class="world-field"><label for="worldEnd">Ano final</label><input id="worldEnd" type="number" min="1880" max="2100" placeholder="Ex.: 2020"></div>
-      <div class="world-field"><label for="worldRating">Nota mínima (TMDB)</label><select id="worldRating"><option value="0">Qualquer nota</option><option value="6">6,0 ou mais</option><option value="7">7,0 ou mais</option><option value="7.5">7,5 ou mais</option><option value="8">8,0 ou mais</option><option value="8.5">8,5 ou mais</option></select></div>
-      <div class="world-field"><label for="worldVotes">Mínimo de avaliações</label><select id="worldVotes"><option value="0">Sem mínimo</option><option value="50">50 avaliações</option><option value="200" selected>200 avaliações</option><option value="1000">1.000 avaliações</option><option value="5000">5.000 avaliações</option></select></div>
-      <div class="world-field"><label for="worldRuntime">Duração máxima</label><select id="worldRuntime"><option value="">Qualquer duração</option><option value="90">Até 1h30</option><option value="120">Até 2h</option><option value="150">Até 2h30</option><option value="180">Até 3h</option></select></div>
-      <div class="world-field"><label for="worldLanguage">Idioma original</label><select id="worldLanguage"><option value="">Qualquer idioma</option><option value="en">Inglês</option><option value="pt">Português</option><option value="es">Espanhol</option><option value="fr">Francês</option><option value="ja">Japonês</option><option value="ko">Coreano</option><option value="it">Italiano</option><option value="de">Alemão</option><option value="hi">Hindi</option></select></div>
-      <div class="world-field"><label for="worldCountry">País de origem</label><select id="worldCountry"><option value="">Qualquer país</option><option value="BR">Brasil</option><option value="US">Estados Unidos</option><option value="JP">Japão</option><option value="KR">Coreia do Sul</option><option value="FR">França</option><option value="GB">Reino Unido</option><option value="IN">Índia</option></select></div>
-      <div class="world-field"><label for="worldProvider">Onde assistir? (Brasil)</label><select id="worldProvider"><option value="">Qualquer plataforma</option><option value="8">Netflix</option><option value="119">Prime Video</option><option value="337">Disney+</option><option value="384">Max / HBO Max</option><option value="350">Apple TV+</option></select></div>
-      <div class="world-field"><label for="worldSort">Ordenar por</label><select id="worldSort"><option value="popularity.desc">Mais populares</option><option value="vote_average.desc">Melhores notas</option><option value="primary_release_date.desc">Mais recentes</option><option value="primary_release_date.asc">Mais antigos</option><option value="vote_count.desc">Mais avaliados</option></select></div>
+     <div class="world-search"><input id="worldSearch" type="search" placeholder="Já sabe o nome do filme? Pesquise aqui..." aria-label="Buscar filme por título no TMDB"><button type="submit">Buscar título</button></div>
+     <p class="world-search-hint" id="worldSearchHint">Busca pelo nome e descoberta por filtros são modos diferentes: para combinar os filtros, deixe a pesquisa por título vazia.</p>
+     <div class="world-quick-title">Atalhos para a noite</div>
+     <div class="world-quick" id="worldQuickFilters" role="group" aria-label="Filtros rápidos">
+      <button type="button" data-quick="short" aria-pressed="false">◷ Até 2 horas</button>
+      <button type="button" data-quick="rated" aria-pressed="false">★ Nota 7+</button>
+      <button type="button" data-quick="latest" aria-pressed="false">✦ Últimos 5 anos</button>
+      <button type="button" data-quick="nineties" aria-pressed="false">◈ Anos 90</button>
+      <button type="button" data-quick="netflix" aria-pressed="false">▶ Netflix</button>
      </div>
-     <div class="world-actions"><button type="submit">Aplicar filtros</button><button type="button" class="world-reset" id="worldReset">Limpar</button><p id="worldFilterNote">Combinações personalizadas · Filmes e notas fornecidos pelo TMDB</p></div>
+     <div class="world-section-label">Filtros principais <span>Combine as opções abaixo</span></div>
+     <div class="world-fields world-main-fields">
+      <div class="world-field"><label for="worldGenre">Gênero</label><select id="worldGenre"><option value="">Todos os gêneros</option></select></div>
+      <div class="world-field"><label for="worldEra">Época do filme</label><select id="worldEra"><option value="">Qualquer época</option><option value="current">Este ano</option><option value="last5">Últimos 5 anos</option><option value="2020s">Anos 2020</option><option value="2010s">Anos 2010</option><option value="2000s">Anos 2000</option><option value="1990s">Anos 1990</option><option value="1980s">Anos 1980</option><option value="pre1980">Antes de 1980</option><option value="custom">Intervalo personalizado…</option></select></div>
+      <div class="world-field"><label for="worldRating">Avaliação mínima</label><select id="worldRating"><option value="0">Qualquer nota</option><option value="6">★ 6,0 ou mais</option><option value="7">★ 7,0 ou mais</option><option value="7.5">★ 7,5 ou mais</option><option value="8">★ 8,0 ou mais</option><option value="8.5">★ 8,5 ou mais</option></select></div>
+      <div class="world-field"><label for="worldRuntime">Quanto tempo tem?</label><select id="worldRuntime"><option value="">Qualquer duração</option><option value="90">Até 1h30</option><option value="120">Até 2h</option><option value="150">Até 2h30</option><option value="180">Até 3h</option></select></div>
+      <div class="world-field"><label for="worldProvider">Onde assistir? (Brasil)</label><select id="worldProvider"><option value="">Qualquer plataforma</option><option value="8">Netflix</option><option value="119">Prime Video</option><option value="337">Disney+</option><option value="384">Max / HBO Max</option><option value="350">Apple TV+</option></select></div>
+      <div class="world-field"><label for="worldSort">Mostrar primeiro</label><select id="worldSort"><option value="popularity.desc">Mais populares</option><option value="vote_average.desc">Melhores notas</option><option value="primary_release_date.desc">Mais recentes</option><option value="primary_release_date.asc">Mais antigos</option><option value="vote_count.desc">Mais avaliados</option></select></div>
+     </div>
+     <details class="world-advanced" id="worldAdvanced">
+      <summary><span class="world-advanced-icon">＋</span><span><strong>Mais opções</strong><small>Intervalo exato de anos, número de votos, idioma e país</small></span><span class="world-advanced-chevron">⌄</span></summary>
+      <div class="world-fields world-extra-fields">
+       <div class="world-field"><label for="worldStart">Ano inicial</label><input id="worldStart" type="number" min="1880" max="2100" placeholder="Ex.: 1990"></div>
+       <div class="world-field"><label for="worldEnd">Ano final</label><input id="worldEnd" type="number" min="1880" max="2100" placeholder="Ex.: 2026"></div>
+       <div class="world-field"><label for="worldVotes">Quantidade mínima de votos</label><select id="worldVotes"><option value="0">Sem mínimo</option><option value="50">50 votos</option><option value="200" selected>200 votos</option><option value="1000">1.000 votos</option><option value="5000">5.000 votos</option></select></div>
+       <div class="world-field"><label for="worldLanguage">Idioma original</label><select id="worldLanguage"><option value="">Qualquer idioma</option><option value="en">Inglês</option><option value="pt">Português</option><option value="es">Espanhol</option><option value="fr">Francês</option><option value="ja">Japonês</option><option value="ko">Coreano</option><option value="it">Italiano</option><option value="de">Alemão</option><option value="hi">Hindi</option></select></div>
+       <div class="world-field"><label for="worldCountry">País de origem</label><select id="worldCountry"><option value="">Qualquer país</option><option value="BR">Brasil</option><option value="US">Estados Unidos</option><option value="JP">Japão</option><option value="KR">Coreia do Sul</option><option value="FR">França</option><option value="GB">Reino Unido</option><option value="IN">Índia</option></select></div>
+      </div>
+     </details>
+     <div class="world-active-wrap" id="worldActiveWrap" hidden><div class="world-section-label">Sua seleção <span>Toque em × para retirar um filtro</span></div><div id="worldActiveFilters" class="world-active-tags"></div></div>
+     <div class="world-actions"><button type="submit">Ver filmes encontrados ↗</button><button type="button" class="world-reset" id="worldReset">Limpar tudo</button><p id="worldFilterNote">Filtros combinados no TMDB · Streaming sujeito à disponibilidade no Brasil</p></div>
     </form>
    </div>
    <div class="world-result-head"><strong id="worldHeading">Filmes para descobrir</strong><span id="worldResultCount" role="status" aria-live="polite">Carregando o acervo mundial…</span></div>
@@ -823,6 +888,62 @@ function worldModel(item){
  if(savedRemote[id])saveRemote(movie);
  return movie;
 }
+function worldApplyEra(era){
+ const year=new Date().getFullYear();
+ if(era==='custom'){$('#worldAdvanced').open=true;$('#worldStart').focus();return}
+ let start='',end='';
+ if(era==='current'){start=year;end=year}
+ else if(era==='last5'){start=year-4;end=year}
+ else if(era==='pre1980'){end=1979}
+ else if(/^\d{4}s$/.test(era)){start=Number(era.slice(0,4));end=Number(start)+9}
+ $('#worldStart').value=start;$('#worldEnd').value=end;
+}
+function worldEraFromDates(){
+ const start=$('#worldStart').value,end=$('#worldEnd').value,year=new Date().getFullYear();
+ if(!start&&!end)return '';
+ if(start===String(year)&&end===String(year))return 'current';
+ if(start===String(year-4)&&end===String(year))return 'last5';
+ if(!start&&end==='1979')return 'pre1980';
+ for(const decade of [1980,1990,2000,2010,2020])if(start===String(decade)&&end===String(decade+9))return decade+'s';
+ return 'custom';
+}
+function worldUpdateQuick(){
+ const map={short:$('#worldRuntime').value==='120',rated:$('#worldRating').value==='7',latest:$('#worldEra').value==='last5',nineties:$('#worldEra').value==='1990s',netflix:$('#worldProvider').value==='8'};
+ $$('#worldQuickFilters [data-quick]').forEach(b=>b.setAttribute('aria-pressed',String(Boolean(map[b.dataset.quick]))));
+}
+function worldUpdateFilterSummary(){
+ const entries=[];
+ const add=(id,label)=>entries.push({id,label});
+ const el=id=>document.getElementById(id);
+ const choice=id=>{const e=el(id);return e.options[e.selectedIndex]?.textContent.trim()||''};
+ if(el('worldGenre').value)add('worldGenre',choice('worldGenre'));
+ if(el('worldEra').value&&el('worldEra').value!=='custom')add('worldEra',choice('worldEra'));
+ else if(el('worldStart').value||el('worldEnd').value)add('worldEra',`Anos: ${el('worldStart').value||'…'}–${el('worldEnd').value||'…'}`);
+ if(Number(el('worldRating').value))add('worldRating',choice('worldRating'));
+ if(el('worldRuntime').value)add('worldRuntime',choice('worldRuntime'));
+ if(el('worldProvider').value)add('worldProvider',choice('worldProvider'));
+ if(el('worldVotes').value!=='0')add('worldVotes',`${Number(el('worldVotes').value).toLocaleString('pt-BR')}+ votos`);
+ if(el('worldLanguage').value)add('worldLanguage',choice('worldLanguage'));
+ if(el('worldCountry').value)add('worldCountry',choice('worldCountry'));
+ if(el('worldSort').value!=='popularity.desc')add('worldSort',choice('worldSort'));
+ const wrap=el('worldActiveWrap'),tags=el('worldActiveFilters');
+ wrap.hidden=!entries.length;
+ tags.replaceChildren(...entries.map(e=>{const b=document.createElement('button');b.type='button';b.dataset.clearFilter=e.id;b.textContent=e.label+'  ×';b.setAttribute('aria-label','Remover filtro '+e.label);return b}));
+ el('worldFilterCount').textContent=entries.length+' '+(entries.length===1?'filtro ativo':'filtros ativos');
+ const searching=Boolean(el('worldSearch').value.trim());
+ const hint=el('worldSearchHint');hint.classList.toggle('is-search',searching);
+ hint.textContent=searching?'Você está buscando por título. Nesta busca, gênero, anos, notas e outros filtros não são aplicados. Apague o título para combiná-los.':'Busca pelo nome e descoberta por filtros são modos diferentes: para combinar os filtros, deixe a pesquisa por título vazia.';
+ worldUpdateQuick();
+}
+function worldClearOneFilter(id){
+ if(id==='worldEra'){document.getElementById('worldEra').value='';worldApplyEra('')}
+ else if(id==='worldVotes')document.getElementById(id).value='0';
+ else if(id==='worldSort')document.getElementById(id).value='popularity.desc';
+ else if(id==='worldRating')document.getElementById(id).value='0';
+ else document.getElementById(id).value='';
+ worldUpdateFilterSummary();
+}
+function worldRefreshCustom(){worldPreset='';$$('#worldPicks [data-preset]').forEach(b=>b.classList.remove('active'));worldUpdateFilterSummary();fetchWorldPage(true)}
 function worldParameters(ignoreFilters=false){
  const params={sort_by:'popularity.desc','vote_count.gte':'200',include_adult:'false',region:'BR'};
  if(ignoreFilters)return params;
@@ -941,6 +1062,7 @@ function worldPresetApply(type){
  if(type==='brasil'){$('#worldCountry').value='BR';$('#worldVotes').value='0'}
  if(type==='scifi')$('#worldGenre').value='878';
  if(type==='comedy')$('#worldGenre').value='35';
+ $('#worldEra').value=worldEraFromDates();if($('#worldEra').value==='custom')$('#worldAdvanced').open=true;worldUpdateFilterSummary();
  if(type==='favorites'){
   ++worldSequence;worldItems=[...byId.values()].filter(m=>m.tmdbId&&favorites.has(m.id));worldTotal=worldItems.length;worldPage=1;worldPages=1;
   $('#worldHeading').textContent=worldSortLabel;worldNotice(prettyNumber(worldTotal)+' filmes salvos neste navegador');renderWorldCards();$('#worldMore').hidden=true;return;
@@ -959,7 +1081,24 @@ async function setWorker(){
 }
 function initWorld(){
  $('#worldGenre').innerHTML+=[...TMDB_GENRES].sort((a,b)=>a[1].localeCompare(b[1],'pt-BR')).map(([id,title])=>`<option value="${id}">${escapeHTML(title)}</option>`).join('');
- $('#worldForm').addEventListener('submit',event=>{event.preventDefault();worldPreset='';$$('#worldPicks [data-preset]').forEach(b=>b.classList.remove('active'));fetchWorldPage(true)});
+ $('#worldForm').addEventListener('submit',event=>{event.preventDefault();worldPreset='';$$('#worldPicks [data-preset]').forEach(b=>b.classList.remove('active'));worldUpdateFilterSummary();fetchWorldPage(true)});
+ $('#worldEra').addEventListener('change',()=>{worldApplyEra($('#worldEra').value);worldUpdateFilterSummary()});
+ $$('#worldStart,#worldEnd').forEach(el=>el.addEventListener('input',()=>{$('#worldEra').value=worldEraFromDates();worldUpdateFilterSummary()}));
+ $$('#worldForm select,#worldSearch').forEach(el=>el.addEventListener('input',worldUpdateFilterSummary));
+ $('#worldQuickFilters').addEventListener('click',event=>{
+  const btn=event.target.closest('[data-quick]');if(!btn)return;
+  const quick=btn.dataset.quick;
+  $('#worldSearch').value='';
+  if(quick==='short')$('#worldRuntime').value=$('#worldRuntime').value==='120'?'':'120';
+  if(quick==='rated')$('#worldRating').value=$('#worldRating').value==='7'?'0':'7';
+  if(quick==='netflix')$('#worldProvider').value=$('#worldProvider').value==='8'?'':'8';
+  if(quick==='latest'||quick==='nineties'){
+   const value=quick==='latest'?'last5':'1990s';$('#worldEra').value=$('#worldEra').value===value?'':value;worldApplyEra($('#worldEra').value);
+  }
+  worldRefreshCustom();
+ });
+ $('#worldActiveFilters').addEventListener('click',event=>{const btn=event.target.closest('[data-clear-filter]');if(!btn)return;$('#worldSearch').value='';worldClearOneFilter(btn.dataset.clearFilter);worldRefreshCustom()});
+ worldUpdateFilterSummary();
  $('#worldReset').addEventListener('click',()=>{worldPresetApply('popular')});
  $('#worldPicks').addEventListener('click',e=>{const button=e.target.closest('[data-preset]');if(button)worldPresetApply(button.dataset.preset)});
  $('#worldMore').addEventListener('click',()=>fetchWorldPage());
