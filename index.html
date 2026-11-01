@@ -120,8 +120,48 @@ body{background:var(--bg);color:var(--ink)}
   <option value="1000">1.000 votos</option>
   <option value="5000">5.000 votos</option>
 </select>
-
-  </section>
+      </div>
+     </div>
+     <details style="margin-top:18px">
+      <summary class="small">Mais filtros: idioma, país e ordenação</summary>
+      <div class="grid" style="margin-top:12px">
+       <div class="field">
+        <label for="language">Idioma original</label>
+        <select id="language">
+         <option value="">Qualquer idioma</option>
+         <option value="en">Inglês</option>
+         <option value="pt">Português</option>
+         <option value="ko">Coreano</option>
+         <option value="ja">Japonês</option>
+         <option value="es">Espanhol</option>
+         <option value="fr">Francês</option>
+        </select>
+       </div>
+       <div class="field">
+        <label for="country">País de origem</label>
+        <select id="country">
+         <option value="">Qualquer país</option>
+         <option value="BR">Brasil</option>
+         <option value="US">Estados Unidos</option>
+         <option value="KR">Coreia do Sul</option>
+         <option value="JP">Japão</option>
+         <option value="FR">França</option>
+        </select>
+       </div>
+       <div class="field full">
+        <label for="sort">Ordenar por</label>
+        <select id="sort">
+         <option value="popularity.desc">Popularidade</option>
+         <option value="vote_average.desc">Melhores notas</option>
+         <option value="primary_release_date.desc">Mais recentes</option>
+        </select>
+       </div>
+      </div>
+     </details>
+     <div class="note">O filtro de streaming considera filmes disponíveis por assinatura no Brasil. As categorias de finais especiais são exclusivas da Seleção da casa.</div>
+    </div>
+    <label class="check"><input id="skipSeen" type="checkbox"> Não repetir filmes que marquei como assistidos</label>
+   </section>
   <section class="step" data-step="3" hidden><div class="eyebrow">Etapa 03 / 04</div><h2>Pronto para o cinema?</h2><p class="sub">Uma última conferida. Depois deixe a sorte decidir.</p><div class="summary" id="summary"></div><p class="small" style="margin-top:20px">Não é necessário cadastro ou inserir token de API.</p></section>
   <section class="step" data-step="4" hidden><div class="eyebrow">Etapa 04 / 04</div><h2>O filme da noite.</h2><p class="sub" id="status">Estamos escolhendo...</p><button type="button" class="btn secondary" id="resetFilters" hidden>Limpar filtros e tentar novamente</button><div class="result" id="result" hidden><div id="posterBox"></div><div><h3 id="movieTitle"></h3><div class="meta" id="movieMeta"></div><p id="moviePlot"></p><div class="actions"><button id="saveFav" type="button">♡ Favoritar</button><button id="saveSeen" type="button">✓ Já assisti</button><button id="retry" type="button">↻ Sortear outro</button></div></div></div></section>
   <div class="nav"><button class="btn secondary" id="back" type="button" hidden>← Voltar</button><span></span><button class="btn" id="next" type="button">Continuar →</button></div>
@@ -300,7 +340,7 @@ function updateWorldCount(){
        ($('skipSeen').checked?' (antes de retirar os assistidos).':'.');
      if(step===2)$('next').disabled=count===0;
    }catch(e){
-     if(version===worldCountVersion){$('worldCount').textContent='Não foi possível consultar a quantidade. Confira sua conexão.';$('next').disabled=false}
+     if(version===worldCountVersion){$('worldCount').textContent='Não foi possível consultar a quantidade: '+(e.message||'erro desconhecido')+'; tente novamente.';$('next').disabled=false}
    }
  },250);
 }
